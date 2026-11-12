@@ -824,7 +824,8 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     var st = S.style || {};
     var styles = S.styles || [];
     var target = st.target || (S.projects[0] && S.projects[0].dir) || '';
-    var apiBase = String(S.apiBase || '').replace(/\/+$/, '') || '/ve/plugin';
+    var apiRoot = String(S.apiBase || '').replace(/\/+$/, '');
+    var apiBase = (apiRoot && !/\/ve\/plugin$/.test(apiRoot)) ? apiRoot + '/ve/plugin' : (apiRoot || '/ve/plugin');
     var rows = styles.map(function (s, idx) {
       var nameLines = String(s.name || '').split('\n');
       var main = nameLines[0] || '';

@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.80（修复风格配图 URL 前缀）
+- 工作台 API base 是站点根地址，配图 URL 少拼了 `/ve/plugin`，导致图片 404。
+- 配图地址现在统一为 `<apiBase>/ve/plugin/styles/file?...`，图片可正常显示。
+
+
 ## 1.1.79（风格配图字段）
 - `listStyles()` 返回 `preview` 字段；工作台行卡读取 `meta.preview` 并显示配图。
 - 风格配图接口保持 `/ve/plugin/styles/file`。
