@@ -824,6 +824,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     var st = S.style || {};
     var styles = S.styles || [];
     var target = st.target || (S.projects[0] && S.projects[0].dir) || '';
+    var apiBase = String(S.apiBase || '').replace(/\/+$/, '') || '/ve/plugin';
     var rows = styles.map(function (s, idx) {
       var nameLines = String(s.name || '').split('\n');
       var main = nameLines[0] || '';
@@ -841,7 +842,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
             '<div class="style-row-tags">' + tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
             (desc ? '<p class="style-row-desc">' + esc(desc) + '</p>' : '') +
           '</div>' +
-          '<div class="style-row-visual"><div class="style-row-image" data-style-image="' + esc(s.id) + '"></div></div>' +
+          '<div class="style-row-visual"><div class="style-row-image" data-style-image="' + esc(s.id) + '">' + (s.preview ? '<img src="' + esc(apiBase + '/styles/file?id=' + encodeURIComponent(s.id) + '&name=' + encodeURIComponent(s.preview)) + '" alt="">' : '') + '</div></div>' +
         '</div>'
       );
     }).join('');
