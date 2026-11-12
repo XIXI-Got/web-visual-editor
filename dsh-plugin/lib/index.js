@@ -1268,6 +1268,8 @@ export function apply(ctx) {
       brief,
       '',
       '执行方式：先读取上面这份规范的抽象 token（颜色/字体/圆角/间距/动效）作为硬约束，再逐处修改该项目的样式；不要引入新的主色或字体，不要重写整页结构。改完用编辑器保存并说明用了哪些 token。',
+      '',
+      '中文补充（强制）：英文衬线字体 → 中文用 思源宋体 / 宋体；英文非衬线字体 → 中文用 思源黑体 / 黑体；等宽字体只给英文 / 数字；字重要与规范相近（中文标题 ≥600、小字 ≥400）。',
     ].join('\n');
   }
   function computeStyleSpec(inputPath) {
@@ -1378,10 +1380,16 @@ export function apply(ctx) {
     lines.push('## 原始规范摘录（仅作理解参考，不要照抄 HTML）');
     lines.push(spec.notes ? spec.notes.slice(0, 3000) : '（无）');
     lines.push('');
-    lines.push('## 中文排版注意');
-    lines.push('- 规范中的展示字体多为拉丁字体（Bodoni Moda / Inter 等），中文没有对应字重时容易显得过细。');
-    lines.push('- 中文标题建议使用同气质替代字体（思源宋体 / 宋体 / 思源黑体等），字重要比规范数值更实一档（≥600）。');
-    lines.push('- 拉丁字体只用于英文单词、数字与标签，避免整段中文落到细体衬线。');
+    lines.push('## 中文字体映射（强制）');
+    lines.push('- 规范里的展示字体大多是拉丁字体，中文没有对应字形；不要用拉丁字体直接渲染中文，按下表映射：');
+    lines.push('  - 英文**衬线**字体（Bodoni Moda / Playfair / Georgia / Times / serif）→ 中文用 **思源宋体 / 宋体**（Source Han Serif SC / Noto Serif SC / Songti SC / SimSun）。');
+    lines.push('  - 英文**非衬线**字体（Inter / Helvetica / Grotesk / system-ui / sans-serif）→ 中文用 **思源黑体 / 黑体**（Source Han Sans SC / Noto Sans SC / PingFang SC / Microsoft YaHei）。');
+    lines.push('- 等宽字体（mono）只用于英文、数字、代码与标签，不要用来渲染中文。');
+    lines.push('- 字重要与规范相近：映射到同气质、最接近的可用字重；中文标题 ≥600，中文小字 ≥400，避免中文在 500 以下显得过细。');
+    lines.push('- 拉丁字体只用于英文单词、数字与标签；整段中文不要落到细体衬线或细体无衬线。');
+    lines.push('- 实现方式（字体栈：拉丁在前、中文在后）：');
+    lines.push('  `--font-display: "Inter Tight", "Inter", "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;`');
+    lines.push('  `--font-serif: "Source Han Serif SC", "Noto Serif SC", "Songti SC", SimSun, serif;`');
     lines.push('');
     lines.push('## 执行要求');
     lines.push('1. 只允许使用上面的颜色、字体、圆角、间距体系，不要引入新的主色或第三种字体。');

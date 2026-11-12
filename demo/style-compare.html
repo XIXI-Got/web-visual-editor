@@ -113,7 +113,7 @@
     btnSplit.classList.toggle('on', mode === 'split');
   }
   function setSplit(pct) {
-    split = Math.max(15, Math.min(85, pct));
+    split = Math.max(4, Math.min(96, pct));
     document.documentElement.style.setProperty('--split', split + '%');
   }
   btnBefore.addEventListener('click', () => setMode('single', 'before'));
