@@ -31,6 +31,7 @@
     --u:clamp(.45px,calc(100vw / var(--design-w)),1px);
   }
   *{box-sizing:border-box}
+  body{min-height:calc(100vh + 50px);padding-bottom:50px}
   html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);overflow-x:clip}
   body{background:linear-gradient(180deg,var(--paper) 0%,var(--soft) 100%)}
   .preview-wrap{width:min(calc(1120 * var(--u)),calc(100% - calc(40 * var(--u))));margin:calc(72 * var(--u)) auto}
