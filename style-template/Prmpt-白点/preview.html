@@ -34,7 +34,7 @@
   body{min-height:0;padding-bottom:0;overflow:hidden}
   html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);overflow-x:clip}
   body{background-color:var(--paper);background-image:radial-gradient(rgba(0,0,0,.10) .8px,transparent .9px);background-size:24px 24px;min-height:0;padding-bottom:0;overflow:hidden}
-  .preview-wrap{width:min(1120px,calc(100% - 40px));height:400px;margin:0 auto;display:flex;align-items:center;overflow:visible}
+  .preview-wrap{width:min(1120px,calc(100% - 40px));height:calc(400px - 56px);margin:0 auto;display:flex;align-items:center;overflow:visible}
   /* 左右布局：左文案/按钮，右图片 */
   .preview-block{width:100%;display:grid;transform:scale(.88);transform-origin:center;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:calc(64 * var(--u));align-items:center}
   .preview-copy{min-width:0;max-width:470px;height:200px;display:flex;flex-direction:column;justify-content:center;margin-left:30px}
@@ -63,9 +63,29 @@
     .preview-figure{aspect-ratio:16/9}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .tpl-nav{position:relative;z-index:5;background:rgba(251,251,251,.9);border-bottom:1px solid rgba(0,0,0,.14)}
+  .tpl-nav-inner{width:min(1120px,calc(100% - 40px));height:56px;margin:0 auto;display:flex;align-items:center;gap:26px}
+  .tpl-nav-brand{display:flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none;font:600 10px/1 var(--font-sans);letter-spacing:.15em;white-space:nowrap}
+  .tpl-nav-mark{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:#000;color:#FBFBFB;font:700 11px/1 var(--font-sans);letter-spacing:0}
+  .tpl-nav-links{display:flex;align-items:center;gap:22px;margin-left:auto}
+  .tpl-nav-links a{color:var(--muted);text-decoration:none;font:500 11px/1 var(--font-sans);padding:6px 0;white-space:nowrap}
+  .tpl-nav-links a.is-active{color:var(--ink)}
+  .tpl-nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 16px;border-radius:var(--radius-pill);background:#000;color:#FBFBFB;text-decoration:none;font:600 10.5px/1 var(--font-sans);white-space:nowrap}
+  @media (max-width:640px){.tpl-nav-links a:not(.is-active){display:none}.tpl-nav-inner{gap:14px}.tpl-nav-brand span:last-child{display:none}.tpl-nav-cta{padding:0 12px}}
 </style>
 </head>
 <body>
+
+  <header class="tpl-nav">
+    <div class="tpl-nav-inner">
+      <a class="tpl-nav-brand" href="#"><span class="tpl-nav-mark">S</span><span>STYLE TEMPLATE</span></a>
+      <nav class="tpl-nav-links" aria-label="主导航">
+        <a class="is-active" href="#preview">预览</a><a href="#styles">风格库</a><a href="#templates">模板</a><a href="#about">关于</a>
+      </nav>
+      <a class="tpl-nav-cta" href="#start">使用模板</a>
+    </div>
+  </header>
   <main class="preview-wrap">
     <!-- 复制范围：从 <section> 到 </section>；替换图片和文案即可 -->
     <section class="preview-block" aria-labelledby="preview-title">
@@ -84,7 +104,5 @@
       </figure>
     </section>
   </main>
-
-<script defer src="ve-applied.js" data-ve-applied="1"></script>
 </body>
 </html>

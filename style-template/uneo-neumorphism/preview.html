@@ -17,7 +17,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--canvas);color:var(--espresso);font-family:var(--font-sans);overflow-x:clip}
   body{background-image:radial-gradient(rgba(51,40,30,.022) 1px,transparent 0);background-size:4px 4px;min-height:0;padding-bottom:0;overflow:hidden}
-  .preview-wrap{width:min(1120px,calc(100% - 40px));height:400px;margin:0 auto;display:flex;align-items:center;overflow:visible}
+  .preview-wrap{width:min(1120px,calc(100% - 40px));height:calc(400px - 56px);margin:0 auto;display:flex;align-items:center;overflow:visible}
   .preview-block{width:100%;display:grid;transform:scale(.88);transform-origin:center;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,5vw,64px);align-items:center}
   .preview-copy{min-width:0;max-width:470px;height:200px;display:flex;flex-direction:column;justify-content:center;margin-left:30px}
   .preview-eyebrow{margin:0 0 14px;font:500 10px/1.4 var(--font-sans);letter-spacing:.16em;text-transform:uppercase;color:var(--bronze)}
@@ -31,9 +31,29 @@
   .preview-figure img{display:block;width:100%;height:100%;object-fit:cover}
   @media (max-width:760px){.preview-wrap{width:calc(100% - 28px);height:auto;min-height:0;margin:28px auto;display:block;overflow:visible}.preview-block{grid-template-columns:1fr;gap:24px}.preview-copy{max-width:none}.preview-figure{max-height:none}}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .tpl-nav{position:relative;z-index:5;background:rgba(243,239,233,.88);border-bottom:1px solid rgba(51,40,30,.10)}
+  .tpl-nav-inner{width:min(1120px,calc(100% - 40px));height:56px;margin:0 auto;display:flex;align-items:center;gap:26px}
+  .tpl-nav-brand{display:flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none;font:600 10px/1 var(--font-sans);letter-spacing:.15em;white-space:nowrap}
+  .tpl-nav-mark{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--elevated);color:var(--espresso);font:700 11px/1;box-shadow:3px 3px 8px var(--shadowDark),-3px -3px 8px var(--shadowLight) var(--font-sans);letter-spacing:0}
+  .tpl-nav-links{display:flex;align-items:center;gap:22px;margin-left:auto}
+  .tpl-nav-links a{color:var(--muted);text-decoration:none;font:500 11px/1 var(--font-sans);padding:6px 0;white-space:nowrap}
+  .tpl-nav-links a.is-active{color:var(--ink)}
+  .tpl-nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 16px;border-radius:var(--radius-pill);background:linear-gradient(145deg,#3D3024,#2B2118);color:#FAF8F5;text-decoration:none;font:500 10.5px/1;box-shadow:5px 6px 12px rgba(51,40,30,.24),-3px -3px 8px var(--shadowLight) var(--font-sans);white-space:nowrap}
+  @media (max-width:640px){.tpl-nav-links a:not(.is-active){display:none}.tpl-nav-inner{gap:14px}.tpl-nav-brand span:last-child{display:none}.tpl-nav-cta{padding:0 12px}}
 </style>
 </head>
 <body>
+
+  <header class="tpl-nav">
+    <div class="tpl-nav-inner">
+      <a class="tpl-nav-brand" href="#"><span class="tpl-nav-mark">S</span><span>STYLE TEMPLATE</span></a>
+      <nav class="tpl-nav-links" aria-label="主导航">
+        <a class="is-active" href="#preview">预览</a><a href="#styles">风格库</a><a href="#templates">模板</a><a href="#about">关于</a>
+      </nav>
+      <a class="tpl-nav-cta" href="#start">使用模板</a>
+    </div>
+  </header>
   <main class="preview-wrap">
     <section class="preview-block" aria-labelledby="preview-title">
       <div class="preview-copy">
