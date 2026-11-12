@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.79（风格配图字段）
+- `listStyles()` 返回 `preview` 字段；工作台行卡读取 `meta.preview` 并显示配图。
+- 风格配图接口保持 `/ve/plugin/styles/file`。
+
+
 ## 1.1.78（修复工作台 500）
 - 修复 `/ve/wb` 静态路由里 `stat.isFile()` 被误写成多次调用导致的工作台 500。
 - 风格配图 `/styles/file` 同步修正。

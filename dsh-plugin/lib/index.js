@@ -561,6 +561,7 @@ export function apply(ctx) {
             titleEffect: titleEffect,
             strokeColor: strokeColor,
             description: description,
+            preview: meta.preview || '',
           });
         } catch (e) { /* ignore */ }
       }
