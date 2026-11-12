@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>标题 + 图片 + 按钮 · DEMO 蓝白</title>
+<style>
+  /* ===== DEMO 蓝白 tokens（硬约束） ===== */
+  :root{
+    --paper:#FBFBFB;
+    --soft:#FFFFFF;
+    --sky:#F3F3F3;
+    --ink:#000000;
+    --muted:rgba(0,0,0,.72);
+    --dim:rgba(0,0,0,.55);
+    --blue:#000000;
+    --blue2:#333333;
+    --line:rgba(0,0,0,.16);
+    --font-sans:"Inter","Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+    --font-mono:Consolas,"SFMono-Regular",monospace;
+    --radius-sm:0;
+    --radius-md:0;
+    --radius-lg:0;
+    --radius-pill:999px;
+    --shadow-card:none;
+    --shadow-float:none;
+    --motion-ease:cubic-bezier(.16,.84,.3,1);
+    --motion-fast:160ms;
+    --motion-base:280ms;
+    --design-w:1440;
+    --u:clamp(.45px,calc(100vw / var(--design-w)),1px);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);overflow-x:clip}
+  body{background-color:var(--paper);background-image:radial-gradient(rgba(0,0,0,.10) .8px,transparent .9px);background-size:24px 24px}
+  .preview-wrap{width:min(calc(1120 * var(--u)),calc(100% - calc(40 * var(--u))));margin:calc(72 * var(--u)) auto}
+  /* 左右布局：左文案/按钮，右图片 */
+  .preview-block{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:calc(64 * var(--u));align-items:center}
+  .preview-copy{min-width:0;max-width:calc(520 * var(--u))}
+  .preview-eyebrow{margin:0 0 calc(14 * var(--u));font:500 max(10px,calc(10 * var(--u)))/1.4 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
+  .preview-title{margin:0;font-family:var(--font-sans);font-weight:800;font-size:max(30px,calc(58 * var(--u)));line-height:1.06;letter-spacing:-.04em;color:var(--ink)}
+  .preview-lead{margin:calc(16 * var(--u)) 0 0;max-width:46ch;color:var(--muted);font-size:max(13px,calc(15 * var(--u)));line-height:1.75}
+  .preview-actions{display:flex;align-items:center;gap:calc(14 * var(--u));flex-wrap:wrap;margin-top:calc(30 * var(--u))}
+  .preview-btn{display:inline-flex;align-items:center;justify-content:center;min-height:calc(44 * var(--u));padding:0 calc(22 * var(--u));border-radius:var(--radius-pill);background:var(--blue);color:#fff;text-decoration:none;font-weight:600;font-size:max(12px,calc(13 * var(--u)));box-shadow:var(--shadow-float);transition:transform var(--motion-fast) var(--motion-ease),background var(--motion-fast) var(--motion-ease)}
+  .preview-btn:hover{transform:translateY(-1px);background:var(--blue2)}
+  .preview-meta{color:var(--dim);font-size:max(9px,calc(10 * var(--u)));font-family:var(--font-mono);letter-spacing:.08em}
+  .preview-figure{position:relative;margin:0;width:100%;aspect-ratio:1/1;border-radius:var(--radius-lg);overflow:hidden;background:var(--sky);border:1px solid var(--line);box-shadow:var(--shadow-card)}
+  .preview-figure img{display:block;width:100%;height:100%;object-fit:cover}
+  @media (max-width:760px){
+    .preview-wrap{width:calc(100% - calc(28 * var(--u)));margin:calc(36 * var(--u)) auto}
+    .preview-block{grid-template-columns:1fr;gap:calc(24 * var(--u))}
+    .preview-copy{max-width:none}
+    .preview-title{font-size:max(28px,calc(48 * var(--u)))}
+    .preview-figure{aspect-ratio:1/1}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+  <main class="preview-wrap">
+    <!-- 复制范围：从 <section> 到 </section>；替换图片和文案即可 -->
+    <section class="preview-block" aria-labelledby="preview-title">
+      <div class="preview-copy">
+        <p class="preview-eyebrow">FEATURE / 01</p>
+        <h2 class="preview-title" id="preview-title">让内容回到黑白之间</h2>
+        <p class="preview-lead">左侧标题、说明和按钮，右侧一张完整的页面预览；纸白、墨黑与点阵，只留下编辑性的安静。</p>
+        <div class="preview-actions">
+          <a class="preview-btn" href="#">了解详情</a>
+          <span class="preview-meta">TITLE / IMAGE / BUTTON</span>
+        </div>
+      </div>
+
+      <figure class="preview-figure">
+        <img src="preview-white-dot.png" alt="预览图片：蓝白风格页面拼贴" loading="lazy">
+      </figure>
+    </section>
+  </main>
+
+<script defer src="ve-applied.js" data-ve-applied="1"></script>
+</body>
+</html>
