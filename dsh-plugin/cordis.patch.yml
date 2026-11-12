@@ -1,0 +1,14 @@
+# dsh-ui-editor bundle patch
+#
+# 这个组合包只挂一个插件：宿主端（lib/index.js）注册 /ve/plugin/*，
+# 浏览器端（lib/client.js，由 dsh.client 清单声明）挂侧边栏按钮和右侧抽屉。
+#
+# 安装方式（二选一）：
+#   1) DSH 设置 → 插件 → 添加插件 → 本地目录路径 → 本包目录
+#   2) node dsh-plugin/install.mjs
+# 两者都是把包名 "dsh-ui-editor" 加进 profile 的 dsh.profile.bundles，
+# 由 Loader 应用本 patch。
+
+- insert:
+    - id: dsh-ui-editor
+      name: 'dsh-ui-editor'

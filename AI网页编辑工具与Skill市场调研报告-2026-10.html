@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 可接入的网页编辑工具 / Skill 市场调研（2026-10）</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --card:#fff; --ink:#111827; --muted:#5b6478; --line:#e4e8f1;
+    --accent:#2f5cff; --good:#0a8f5b; --warn:#b0700a; --bad:#c0392b; --gray:#6b7280;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1200px;margin:0 auto;padding:36px 22px 90px}
+  header.hero{background:linear-gradient(135deg,#0f172a 0%,#1e2f6b 55%,#2f5cff 100%);color:#fff;border-radius:18px;padding:34px 34px 28px;box-shadow:0 10px 30px rgba(15,23,42,.25)}
+  header.hero h1{margin:0 0 10px;font-size:30px;line-height:1.3;letter-spacing:.5px}
+  header.hero p{margin:6px 0;color:#c9d6ff;font-size:14.5px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .meta span{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:3px 11px;font-size:12.5px}
+  h2{font-size:21px;margin:44px 0 14px;padding-left:12px;border-left:5px solid var(--accent);line-height:1.35}
+  h3{font-size:16px;margin:26px 0 10px;color:#1e2a4a}
+  p{font-size:14.5px;color:#26303f}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  .tldr{background:linear-gradient(180deg,#eef3ff,#fff);border:1px solid #cfdcff;border-left:5px solid var(--accent)}
+  .tldr ol{margin:8px 0 0;padding-left:22px}
+  .tldr li{font-size:14.5px;margin:9px 0}
+  .warnbox{background:#fffaf0;border:1px solid #f3e0b8;border-left:5px solid var(--warn)}
+  .tablewrap{overflow-x:auto;border-radius:12px;border:1px solid var(--line);background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.07);margin:12px 0 6px}
+  table{width:100%;border-collapse:collapse;font-size:13.2px;min-width:860px}
+  thead th{background:#0f172a;color:#fff;text-align:left;padding:10px 12px;font-weight:600;font-size:12.6px;white-space:nowrap;position:sticky;top:0}
+  td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#fafbff}
+  tbody tr:hover{background:#f2f6ff}
+  td:first-child{font-weight:600;white-space:nowrap}
+  .sub{display:block;font-weight:400;color:var(--muted);font-size:11.6px;white-space:nowrap}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .b{display:inline-block;padding:1px 7px;border-radius:5px;font-size:11.8px;font-weight:700;white-space:nowrap;line-height:1.6}
+  .b4{background:#e2f6ec;color:#0a7a4e}   /* 可改线上/任意页 */
+  .b3{background:#e8f0ff;color:#2450c8}   /* 有前提可改 */
+  .b2{background:#fff4e0;color:#a35f00}   /* 仅自家平台/仓库 */
+  .b1{background:#fdeaea;color:#a92c20}   /* 仅新建 */
+  .b0{background:#eef0f4;color:#5b6478}   /* 基础设施 */
+  .tag{display:inline-block;background:#eef1f8;color:#3b4761;border-radius:4px;padding:0 6px;font-size:11.5px;margin-right:4px}
+  code{background:#eef1f8;border-radius:4px;padding:1px 5px;font-size:.9em;color:#1f3255}
+  .legend{font-size:12.8px;color:var(--muted);margin:6px 0 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+  ul.tight{margin:8px 0;padding-left:20px}
+  ul.tight li{font-size:14.2px;margin:6px 0}
+  .num{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;align-items:center;justify-content:center;font-weight:700;margin-right:7px}
+  footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.6px}
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .toc a{background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12.8px;color:#26303f}
+  .toc a:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+  .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:18px 0}
+  .kpi div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .kpi b{display:block;font-size:22px;color:var(--accent);line-height:1.3}
+  .kpi span{font-size:12.4px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>AI 可接入的「网页编辑」工具 / Skill 全景调研</h1>
+  <p>市面扫描：哪些工具真的能让 AI 去改网页、怎么接进去（MCP / API / 扩展 / Skill）、哪些已经不能用了。</p>
+  <p style="color:#9fb4ff;font-size:13px">核实基准日 2026-10-30 · 数据来自官方文档、GitHub / npm 实时接口与厂商页面；价格类信息以官网为准</p>
+  <div class="meta">
+    <span>90+ 条目</span><span>10 个分类</span><span>4 条技术路线</span><span>1 份避坑清单</span>
+  </div>
+  <div class="toc">
+    <a href="#tldr">结论先行</a>
+    <a href="#map">能力分级</a>
+    <a href="#a">平台官方 MCP</a>
+    <a href="#b">网页装修扩展</a>
+    <a href="#c">代码库可视化</a>
+    <a href="#d">AI 浏览器</a>
+    <a href="#e">CDP/MCP 基建</a>
+    <a href="#f">生成新站</a>
+    <a href="#g">建站平台</a>
+    <a href="#h">国内</a>
+    <a href="#i">Skill 生态</a>
+    <a href="#route">路线对比</a>
+    <a href="#choose">选型建议</a>
+    <a href="#trap">避坑清单</a>
+    <a href="#gap">市场空白</a>
+  </div>
+</header>
+
+<h2 id="tldr">结论先行（TL;DR）</h2>
+<div class="card tldr">
+<ol>
+  <li><b>「AI 能接入」和「AI 能改网页」是两件事。</b>绝大多数产品（Lovable / v0 / Bolt / Same / 各类 AI 建站）是 <b>从零生成新站</b>；把 URL 丢进去得到的是<b>重建的副本</b>，不是原地修改。真正能改「你已有的线上页面」的只有三条路：<b>平台官方 MCP</b>、<b>代码库内可视化编辑</b>、<b>浏览器扩展注入渲染层</b>。</li>
+  <li><b>目前工程上最干净的闭环是「CDP + MCP」：</b>读结构化 DOM（不是截图）→ AI 产出 CSS/HTML diff → <code>evaluate_script</code> 注入 → 截图/录屏验证。<code>chrome-devtools-mcp</code>（54k★，Apache-2.0，免费）能同时给出<b>渲染结果</b>和<b>源码行号</b>，是这条路的首选；<code>playwright-mcp</code> 的 <code>annotate</code>/<code>highlight</code> 是做「用户圈一下、AI 来改」交互的现成积木。</li>
+  <li><b>平台侧已经 MCP 化，而且能改线上页：</b>Webflow 官方 MCP（所有计划含免费 Starter，能改建页/样式/组件/CMS/交互，带分支与快照）、Elementor 4.3 官方 MCP（2026-09-22 内建）、WordPress 7.0 Abilities API + EMCP / GoBuildWP（带快照与回滚）。<b>存量站改造优先看这条线。</b></li>
+  <li><b>「Skill」补的是方法，不是手段。</b>Anthropic 的 Agent Skills 标准已在 2026-10-22 捐给 Linux 基金会 AAIF，70+ 平台接入、100 万个 skill、约 2.8 亿次安装；但官方 skill 里只有 <code>frontend-design</code>、<code>web-artifacts-builder</code>、<code>webapp-testing</code> 等「产出 + 验收」能力，<b>没有任何一个「打开既有网页 → 精准改 DOM/源码」的专用 Skill</b>。Skill 没有浏览器和网络能力，碰不到页面。</li>
+  <li><b>这块市场很小、很新、很不稳。</b>唯一的「网页可视化编辑 MCP」项目只有 0 star、467 下载/月、单人维护；另有大量包名重名（canvas-agent 其实是 Canvas LMS 教学 MCP）。做选型必须假设「半年后可能没了」。</li>
+  <li><b>国内基本空白。</b>没有「贴 URL 就让 AI 改线上页面并保存」的厂商级产品；能落地的只有：① AI IDE 改本地仓库（Trae / CodeBuddy / Qoder CN / Comate）② 平台内生成物（秒哒 / Coze / 微搭 / CodeWave）③ 浏览器扩展临时改渲染层（刷新即失、不可发布）。</li>
+</ol>
+</div>
+
+<div class="kpi">
+  <div><b>54,460★</b><span>chrome-devtools-mcp（Apache-2.0，免费，108 个工具 + 7 个官方 Skill）</span></div>
+  <div><b>2,610 万/月</b><span>playwright-mcp npm 下载量，38,831★</span></div>
+  <div><b>0★</b><span>唯一「网页可视化编辑」MCP 项目（@nco-studio/web-editor-mcp）</span></div>
+  <div><b>23.6%</b><span>Anthropic 实测：无防护时浏览器代理被提示注入攻击成功率</span></div>
+</div>
+
+<h2 id="map">一、先分清 4 种「AI 改网页」的真实含义</h2>
+<p>市面上把这些混在一起讲，是选型踩坑的第一原因。它们的<b>能力边界、失败模式、成本</b>完全不同：</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>层级</th><th>含义</th><th>谁是玩家</th><th>能否持久化</th><th>典型失败</th></tr></thead>
+<tbody>
+<tr><td>L0 运行时改渲染</td><td>往当前页面注入 <code>&lt;style&gt;</code> / DOM 改动，立即生效</td><td>浏览器扩展（PageStyler、ReSkin）、CDP <code>evaluate_script</code></td><td>不能，刷新即失</td><td>MV3 被回收、SPA 路由切换丢状态</td></tr>
+<tr><td>L1 改源码</td><td>AI 读仓库 → 改组件 → 重新构建</td><td>Trae / CodeBuddy / Cursor / Claude Code / Onlook</td><td>能（进 Git）</td><td>需要拿到源码，线上站多半拿不到</td></tr>
+<tr><td>L2 平台内改结构</td><td>通过 CMS / 建站平台的官方 MCP 或 API 改</td><td>Webflow MCP、Elementor MCP、EMCP、Builder.io</td><td>能（落草稿→发布）</td><td>只作用于该平台托管的站</td></tr>
+<tr><td>L3 像人一样操作</td><td>截图/无障碍树 + 点击输入，替人干活</td><td>Claude in Chrome、ChatGPT 云浏览器、Comet</td><td>不落源码</td><td>定位失败静默报成功；不提供「注入任意 CSS」通道</td></tr>
+</tbody>
+</table>
+</div>
+<p class="legend">能力分级图例：<span class="b b4">可改线上已有页</span> <span class="b b3">有条件可改</span> <span class="b b2">仅自家平台/仓库</span> <span class="b b1">仅生成新站</span> <span class="b b0">基础设施</span></p>
+
+<h2 id="a">二、平台官方 MCP / API：唯一能「改线上已有页面」的正规军</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>工具</th><th>接入方式</th><th>改页能力</th><th>开源</th><th>价格</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://webflow.com/blog/the-agentic-web-is-here">Webflow MCP</a><span class="sub">Webflow</span></td><td>官方远程 MCP + API + CLI</td><td><span class="b b4">★★</span></td><td>否</td><td>Starter 免费；Basic $15/月起</td><td>建页/样式/组件/CMS/交互/发布/快照/分支；官方称所有站点计划可用，不额外耗 AI credits</td></tr>
+<tr><td><a href="https://elementor.com">Elementor 4.3 官方 MCP</a><span class="sub">Elementor</span></td><td>内建 MCP（基于 WordPress Abilities API）</td><td><span class="b b3">★★</span></td><td>是（GPL）</td><td>插件免费；One $19/月</td><td>2026-09-22 内建；<b>只能改 Atomic(V4) 布局</b>，改动落草稿；V3 Widget 站只能新增区块</td></tr>
+<tr><td><a href="https://emcptools.com">EMCP Tools</a><span class="sub">msrbuilds</span></td><td>MCP（244 免费 / 578 工具 Pro）</td><td><span class="b b4">★★</span></td><td>是（GPL-2.0）</td><td>免费版 + Pro</td><td>Elementor / Bricks / Divi / WPBakery；带快照、账本、回滚</td></tr>
+<tr><td><a href="https://gobuildwp.com">GoBuildWP</a><span class="sub">GoBuildWP</span></td><td>MCP 直连或 Cloud 网关</td><td><span class="b b4">★★</span></td><td>是（GPL）</td><td>免费插件；Pro $39/年起</td><td>16 家客户端、安全档位、undo、多站点管理</td></tr>
+<tr><td><a href="https://builder.io">Builder.io（Fusion + Content）</a><span class="sub">Builder.io</span></td><td>可视化 IDE + 视觉 CMS + 3 个官方 MCP + CLI + Figma 插件</td><td><span class="b b4">★★</span></td><td>否</td><td>Free；Pro $24/席</td><td>唯一「改代码 + 改线上 CMS 页面」双栖</td></tr>
+<tr><td><a href="https://wix.com">Wix MCP</a><span class="sub">Wix</span></td><td>MCP（内容/CMS/商城/运营）</td><td><span class="b b3">★</span></td><td>否</td><td>Free 层；约 $17/月起</td><td>偏内容与运营层，<b>版式改版仍要回 Wix Editor</b></td></tr>
+<tr><td><a href="https://wordpress.org">WP 7.0 Abilities API + MCP Adapter</a><span class="sub">WordPress</span></td><td>核心能力注册协议（2026-02）</td><td><span class="b b4">★★</span></td><td>是（GPL）</td><td>免费</td><td>WooCommerce / Yoast / ACF / 主题均可注册「能力」，是上面两个 WP MCP 的地基</td></tr>
+<tr><td><a href="https://unshift.ai">Unshift</a><span class="sub">Unshift</span></td><td>远程 MCP（Streamable HTTP + OAuth）+ 附带 SKILL.md</td><td><span class="b b3">★</span></td><td>否</td><td>免费发布；Pro $20/月/站</td><td>可抓 URL 重建、改块/主题/SEO；<b>早期项目（仓库 0★），需自验</b></td></tr>
+</tbody>
+</table>
+</div>
+<p class="legend">判断要点：能不能改存量站，先问三句——① 有无官方 MCP/API ② 改动是否落草稿/分支、是否可 undo ③ 是否需要 V4/Atomic 之类的新架构。</p>
+
+<h2 id="b">三、浏览器扩展：直接「装修」任意网页（不落源码）</h2>
+<p>这是最贴近「给个页面，AI 改一下」体验的一类，也是国内团队最容易照抄的一类。共同硬伤：<b>只改渲染层，刷新即失、不可发布、不能进 Git</b>。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>工具</th><th>接入方式</th><th>改页能力</th><th>开源</th><th>价格</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://github.com/ns2250225/zhuangxiu">PageStyler AI / 网页装修师</a><span class="sub">个人开源项目</span></td><td>MV3 扩展 + 任意 OpenAI 兼容模型</td><td><span class="b b4">★★</span></td><td>源码公开（保留权利）</td><td>免费（自备 key）</td><td>自然语言装修、10 套主题、元素选取/相似元素批量、撤销重做、装修码分享、CSS 清洗白名单、隐私裁剪</td></tr>
+<tr><td><a href="https://github.com/tekaratzas/ReSkin-AI">ReSkin AI</a><span class="sub">tekaratzas</span></td><td>扩展 + LLM 生成 CSS 覆盖</td><td><span class="b b4">★★</span></td><td>是（MIT）</td><td>免费（自备 key）</td><td>把 HTML 骨架喂给 LLM 生成 CSS override，最简参考实现</td></tr>
+<tr><td><a href="https://github.com/kchander/magix-extension">Magix</a><span class="sub">kchander</span></td><td>扩展 + ChatGPT</td><td><span class="b b4">★★</span></td><td>是</td><td>免费</td><td>「ChatGPT + Tampermonkey」，自然语言改任意站</td></tr>
+<tr><td><a href="https://chromewebstore.google.com/detail/webedit-ai/kjkckloecleleppjlfaemfkkppekcbmf">WebEdit AI</a><span class="sub">Chrome 商店</span></td><td>扩展</td><td><span class="b b4">★★</span></td><td>否</td><td>订阅</td><td>页面内直接编辑文案/样式</td></tr>
+<tr><td><a href="https://chromewebstore.google.com/detail/webskin-ai/nimdmhcklgnpbpiegpdlgngmfgingjii">WebSkin AI</a><span class="sub">Chrome 商店</span></td><td>扩展</td><td><span class="b b4">★★</span></td><td>否</td><td>订阅</td><td>换肤/重设计</td></tr>
+<tr><td><a href="https://chromewebstore.google.com/detail/siteskin-%E2%80%93-restyle-your-f/bfkinabphaloeffdmmmfjjncjjjdphaj">SiteSkin</a><span class="sub">Chrome 商店</span></td><td>扩展</td><td><span class="b b4">★★</span></td><td>否</td><td>免费/内购</td><td>一键换肤</td></tr>
+<tr><td><a href="https://chromewebstore.google.com/detail/tezyn-%E2%80%94-customize-any-web/nfegclcoidodkleddekkdbfgljnfajgj">Tezyn</a><span class="sub">Chrome 商店</span></td><td>扩展</td><td><span class="b b4">★★</span></td><td>否</td><td>免费/内购</td><td>Customize any website</td></tr>
+<tr><td><a href="https://chromewebstore.google.com/detail/ai-website-redesign/lkpclcmkiklodpkfjlpbeopfifmbdeel">AI Website Redesign</a><span class="sub">Chrome 商店</span></td><td>扩展</td><td><span class="b b4">★★</span></td><td>否</td><td>订阅</td><td>整站重设计</td></tr>
+<tr><td><a href="https://chromewebstore.google.com/detail/styleswift/llchggmimjgnbjlcgpkjmplhfbkjjcli">StyleSwift / 数字女娲</a><span class="sub">Chrome 商店</span></td><td>扩展</td><td><span class="b b4">★★</span></td><td>否</td><td>免费/内购</td><td>中文换肤插件</td></tr>
+<tr><td><a href="https://chromewebstore.google.com/detail/ai-html-editor/ancdpandpkkbnpnodamdjnedanoodnkl">AI HTML Editor</a><span class="sub">Chrome 商店</span></td><td>扩展</td><td><span class="b b4">★★</span></td><td>否</td><td>免费/内购</td><td>页面 HTML 片段编辑</td></tr>
+<tr><td><a href="https://www.npmjs.com/package/@nco-studio/web-editor-mcp">@nco-studio/web-editor-mcp</a><span class="sub">n'co studio</span></td><td>扩展 + 本地 WS + MCP → 改源码</td><td><span class="b b4">★★</span></td><td>是（MIT）</td><td>免费</td><td>唯一「产品化」的闭环：<b>预览在 DOM、持久化在源码</b>；但 0★、467 下载/月、单人维护、仅 JSX/TSX</td></tr>
+<tr><td><a href="https://github.com/myriade-ai/open-v0">open-v0</a><span class="sub">myriade-ai</span></td><td>开源「V0 克隆」可视化编辑器</td><td><span class="b b2">△</span></td><td>是</td><td>免费自托管</td><td>可作为自研底座参考</td></tr>
+<tr><td>Aimax / AI 页面操作助手 / 网页临时修改助手<span class="sub">国内小团队</span></td><td>扩展，对话式改 DOM</td><td><span class="b b4">★★</span></td><td>否</td><td>免费/内购</td><td>只改渲染层，不落源码、不可发布，适合演示与视觉调试</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="c">四、代码库内可视化编辑（能拿到源码时的最优解）</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>工具</th><th>接入方式</th><th>改页能力</th><th>开源</th><th>价格</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://github.com/onlook-dev/onlook">Onlook</a><span class="sub">On Off Inc.</span></td><td>内置 AI + Agent + Skills，可自托管</td><td><span class="b b3">△</span></td><td>是（Apache-2.0）</td><td>自托管免费；团队议价</td><td>在真实 React/Next 代码库上「像 Figma 一样」改，改的就是源码</td></tr>
+<tr><td><a href="https://v0.app">v0 Design Mode</a><span class="sub">Vercel</span></td><td>对话 + 可视化选择 + GitHub/Vercel MCP</td><td><span class="b b3">△</span></td><td>否</td><td>Free 7 条/天；Plus $30/席</td><td>Design Mode 可点选元素改样式，产出真代码</td></tr>
+<tr><td><a href="https://tempo.new">Tempo</a><span class="sub">Tempo Labs (YC)</span></td><td>设计工具式 React IDE</td><td><span class="b b3">△</span></td><td>否</td><td>免费层 + 付费</td><td>设计工具心智，输出 React</td></tr>
+<tr><td><a href="https://replit.com">Replit Design</a><span class="sub">Replit</span></td><td>Agent + Design 画布 + URL/Figma 导入</td><td><span class="b b3">△</span></td><td>否</td><td>Core $25/月</td><td>导入 URL 是<b>重建</b>，不是原地改</td></tr>
+<tr><td><a href="https://www.puckeditor.com">Puck</a><span class="sub">开源</span></td><td>React 原生可视化编辑器（JSON 配置）</td><td><span class="b b3">★</span></td><td>是（MIT）</td><td>免费</td><td>让 agent 生成受控 JSON；自研产品最稳的底座之一</td></tr>
+<tr><td><a href="https://grapesjs.com">GrapesJS</a><span class="sub">开源</span></td><td>可嵌入页面构建器框架，社区 AI 插件</td><td><span class="b b4">★★</span></td><td>是（BSD-3）</td><td>自托管免费；Studio SDK 付费</td><td><b>唯一能直接吃任意现有 HTML 的开源底座</b>；AI 需自接（grapesjs-ai-agent / silexlabs-ai-copilot）</td></tr>
+<tr><td><a href="https://webstudio.is">Webstudio</a><span class="sub">开源</span></td><td>内置 AI，可自托管</td><td><span class="b b3">△</span></td><td>是（AGPL-3.0）</td><td>自托管免费</td><td>开源 Webflow 替代</td></tr>
+<tr><td><a href="https://dyad.sh">Dyad</a><span class="sub">开源</span></td><td>本地 AI 应用构建器，自带 key</td><td><span class="b b3">△</span></td><td>是（Apache-2.0）</td><td>免费</td><td>本地跑、隐私好</td></tr>
+<tr><td>Tiptap / Editor.js<span class="sub">开源</span></td><td>富文本 / 块编辑器</td><td><span class="b b1">✗</span></td><td>是</td><td>核心免费</td><td><b>内容层编辑器，改不了版式</b>——这是最常见的选型误判</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="d">五、AI 浏览器 / 代理：像人一样操作（不是「改页面」）</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>工具</th><th>接入方式</th><th>改页能力</th><th>开源</th><th>价格</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://claude.com/claude-in-chrome">Claude in Chrome</a><span class="sub">Anthropic</span></td><td>Chrome 扩展（MV3）</td><td><span class="b b3">★</span></td><td>否</td><td>全部付费档内含</td><td>已 <b>GA</b>；能读页面、点击、输入、填表；<b>不提供任意 CSS 注入通道</b>，想改页面只能让它去改源码</td></tr>
+<tr><td><a href="https://help.openai.com/en/articles/20001280-using-cloud-browser-in-chatgpt">ChatGPT 云浏览器</a><span class="sub">OpenAI</span></td><td>云端独立浏览器（ChatGPT Work）</td><td><span class="b b3">★</span></td><td>否</td><td>付费档（不含 Free/Go）</td><td>独立 Cookie/登录态，<b>不继承本机会话</b>；高影响动作强制确认</td></tr>
+<tr><td><a href="https://blog.google/products-and-platforms/products/chrome/gemini-3-auto-browse/">Gemini in Chrome / Auto Browse</a><span class="sub">Google</span></td><td>浏览器内置侧栏</td><td><span class="b b3">★</span></td><td>否</td><td>侧栏免费；Auto Browse 需 AI Pro $19.99</td><td>有 User Alignment Critic 防投毒，但只判断「是否符合意图」</td></tr>
+<tr><td><a href="https://www.perplexity.ai/hub/blog/introducing-comet">Comet</a><span class="sub">Perplexity</span></td><td>独立浏览器</td><td><span class="b b3">★</span></td><td>否</td><td>已对所有用户免费</td><td>可后台跑任务</td></tr>
+<tr><td><a href="https://www.diabrowser.com">Dia</a><span class="sub">The Browser Company → Atlassian</span></td><td>独立浏览器</td><td><span class="b b3">★</span></td><td>否</td><td>免费</td><td>2025-09 被 Atlassian 收购；姊妹产品 Arc 将停服</td></tr>
+<tr><td style="color:#a92c20">~~ChatGPT Atlas / Operator / Project Mariner / Edge Copilot Mode~~</td><td>—</td><td><span class="b b1">已退役</span></td><td>—</td><td>—</td><td><b>12 个月内 4 次退役</b>：Mariner 2026-05 关停、Atlas 退役、Operator 下线并并入 ChatGPT Work、Edge Copilot Mode 取消</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="e">六、浏览器自动化 / CDP-MCP 基础设施：真正的「手」</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>工具</th><th>接入方式</th><th>改页能力</th><th>开源</th><th>价格</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">Chrome DevTools MCP</a><span class="sub">ChromeDevTools</span></td><td>MCP + CLI</td><td><span class="b b4">★★</span></td><td>是（Apache-2.0）</td><td>免费</td><td><b>54,460★</b>；<code>get_css_styles</code> 带源码行号与层叠信息、<code>evaluate_script</code> 注入、<code>take_screenshot</code>/<code>screencast</code> 验证；附 7 个官方 Skill</td></tr>
+<tr><td><a href="https://github.com/microsoft/playwright-mcp">Playwright MCP</a><span class="sub">Microsoft</span></td><td>MCP + CLI</td><td><span class="b b4">★★</span></td><td>是（Apache-2.0）</td><td>免费</td><td>38,831★ / npm 2,610 万/月；<code>browser_annotate</code>（手绘标注→截图+ARIA）与 <code>browser_highlight</code> 是可视化编辑的现成积木</td></tr>
+<tr><td><a href="https://github.com/browser-use/browser-use">browser-use</a><span class="sub">browser-use</span></td><td>Python 库 / 云 / MCP</td><td><span class="b b4">★★</span></td><td>是（MIT）</td><td>按量，$1 试用</td><td>119,513★，社区最大</td></tr>
+<tr><td><a href="https://github.com/browserbase/stagehand">Browserbase + Stagehand</a><span class="sub">Browserbase</span></td><td>SDK / API / MCP</td><td><span class="b b4">★★</span></td><td>SDK 开源（MIT）</td><td>Free / $20 / $99</td><td>云端浏览器托管，适合多租户产品</td></tr>
+<tr><td><a href="https://github.com/Skyvern-AI/skyvern">Skyvern</a><span class="sub">Skyvern</span></td><td>API</td><td><span class="b b4">★★</span></td><td>是（AGPL-3.0）</td><td>$29 / $149</td><td>带 human-in-the-loop（企业版）</td></tr>
+<tr><td><a href="https://github.com/steel-dev/steel-browser">Steel.dev</a><span class="sub">Steel</span></td><td>API / 可自托管</td><td><span class="b b4">★★</span></td><td>是（Apache-2.0）</td><td>$0.10/浏览器小时</td><td>自托管成本最低</td></tr>
+<tr><td><a href="https://github.com/hyperbrowserai/mcp">Hyperbrowser</a><span class="sub">Hyperbrowser</span></td><td>MCP / API</td><td><span class="b b4">★★</span></td><td>是（MIT）</td><td>Free / $30 / $100</td><td>⚠️ 仓库 2025-11 后停更</td></tr>
+<tr><td><a href="https://github.com/nottelabs/notte">Notte</a><span class="sub">Notte Labs</span></td><td>API / SDK / MCP</td><td><span class="b b4">★★</span></td><td>自定义许可</td><td>$0.01/浏览器小时</td><td>单价最低</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="f">七、Prompt → 整站（生成新站为主，改旧站等于重建）</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>工具</th><th>接入方式</th><th>改页能力</th><th>开源</th><th>价格</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://lovable.com">Lovable</a><span class="sub">Lovable</span></td><td>对话 + 官方 MCP server + API + 点选编辑</td><td><span class="b b2">△</span></td><td>否</td><td>Free；Pro $25/月</td><td>URL 导入 = 重建副本；支持把应用发布成 MCP server</td></tr>
+<tr><td><a href="https://v0.app">v0</a><span class="sub">Vercel</span></td><td>对话 + Design Mode + GitHub 同步</td><td><span class="b b2">△</span></td><td>否</td><td>Free；Plus $30/席</td><td>已同步仓库后可持续迭代</td></tr>
+<tr><td><a href="https://bolt.new">Bolt.new</a><span class="sub">StackBlitz</span></td><td>对话 + Connectors/MCP + 导入 GitHub</td><td><span class="b b2">△</span></td><td>否</td><td>Free 1M tokens；Pro $25/月</td><td>浏览器内全栈 + 托管</td></tr>
+<tr><td><a href="https://same.new">Same.new</a><span class="sub">Same</span></td><td>对话 + 手动点选 + GitHub/Neon/Supabase</td><td><span class="b b2">△</span></td><td>否</td><td>Free 500K；Basic $10/月</td><td>网页复刻型，克隆即副本</td></tr>
+<tr><td><a href="https://base44.com">Base44</a><span class="sub">Wix</span></td><td>对话</td><td><span class="b b2">△</span></td><td>否</td><td>Free；约 $20/月</td><td>内部工具向</td></tr>
+<tr><td><a href="https://capy.ai">Capy</a><span class="sub">Capy</span></td><td>对话 + 画布</td><td><span class="b b2">△</span></td><td>否</td><td>免费层 + 按模型</td><td>团队协作向</td></tr>
+<tr><td><a href="https://bubble.io">Bubble Agent 2 + Bubble MCP</a><span class="sub">Bubble</span></td><td>MCP（beta，不耗积分）</td><td><span class="b b3">△</span></td><td>否</td><td>Starter 约 $39/月</td><td>2026-10 上线，明确面向「改造已有应用」</td></tr>
+<tr><td><a href="https://replit.com">Replit Agent</a><span class="sub">Replit</span></td><td>Agent + Design 画布</td><td><span class="b b2">△</span></td><td>否</td><td>Core $25/月</td><td>导入即重建</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="g">八、传统建站 / 设计平台：AI 化程度分三档</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>工具</th><th>接入方式</th><th>改页能力</th><th>开源</th><th>价格</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://framer.com">Framer</a><span class="sub">Framer</span></td><td>内置 AI Agents + credits</td><td><span class="b b3">★</span></td><td>否</td><td>Free；Basic $10/月（年付）</td><td>自家站点任意改，2026 起转 Agents 计费</td></tr>
+<tr><td><a href="https://wix.com">Wix AI Builder</a><span class="sub">Wix</span></td><td>对话建站 + Wix MCP</td><td><span class="b b2">△</span></td><td>否</td><td>Free 层；约 $17/月起</td><td>生成后仍靠 Wix Editor 精修</td></tr>
+<tr><td><a href="https://squarespace.com">Squarespace Blueprint</a><span class="sub">Squarespace</span></td><td>问卷式 AI 生成</td><td><span class="b b1">✗</span></td><td>否</td><td>约 $16/月</td><td>只生成新站</td></tr>
+<tr><td><a href="https://hostinger.com/ai-builder">Hostinger Horizons</a><span class="sub">Hostinger</span></td><td>对话</td><td><span class="b b2">△</span></td><td>否</td><td>约 $10–20/月</td><td>低价位段</td></tr>
+<tr><td><a href="https://durable.co">Durable</a><span class="sub">Durable</span></td><td>AI 生成 + 文案</td><td><span class="b b1">✗</span></td><td>否</td><td>约 $12/月</td><td>小微 30 秒站</td></tr>
+<tr><td><a href="https://unbounce.com">Unbounce Smart Builder</a><span class="sub">Unbounce</span></td><td>内置 AI</td><td><span class="b b2">△</span></td><td>否</td><td>约 $99/月</td><td>仅平台内落地页</td></tr>
+<tr><td><a href="https://instapage.com">Instapage</a><span class="sub">Instapage</span></td><td>内置 AI + 个性化</td><td><span class="b b2">△</span></td><td>否</td><td>约 $199/月</td><td>企业落地页</td></tr>
+<tr><td><a href="https://figma.com">Figma Make + 远程 MCP</a><span class="sub">Figma</span></td><td>prompt→code + 远程 MCP（可反向编辑 Figma 文件）</td><td><span class="b b3">△</span></td><td>否</td><td>Free Starter；席位约 $16+</td><td>Figma MCP 是「反向」能力，落到网站还需 Make/Sites</td></tr>
+<tr><td><a href="https://animaapp.com">Anima</a><span class="sub">Anima</span></td><td>Figma 插件 + BYO 模型</td><td><span class="b b1">✗</span></td><td>否</td><td>免费层 + 付费</td><td>一次性设计稿转前端</td></tr>
+<tr><td><a href="https://locofy.ai">Locofy</a><span class="sub">Locofy</span></td><td>插件 + AI</td><td><span class="b b1">✗</span></td><td>否</td><td>免费额度 + 订阅</td><td>设计稿→React/Next/Flutter</td></tr>
+<tr><td>Wixel<span class="sub">Wix</span></td><td>对话式设计 Agent</td><td><span class="b b1">✗</span></td><td>否</td><td>需 Wix 账户</td><td><b>只做 logo/图/视频/PPT，不做网页</b>——常见误认</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="h">九、国内市场：能改「已有网页」的只有三条路</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>工具</th><th>接入方式</th><th>改页能力</th><th>开源</th><th>价格</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://www.trae.cn/pricing">Trae</a><span class="sub">字节跳动</span></td><td>AI IDE + 插件 + MCP</td><td><span class="b b2">△</span></td><td>否</td><td>免费 500 积分；Pro ¥69/月起</td><td>只能改本地仓库源码；原 MarsCode 已并入</td></tr>
+<tr><td><a href="https://www.codebuddy.cn/docs/ide/Account/pricing">CodeBuddy</a><span class="sub">腾讯</span></td><td>IDE + 插件 + CLI，<b>MCP/Skills/Hooks/Subagents</b></td><td><span class="b b2">△</span></td><td>否</td><td>免费 500 积分；标准 ¥99/月</td><td>国内里 Skill 生态支持最全，含 Figma 接入</td></tr>
+<tr><td><a href="https://lingma.aliyun.com/pricing">Qoder CN（原通义灵码）</a><span class="sub">阿里云</span></td><td>插件 / IDE / CLI + MCP</td><td><span class="b b2">△</span></td><td>否</td><td>社区版免费；专业版 ¥59/月</td><td>2026-05-20 更名，旧名已废弃</td></tr>
+<tr><td><a href="https://comate.baidu.com">文心快码 Comate</a><span class="sub">百度</span></td><td>AI IDE + 插件</td><td><span class="b b2">△</span></td><td>否</td><td>个人免费</td><td>Agent 按 token，用尽降级不断供</td></tr>
+<tr><td><a href="https://codegeex.cn">CodeGeeX</a><span class="sub">智谱</span></td><td>插件 + 可私有化</td><td><span class="b b2">△</span></td><td>模型权重开源</td><td>个人免费</td><td>仓库 2024-08 后停更，重心转 ZCode</td></tr>
+<tr><td><a href="https://www.miaoda.cn">秒哒 Miaoda</a><span class="sub">百度</span></td><td>对话建站 + 技能 + 源码导出</td><td><span class="b b2">△</span></td><td>否</td><td>免费秒点；标准版 14.9 首月</td><td>只能改秒哒生成的应用；<b>高级版+可导出源码</b>再接 AI IDE</td></tr>
+<tr><td><a href="https://coze.cn">Coze 扣子</a><span class="sub">字节跳动</span></td><td>Agent + Skill + 插件 + MCP + API</td><td><span class="b b2">△</span></td><td>否</td><td>免费版 + 付费版</td><td>只能改 Coze 项目内生成物</td></tr>
+<tr><td><a href="https://cloud.tencent.com/product/weda">腾讯云微搭</a><span class="sub">腾讯云</span></td><td>低代码 + 自然语言生成页面</td><td><span class="b b2">△</span></td><td>否</td><td>个人 ¥19.9/月起</td><td>平台内应用</td></tr>
+<tr><td><a href="https://codewave.163.com">网易 CodeWave（SDD）</a><span class="sub">网易智企</span></td><td>Spec 驱动 + NASL + 可视化拖拽</td><td><span class="b b3">△</span></td><td>否</td><td>企业咨询报价</td><td>可导出 Vue/React/Spring 源码</td></tr>
+<tr><td><a href="https://www.fkw.com">凡科</a><span class="sub">凡科</span></td><td>SaaS 模板 + AI 生成框架</td><td><span class="b b2">△</span></td><td>否</td><td>年费 ¥698 起</td><td>每站仅 1 次免费 AI 生成</td></tr>
+<tr><td><a href="https://mastergo.com">MasterGo AI</a><span class="sub">蓝湖</span></td><td>官方 Vibe MCP / Magic MCP</td><td><span class="b b1">✗</span></td><td>否</td><td>席位 + AI 积分</td><td>设计稿→代码单向，不能回写线上页</td></tr>
+<tr><td><a href="https://js.design">即时设计 AI</a><span class="sub">即时设计</span></td><td>社区 jsdesign-mcp-server</td><td><span class="b b1">✗</span></td><td>否</td><td>免费 + 会员</td><td>设计稿→代码单向</td></tr>
+<tr><td><a href="https://pixso.cn/price/">Pixso AI</a><span class="sub">博思云创</span></td><td>官方 Pixso MCP</td><td><span class="b b1">✗</span></td><td>否</td><td>免费 + 团队版</td><td>设计稿→代码单向</td></tr>
+<tr><td style="color:#a92c20">~~Motiff 妙多~~</td><td>—</td><td><span class="b b1">已停服</span></td><td>—</td><td>—</td><td><b>2026-07-31 停服，2026-11-01 数据永久删除</b>；原 MCP 随之作废</td></tr>
+<tr><td>稿定设计 / 墨刀 AI<span class="sub">国内</span></td><td>模板 + AI 生图/文案；对话生成原型</td><td><span class="b b1">✗</span></td><td>否</td><td>免费 + 会员</td><td>产出图片物料/原型，不出可发布网页</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="i">十、Skill 生态：标准已确立，但「改网页」的 Skill 是空白</h2>
+<div class="card">
+<p><b>标准层：</b>Agent Skills（<code>SKILL.md</code> + <code>scripts/</code> + <code>references/</code> + <code>assets/</code>，渐进披露三层加载）已在 <b>2026-10-22 由 Anthropic 捐给 Linux 基金会下的 AAIF</b>（Anthropic、Block、OpenAI 共同创立），MCP 也捐给了同一基金会。<b>70+ 平台接入</b>（ChatGPT、Cursor、GitHub Copilot、VS Code 等），已发布 <b>100 万个 skill</b>、安装约 <b>2.8 亿次</b>。</p>
+</div>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Skill / 平台</th><th>形态</th><th>与「改网页」的关系</th><th>成熟度</th><th>要点</th></tr></thead>
+<tbody>
+<tr><td><a href="https://agentskills.io/home">Agent Skills 标准</a><span class="sub">AAIF</span></td><td>开放标准</td><td><span class="b b0">基础</span></td><td>事实标准</td><td>版本化发布、提案流程、安全指南已在路线图中</td></tr>
+<tr><td><a href="https://github.com/anthropics/skills">frontend-design</a><span class="sub">anthropics/skills</span></td><td>官方 Skill</td><td><span class="b b1">✗</span> 只管「怎么设计」</td><td>生产级</td><td>反「AI 味」，强制模型做大胆设计决策；React + Tailwind 效果最好</td></tr>
+<tr><td><a href="https://github.com/anthropics/skills">web-artifacts-builder</a><span class="sub">anthropics/skills</span></td><td>官方 Skill</td><td><span class="b b1">✗</span> 生成新页面</td><td>生产级</td><td>React + Tailwind + shadcn/ui 构建 HTML artifacts</td></tr>
+<tr><td><a href="https://github.com/anthropics/skills">webapp-testing</a><span class="sub">anthropics/skills</span></td><td>官方 Skill</td><td><span class="b b3">△</span> 只负责验收</td><td>生产级</td><td>Playwright 起浏览器测本地 app，做 UI 验证与截图比对——<b>改完页面用它验收</b></td></tr>
+<tr><td><a href="https://github.com/anthropics/skills">canvas-design / brand-guidelines / theme-factory</a><span class="sub">anthropics/skills</span></td><td>官方 Skill</td><td><span class="b b1">✗</span></td><td>生产级</td><td>视觉风格、品牌色/字体规范，适合沉淀设计系统</td></tr>
+<tr><td><a href="https://github.com/anthropics/skills">mcp-builder</a><span class="sub">anthropics/skills</span></td><td>官方 Skill</td><td><span class="b b0">造工具</span></td><td>生产级</td><td>用 Skill 指导生成高质量 MCP server——自研时的加速器</td></tr>
+<tr><td><a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">chrome-devtools-mcp 的 7 个 Skill</a><span class="sub">Google</span></td><td>官方 Skill 包</td><td><span class="b b4">★★</span></td><td>官方维护</td><td><code>chrome-devtools</code> / <code>a11y-debugging</code> / <code>debug-optimize-lcp</code> / <code>memory-leak-debugging</code> 等，可用 <code>/plugin install</code> 一键装</td></tr>
+<tr><td><a href="https://github.com/travisvn/awesome-claude-skills">awesome-claude-skills</a><span class="sub">社区</span></td><td>合集</td><td><span class="b b3">△</span></td><td>活跃</td><td>收录 playwright-skill、frontend-slides、shadcn/ui skills、web-asset-generator 等；找 skill 首选入口</td></tr>
+<tr><td><a href="https://github.com/smootify/skills">Smootify skills</a><span class="sub">社区</span></td><td>合集</td><td><span class="b b3">△</span></td><td>垂直</td><td>Figma 标注、Figma→Webflow、站点审计、自定义脚本</td></tr>
+<tr><td><a href="https://github.com/unshift-ai/unshift-mcp">unshift-website-builder</a><span class="sub">Unshift</span></td><td>厂商 Skill + MCP</td><td><span class="b b3">★</span></td><td>早期</td><td>少见的「Skill + 远程 MCP」组合：教 Agent 用 Unshift 建站/导入/改/发布</td></tr>
+<tr><td>ChatGPT Apps / MCP Apps SDK<span class="sub">OpenAI</span></td><td>平台</td><td><span class="b b0">分发</span></td><td>迁移中</td><td>约 330 个应用，正从 OpenAI Apps SDK 迁往 MCP Apps SDK</td></tr>
+<tr><td>Gemini CLI Extensions<span class="sub">Google</span></td><td>平台</td><td><span class="b b0">分发</span></td><td>活跃</td><td>可捆绑 MCP + 命令 + 上下文文件</td></tr>
+<tr><td>Cursor Rules + MCP 市场<span class="sub">Cursor</span></td><td>平台</td><td><span class="b b0">分发</span></td><td>活跃</td><td>项目级规则 + MCP 安装入口，国内团队最常用组合</td></tr>
+<tr><td><a href="https://smithery.ai/servers">Smithery</a> / <a href="https://mcp.so">mcp.so</a></td><td>MCP 市场</td><td><span class="b b0">分发</span></td><td>活跃</td><td><code>browser-automation</code> 与 <code>web-scraping</code> 各约 60 个服务</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card warnbox">
+<p><b>关键判断：Skill 没有「手」。</b>Skill 是提示词 + 脚本资产包，本身不携带浏览器与网络能力；<b>要碰到页面必须有 MCP / CDP / 扩展</b>。所以「AI 改网页」的正确组合是：<b>MCP 给手段（读 DOM、截图、注入）+ Skill 给方法（设计规范、验收流程、组件约定）</b>——这也是 AAIF 的官方口径（MCP 与 Skills 互补）。判据一句话：<b>「知道怎么改但没有手」→ 上 MCP；「有手但每次改出 AI 味」→ 上 Skill。</b></p>
+</div>
+
+<h2 id="route">十一、四条技术路线对比</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>维度</th><th>A 浏览器扩展注入</th><th>B CDP / MCP</th><th>C 截图 + 坐标点击</th><th>D 改源码仓库</th></tr></thead>
+<tbody>
+<tr><td>代表</td><td>PageStyler、ReSkin、web-editor-mcp、Claude in Chrome</td><td>chrome-devtools-mcp、playwright-mcp、browser-use</td><td>Computer Use、<code>--caps=vision</code></td><td>Trae / CodeBuddy / Cursor / Claude Code / Onlook</td></tr>
+<tr><td>读 DOM</td><td>content script 直读，最准</td><td>CDP 全量：a11y 树 + CSS 层叠 + console + network</td><td>看不到 DOM，只有像素</td><td>读源码与组件树</td></tr>
+<tr><td>写回</td><td>DOM API 直改，天然即时预览</td><td><code>evaluate_script</code> 注入，天然即时预览</td><td>只能模拟人操作</td><td>改文件 → 重新构建</td></tr>
+<tr><td>登录态</td><td>天然继承用户全部会话（风险最高）</td><td>可继承（persistent profile / --extension）或隔离</td><td>云端 VM 通常不继承</td><td>无关</td></tr>
+<tr><td>持久化</td><td>✗ 刷新即失</td><td>✗ 需自己落 diff</td><td>✗</td><td>✓ 进 Git</td></tr>
+<tr><td>稳定性</td><td>中（MV3 回收、SPA 丢状态）</td><td>高（语义定位，非坐标）</td><td>低（4/5 失败模式静默）</td><td>高（构建即验证）</td></tr>
+<tr><td>成本</td><td>最低（本地）</td><td>低（本地/自托管）</td><td>最高（每步视觉推理）</td><td>中（要有人维护仓库）</td></tr>
+<tr><td>适合</td><td>人手选元素 + 即时预览的前端交互层</td><td><b>闭环改页面的默认答案</b></td><td>极不推荐</td><td>自己的网站、可交付</td></tr>
+</tbody>
+</table>
+</div>
+<p class="legend">结论：要「读 DOM → AI 改 → 写回 → 即时预览」的闭环，走 <b>B</b>；A 只适合做「人手选中元素」的交互外壳；C 是效率与可靠性双输；D 是唯一能交付给别人的路径。<b>B 与 D 组合 = 预览在 DOM、持久化在源码</b>（web-editor-mcp 的思路）。</p>
+
+<h2 id="choose">十二、选型建议（按场景）</h2>
+<div class="card">
+<p><span class="num">1</span><b>「我的网站，改了要发布」</b> → 平台官方 MCP：Webflow MCP（免费 Starter 就能用，带分支/快照）/ Elementor 4.3 MCP（限 Atomic V4）/ WordPress + EMCP 或 GoBuildWP（带回滚）。没有官方 MCP 就退回 D：源码进 Git，用 AI IDE 改。</p>
+<p><span class="num">2</span><b>「就把当前这个页面改好看点，不用发布」</b> → 浏览器扩展（PageStyler 那套）或 CDP <code>evaluate_script</code> 注入。零依赖、即时预览、成本最低。</p>
+<p><span class="num">3</span><b>「我要自研一个『AI 网页调整工具』」</b> → 交互外壳用 MV3 扩展（WXT + Shadow DOM 隔离），能力层接 chrome-devtools-mcp 或自建 CDP 桥；产出受限的结构化 JSON/CSS patch（不要直接执行 LLM 生成的脚本），走「CSS 清洗白名单 + 撤销/重做 + 差异导出」。底座可参考 GrapesJS（能吃任意 HTML）或 Puck（React/JSON）。</p>
+<p><span class="num">4</span><b>「批量/跨站自动化」</b> → browser-use / Stagehand / Steel（自托管最省）。</p>
+<p><span class="num">5</span><b>「给非技术同事用」</b> → Claude in Chrome（已 GA、付费档内含、零采购）；但它只会「像人一样点」，改不了样式，真要改还得接 MCP。</p>
+<p><span class="num">6</span><b>「只改自己仓库里的页面」</b> → 其实不必上 MCP：项目级 <code>SKILL.md</code>（设计规范 + 组件约定 + 验收清单）+ 支持 Skills 的 IDE（CodeBuddy / Claude Code / Cursor），token 最省、可进 Git 版本管理。</p>
+</div>
+
+<h2 id="trap">十三、避坑清单（截至 2026-10 已失效或名不副实）</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>对象</th><th>真实状态</th><th>证据</th></tr></thead>
+<tbody>
+<tr><td>ChatGPT Atlas</td><td>已退役，被「ChatGPT Work + 云浏览器」取代</td><td>OpenAI 帮助中心标题即 retirement；书签/密码/Cookie 需手工迁移</td></tr>
+<tr><td>ChatGPT agent mode / Operator</td><td>agent mode 下线，Operator 网站不可访问</td><td>官方帮助页：「ChatGPT agent is no longer available」</td></tr>
+<tr><td>Google Project Mariner</td><td>2026-05-04 关停</td><td>原官网已下线，指向 Gemini Agent</td></tr>
+<tr><td>Microsoft Edge Copilot Mode</td><td>2026-05 取消，AI 并入整体浏览流程</td><td>官方变更说明</td></tr>
+<tr><td>妙多 Motiff</td><td>2026-07-31 停服，2026-11-01 数据删除</td><td>官方停服公告</td></tr>
+<tr><td>通义灵码</td><td>2026-05-20 更名 Qoder CN</td><td>阿里云公告</td></tr>
+<tr><td>豆包 MarsCode</td><td>已并入 Trae</td><td>原站跳转、账号互通</td></tr>
+<tr><td>Hyperbrowser MCP</td><td>仓库 2025-11 后停更</td><td>GitHub pushed_at</td></tr>
+<tr><td>«unshift-mcp» 作为 npm 包</td><td>npm 上不存在（404）。它是<b>远程托管 MCP</b>（URL + OAuth），仓库只是公开 listing（8KB、0★）</td><td>npm registry + GitHub API</td></tr>
+<tr><td>«canvas-agent»</td><td>与网页无关，是 Instructure Canvas LMS 教学管理 MCP（134 个工具）</td><td>npm 页面</td></tr>
+<tr><td>«llm-canvas»</td><td>真实但用途不同：给 agent 输出做展示面板；README 明写 MCP adapter「planned but not yet implemented」</td><td>仓库 README</td></tr>
+<tr><td>Wixel（Wix）</td><td>只做 logo/图/视频/PPT，不产出网页</td><td>官网</td></tr>
+<tr><td>Tiptap / Editor.js 当网页编辑器</td><td>内容层编辑器，改不了版式</td><td>官方文档</td></tr>
+<tr><td>「URL 导入就是改原站」</td><td>Lovable / Bolt / Replit / Same 的 URL 导入都是<b>抓取后重建副本</b></td><td>各官方文档</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="gap">十四、市场空白与产品机会（给做「网页调整工具」的团队）</h2>
+<div class="card">
+<ul class="tight">
+<li><b>① 「改任意已有网页」的产品级 MCP 是真空。</b>唯一沾边的项目 0★、467 下载/月、单人维护；大厂（Anthropic / OpenAI / Google）都止步于「像人一样点」。做「DOM 结构化读 + 受限写回 + 截图验证」这三件套，就能填上这个洞。</li>
+<li><b>② 运行时与持久化之间的断点没人补。</b>预览在 DOM、持久化在源码——中间的 diff/patch 导出（CSS patch、JSON patch、PR、设计 token 映射）是明显缺口。web-editor-mcp 只做了 JSX/TSX，Vue / Svelte / 纯 HTML 全覆盖无人做。</li>
+<li><b>③ 安全是准入门槛，也是卖点。</b>Anthropic 实测提示注入攻击成功率 23.6%；现有扩展普遍直接执行 LLM 输出。把「CSS 清洗白名单（禁 <code>expression()</code>/<code>javascript:</code>/<code>@import</code>/外部 url）+ 只允许 JSON 规则 + 撤销重做 + 隐私裁剪」做成默认，就比大多数竞品稳。</li>
+<li><b>④ 国内市场几乎真空。</b>国内只有「临时改渲染层」的小插件，没有产品级厂商；同时国内 AI IDE 已支持 MCP / Skills 的分发渠道（CodeBuddy、Trae），缺的是「改网页」这个能力件本身。</li>
+<li><b>⑤ 团队协作 / 审批流缺位。</b>Webflow 的 draft + branch + 「AI 活动日志」是目前的标杆；非平台型工具基本没有「谁改的、能不能回滚、谁批准发布」。</li>
+<li><b>⑥ 别和大厂抢「像人一样操作」。</b>Claude in Chrome 已 GA 且含在付费档，Comet 免费；正面竞争无胜算。差异化在「精确改样式 + 可回滚 + 可交付」。</li>
+</ul>
+</div>
+
+<h2>十五、验证方式与局限</h2>
+<div class="card">
+<p><b>核实基准日：2026-10-30。</b>关键事实逐条对照一手来源：Anthropic 官方公告（Agent Skills 捐赠 AAIF、1M skills / 2.8 亿次安装）、claude.com（Claude in Chrome 已 GA、全部付费档）、OpenAI 帮助中心（云浏览器替代 Atlas、不含 Free/Go）、GitHub API（star 数、最后 push）、npm registry（包是否存在、下载量）、厂商文档（Webflow MCP、chrome-devtools-mcp 工具与 Skills）。</p>
+<p><b>局限：</b>① 价格多数来自官网但会变，标「约」或第三方的下单前请复核；② Chrome 应用商店的 8 个换肤扩展只能核到名称与定位，未能逐个抓取功能细节；③ 国内设计类（稿定 / 墨刀 / 即时设计 / Pixso）的精确档位价格官网 JS 渲染抓不到；④ Trae 是否已支持 <code>SKILL.md</code> 加载未核实（仅确认支持 MCP）；⑤ Unshift 为早期产品，README 完整但仓库 0★，建议自验后再依赖。</p>
+</div>
+
+<footer>
+<p>报告生成：2026-10-30 · 覆盖 90+ 条目 / 10 个分类 / 4 条技术路线 · 供选型与自研参考，不构成采购建议。</p>
+<p>主要一手来源：<a href="https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation">Anthropic: Donating Agent Skills to AAIF</a> ·
+<a href="https://agentskills.io/home">agentskills.io</a> ·
+<a href="https://github.com/anthropics/skills">anthropics/skills</a> ·
+<a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">chrome-devtools-mcp</a> ·
+<a href="https://github.com/microsoft/playwright-mcp">playwright-mcp</a> ·
+<a href="https://developers.webflow.com/mcp/reference/overview">Webflow MCP</a> ·
+<a href="https://claude.com/claude-in-chrome">Claude in Chrome</a> ·
+<a href="https://help.openai.com/en/articles/20001280-using-cloud-browser-in-chatgpt">ChatGPT 云浏览器</a> ·
+<a href="https://github.com/ns2250225/zhuangxiu">PageStyler AI</a></p>
+</footer>
+
+</div>
+</body>
+</html>

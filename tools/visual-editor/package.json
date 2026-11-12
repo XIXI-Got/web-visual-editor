@@ -1,0 +1,14 @@
+{
+  "name": "visual-editor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "零依赖的网页视觉编辑器（Vite 插件 + 本地服务器 + 浏览器内核）",
+  "bin": {
+    "ve": "./server.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test/"
+  }
+}

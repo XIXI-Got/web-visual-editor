@@ -1,0 +1,23 @@
+﻿# 统一换行：仓库内文本用 LF，工作区按平台 checkout；.bat / .cmd 保持 CRLF（cmd 友好）
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 二进制（不参与 diff / 不尝试合并）
+*.tgz binary
+*.tar binary
+*.zip binary
+*.7z binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.pdf binary
+*.asar binary

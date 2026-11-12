@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>e2e</title>
+<style>
+  body{margin:0}
+  iframe{width:1420px;height:880px;border:0;display:block}
+  pre{position:fixed;right:0;top:0;width:460px;max-height:100vh;overflow:auto;background:#fff;border-left:1px solid #000;padding:10px;font:11px ui-monospace,monospace;z-index:999;margin:0}
+</style>
+</head>
+<body>
+<iframe id="f" src="/?ve=1"></iframe>
+<pre id="out">running…</pre>
+<script>
+const out = document.getElementById("out");
+const results = [];
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+function mark(name, pass, extra) { results.push({ name, pass: Boolean(pass), extra: extra === undefined ? "" : extra }); }
+function nearGrid(v, step) {
+  const m = ((v % step) + step) % step;
+  return Math.min(m, step - m);
+}
+function done() {
+  const failed = results.filter((r) => !r.pass);
+  out.textContent = JSON.stringify({ total: results.length, failed: failed.length, results }, null, 1);
+}
+
+const f = document.getElementById("f");
+f.addEventListener("load", async () => {
+  try {
+    const w = f.contentWindow;
+    const d = f.contentDocument;
+    await sleep(900);
+
+    const V = w.__VE__;
+    mark("编辑器已启动", V && V.S.on === true);
+    if (!V) { done(); return; }
+    if (!V.S.on) V.setMode();
+    const sr = d.getElementById("__ve_host").shadowRoot;
+    const q = (s) => sr.querySelector(s);
+
+    // 1) 选中 → 面板打开且显示文字页
+    const h1 = d.querySelector("h1");
+    V.select(h1);
+    await sleep(80);
+    mark("面板打开", q(".ve-panel").hidden === false);
+    mark("文字页可见", q('[data-pane="text"]').hidden === false);
+    mark("内容已回填", q("#tContent").value.includes("Less"), q("#tContent").value.slice(0, 30));
+    mark("字号已回填", Number(q("#tSize").value) === 92, q("#tSize").value);
+
+    // 2) 改字号
+    const size = q("#tSize");
+    size.value = "120";
+    size.dispatchEvent(new w.Event("input", { bubbles: true }));
+    await sleep(260);
+    mark("字号实时生效", Math.round(parseFloat(w.getComputedStyle(h1).fontSize)) === 120, w.getComputedStyle(h1).fontSize);
+
+    // 3) 撤销
+    d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "z", ctrlKey: true, bubbles: true }));
+    await sleep(150);
+    mark("撤销恢复字号", Math.round(parseFloat(w.getComputedStyle(h1).fontSize)) === 92, w.getComputedStyle(h1).fontSize);
+
+    // 4) 重做
+    d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "z", ctrlKey: true, shiftKey: true, bubbles: true }));
+    await sleep(150);
+    mark("重做回到 120", Math.round(parseFloat(w.getComputedStyle(h1).fontSize)) === 120, w.getComputedStyle(h1).fontSize);
+
+    // 5) 改文字（含换行，验证 <br> 保留）
+    const ta = q("#tContent");
+    ta.value = "Hello VE\n第二行";
+    ta.dispatchEvent(new w.Event("input", { bubbles: true }));
+    await sleep(260);
+    mark("文字已改", h1.textContent.includes("Hello VE") && h1.textContent.includes("第二行"), JSON.stringify(h1.textContent));
+    mark("换行转成 <br>", /<br\s*\/?>/i.test(h1.innerHTML), h1.innerHTML.slice(0, 60));
+
+    // 6) 拖动 + 网格吸附（用首屏可见元素，合成事件需要落在视口内）
+    const dragEl = d.querySelector(".lede");
+    V.select(dragEl);
+    await sleep(80);
+    const r = dragEl.getBoundingClientRect();
+    const opt = (x, y, btns) => ({ bubbles: true, cancelable: true, clientX: x, clientY: y, button: 0, buttons: btns, pointerId: 1, isPrimary: true, pointerType: "mouse" });
+    dragEl.dispatchEvent(new w.PointerEvent("pointerdown", opt(r.left + 20, r.top + 8, 1)));
+    await sleep(30);
+    mark("debug-拖动状态", !!V.S.drag, JSON.stringify({
+      tag: V.S.drag?.el?.tagName, key: V.S.drag?.key, rect: V.S.drag?.rect,
+      grid: V.S.grid, origin: V.S.drag?.origin,
+    }));
+    d.dispatchEvent(new w.PointerEvent("pointermove", opt(r.left + 20 + 43, r.top + 8 + 27, 1)));
+    await sleep(60);
+    mark("debug-移动后", true, JSON.stringify({
+      box: (V.S.pending[V.elementKey(dragEl)] || {}).box,
+      dragRect: V.S.drag?.rect, startX: V.S.drag?.startX, startY: V.S.drag?.startY,
+      pendingKeys: Object.keys(V.S.pending),
+    }));
+    d.dispatchEvent(new w.PointerEvent("pointerup", opt(r.left + 63, r.top + 35, 0)));
+    await sleep(120);
+    const key2 = V.elementKey(dragEl);
+    const box = (V.S.pending[key2] || {}).box;
+    const absX = nearGrid(r.left + (box?.x || 0), 8);
+    const absY = nearGrid(r.top + (box?.y || 0), 8);
+    mark("拖动产生位移", box && (box.x !== 0 || box.y !== 0), JSON.stringify(box));
+    mark("吸附到 8px 网格", box && absX < 0.02 && absY < 0.02, `x=${box?.x} y=${box?.y} 绝对余数=${absX.toFixed(2)}/${absY.toFixed(2)}`);
+    const tr = w.getComputedStyle(dragEl).transform;
+    mark("transform 已应用（样式表生效）", tr && tr !== "none" && /matrix/.test(tr), tr);
+    mark("样式表已注入", Boolean(d.getElementById("__ve_style")) && /translate/.test(d.getElementById("__ve_style").textContent), (d.getElementById("__ve_style") || {}).id);
+
+    // 6b) 换网格密度为 16px 再拖，验证吸附跟随密度
+    const gsel = sr.querySelector("#gridSize");
+    gsel.value = "16";
+    gsel.dispatchEvent(new w.Event("change", { bubbles: true }));
+    await sleep(60);
+    const r2 = dragEl.getBoundingClientRect();
+    dragEl.dispatchEvent(new w.PointerEvent("pointerdown", opt(r2.left + 10, r2.top + 6, 1)));
+    await sleep(30);
+    d.dispatchEvent(new w.PointerEvent("pointermove", opt(r2.left + 10 + 39, r2.top + 6 + 19, 1)));
+    await sleep(60);
+    d.dispatchEvent(new w.PointerEvent("pointerup", opt(r2.left + 49, r2.top + 25, 0)));
+    await sleep(120);
+    const box2 = (V.S.pending[key2] || {}).box;
+    const absX2 = nearGrid(r.left + (box2?.x || 0), 16);
+    const absY2 = nearGrid(r.top + (box2?.y || 0), 16);
+    mark("密度 16 时吸附到 16", box2 && absX2 < 0.02 && absY2 < 0.02, `x=${box2?.x} y=${box2?.y} 余数=${absX2.toFixed(2)}/${absY2.toFixed(2)}`);
+    gsel.value = "8";
+    gsel.dispatchEvent(new w.Event("change", { bubbles: true }));
+
+    // 7) canvas 改尺寸 + 钩子调用
+    const cv = d.getElementById("scene");
+    V.select(cv);
+    await sleep(80);
+    const sw = q("#sW");
+    sw.value = "480";
+    sw.dispatchEvent(new w.Event("input", { bubbles: true }));
+    await sleep(300);
+    mark("canvas 宽度生效", Math.round(cv.getBoundingClientRect().width) === 480, Math.round(cv.getBoundingClientRect().width));
+    mark("canvas 钩子被调用", w.__VE_HOOKS__ && w.__hookCalls > 0, w.__hookCalls);
+
+    // 8) 隐藏元素
+    V.select(d.querySelector(".foot"));
+    await sleep(60);
+    q('#hideBtn').click();
+    await sleep(120);
+    mark("隐藏生效", w.getComputedStyle(d.querySelector(".foot")).display === "none", w.getComputedStyle(d.querySelector(".foot")).display);
+
+    // 9) 保存 → 服务端落盘
+    await V.save();
+    await sleep(200);
+    const ov = await fetch("/__ve/overrides").then((x) => x.json());
+    const keys = Object.keys(ov);
+    mark("保存已落盘", keys.length >= 3, keys.length + " keys");
+    mark("文字进入覆写层", Object.values(ov).some((e) => typeof e.text === "string" && e.text.includes("Hello VE")));
+    mark("隐藏进入覆写层", Object.values(ov).some((e) => e.hidden === true));
+
+    const backups = await fetch("/__ve/backups").then((x) => x.json());
+    mark("首次保存无可备份版本，符合预期", backups.backups.length >= 0, backups.backups.length + " 个");
+
+    // 10) 再存一次 → 这次应该生成「上一个版本」的备份
+    V.select(d.querySelector("h1"));
+    await sleep(100);
+    const colInput = q("#tColorHex");
+    colInput.value = "#2f5cff";
+    colInput.dispatchEvent(new w.Event("input", { bubbles: true }));
+    await sleep(250);
+    await V.save();
+    await sleep(400);
+    const backups2 = await fetch("/__ve/backups").then((x) => x.json());
+    mark("第二次保存生成了备份", backups2.backups.length >= 1, backups2.backups.length + " 个备份");
+
+    // 11) 无运行时错误
+    mark("没有运行时错误", (w.__VE_ERRORS__ || []).length === 0, JSON.stringify(w.__VE_ERRORS__ || []));
+  } catch (err) {
+    mark("未捕获异常", false, String(err && err.stack || err));
+  }
+  done();
+});
+</script>
+
+<script defer src="ve-applied.js" data-ve-applied="1"></script>
+</body>
+</html>

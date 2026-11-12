@@ -1,0 +1,105 @@
+{
+  "_readme": "模板：复制为 design-tokens.json 后按项目改名/改值。系统只提取 meta、color、typography.families、spacing、radius、shadow、motion 这几段；其余段落（layout / components / imagery / breakpoints）仅供人阅读、不参与 token 提取，但会随 UI-SPEC.md 一起给 Agent 参考。所有以 _ 开头的键会被忽略。",
+  "meta": {
+    "name": "（规范名，例如：示例风格 — Tana Camps Expeditions）",
+    "version": "1.0",
+    "edition": "01",
+    "date": "2026-11",
+    "referenceViewport": "1440x960",
+    "phoneViewport": "390x844",
+    "source": "（提取来源：某个网站 / 品牌手册 / 参考实现）"
+  },
+
+  "color": {
+    "paper": { "value": "#F4F1EA", "rgb": "244, 241, 234", "role": "页面底色：全站默认背景" },
+    "paperDeep": { "value": "#E6DCC8", "rgb": "230, 220, 200", "role": "次级底色：图像井 / 按压表面 / 组件底" },
+    "ink": { "value": "#222222", "rgb": "34, 34, 34", "role": "主文字与结构：标题、结构线、主标签" },
+    "ink72": { "value": "rgba(34, 34, 34, 0.72)", "role": "正文文字：长阅读唯一允许的颜色" },
+    "ink56": { "value": "rgba(34, 34, 34, 0.56)", "role": "次级信息：注释、元数据、说明文字" },
+    "rust": { "value": "#8C6A4A", "rgb": "140, 106, 74", "role": "强调色：眉题、数据值、播放控件（面积 < 10%）" },
+    "hairline": { "value": "rgba(34, 34, 34, 0.16)", "role": "分隔线：固定 1px，不可加重" }
+  },
+
+  "typography": {
+    "families": {
+      "display": "Bodoni Moda, Bodoni MT, Didot, Times New Roman, serif",
+      "sans": "Inter, Helvetica Neue, Arial, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "roles": {
+      "hero": { "family": "display", "size": "9.6cqw", "weight": 500, "leading": 0.8, "tracking": "0.01em", "case": "uppercase", "color": "ink" },
+      "statement": { "family": "display", "size": "clamp(40px, 7.2vw, 132px)", "weight": 500, "leading": 1.06, "tracking": "0.004em", "case": "uppercase", "color": "ink" },
+      "sectionTitle": { "family": "display", "size": "clamp(34px, 4.25vw, 66px)", "weight": 500, "leading": 0.93, "tracking": "0.004em", "case": "uppercase", "color": "ink" },
+      "eyebrow": { "family": "sans", "size": "0.66cqw", "weight": 600, "leading": 1.2, "tracking": "0.2em", "case": "uppercase", "color": "rust" },
+      "label": { "family": "sans", "size": "10.5px", "weight": 600, "leading": 1.2, "tracking": "0.2em", "case": "uppercase", "color": "ink" },
+      "body": { "family": "sans", "size": "13.4px", "weight": 400, "leading": 1.78, "tracking": "0.002em", "measure": "38ch", "color": "ink72" },
+      "tableValue": { "family": "sans", "size": "12.5px", "weight": 400, "leading": 1.35, "tracking": "0.005em", "color": "rust" }
+    },
+    "opticalSize": 11
+  },
+
+  "spacing": {
+    "unit": "2px / 4px base",
+    "scale": [2, 4, 8, 12, 16, 22, 26, 32, 38, 44, 48, 56, 66, 84, 96]
+  },
+
+  "radius": {
+    "none": "0",
+    "sm": "4px",
+    "md": "10px",
+    "lg": "18px",
+    "pill": "999px"
+  },
+
+  "shadow": {
+    "card": "0 8px 24px rgba(15, 23, 42, 0.12)",
+    "float": "0 18px 48px rgba(15, 23, 42, 0.22)",
+    "insetRule": "inset 0 0 0 1px rgba(34, 34, 34, 0.16)"
+  },
+
+  "motion": {
+    "easings": {
+      "out": "cubic-bezier(0.16, 0.84, 0.3, 1)",
+      "veil": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "spring": "cubic-bezier(0.2, 1.55, 0.45, 1)"
+    },
+    "durations": {
+      "fast": "150ms",
+      "base": "320ms",
+      "slow": "650ms",
+      "heroLoad": "2200ms"
+    },
+    "stagger": {
+      "letter": "95ms",
+      "row": "105ms",
+      "facts": "30ms"
+    }
+  },
+
+  "layout": {
+    "_note": "以下段落系统不提取 token，只作为人工/Agent 阅读参考（可保留、可删）",
+    "contentMaxWidth": "1460px",
+    "columns": "1.12fr 1.12fr 0.96fr",
+    "columnGap": "clamp(26px, 3.4vw, 48px)",
+    "pageGutter": "clamp(22px, 4vw, 56px)"
+  },
+
+  "components": {
+    "_note": "组件规格：尺寸 / 状态 / 禁用做法（不参与 token 提取）",
+    "button": { "height": "44px", "padding": "0 20px", "radius": "pill", "states": ["default", "hover", "active", "disabled"] },
+    "card": { "radius": "lg", "shadow": "card", "padding": "24px" }
+  },
+
+  "imagery": {
+    "_note": "影像规则，写比例与裁切即可，不附截图",
+    "hero": "2688:1520 documentary landscape",
+    "portrait": "2:3, object-fit: cover",
+    "grain": { "opacity": 0.38, "blend": "multiply", "type": "SVG fractalNoise, fixed" }
+  },
+
+  "breakpoints": {
+    "phoneMax": 760,
+    "narrowPhoneMax": 400,
+    "desktopMin": 1024
+  }
+}

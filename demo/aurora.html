@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AURORA — 品牌与数字产品设计</title>
+<style>
+  :root{
+    --bg:#0b0d12; --panel:#12151d; --line:#232836; --line2:#2d3444;
+    --ink:#f4f6fa; --muted:#9aa3b5; --dim:#6d778c;
+    --blue:#7d9bff; --lime:#c8ff6a;
+    --mono:'Consolas','SFMono-Regular',monospace;
+    --sans:'Microsoft YaHei','PingFang SC','Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);}
+  body{
+    min-height:100vh;overflow-x:hidden;
+    background:
+      radial-gradient(900px 480px at 82% -8%, rgba(125,155,255,.16), transparent 62%),
+      radial-gradient(700px 420px at 8% 18%, rgba(200,255,106,.05), transparent 60%),
+      var(--bg);
+  }
+  body:before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:40px 40px;
+    mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 78%);
+  }
+  .wrap{width:min(1180px,calc(100% - 96px));margin:0 auto;position:relative}
+  header{display:flex;align-items:center;justify-content:space-between;padding:24px 0 18px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:3px;font-size:15px}
+  .brand i{width:13px;height:13px;border-radius:50%;background:var(--ink);display:block;position:relative}
+  .brand i:after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--bg)}
+  nav{display:flex;gap:34px;font-size:13px;color:var(--muted)}
+  nav a{color:inherit;text-decoration:none}
+  .cta{border:0;border-radius:999px;background:var(--blue);color:#0b0d12;font-family:var(--sans);font-weight:700;font-size:13px;padding:12px 20px;cursor:pointer}
+  .hero{padding:36px 0 26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--dim);text-transform:uppercase}
+  h1{font-size:74px;line-height:1.05;letter-spacing:-2.5px;font-weight:800;margin:14px 0 16px;max-width:900px}
+  h1 em{font-style:normal;color:var(--lime)}
+  .sub{font-size:16.5px;line-height:1.75;color:var(--muted);max-width:610px}
+  .actions{display:flex;gap:12px;margin-top:22px}
+  .btn{border:1px solid var(--line2);background:transparent;color:var(--ink);border-radius:999px;padding:13px 22px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer}
+  .btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .work{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:10px 0 4px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:15px;transition:border-color .2s ease}
+  .cover{height:88px;border-radius:10px;margin-bottom:12px;position:relative;overflow:hidden}
+  .cover.a{background:linear-gradient(135deg,#1a2a63,#7d9bff 70%,#cfe0ff)}
+  .cover.b{background:linear-gradient(135deg,#2b3413,#c8ff6a 75%,#f0ffd0)}
+  .cover.c{background:linear-gradient(135deg,#3a1a2a,#ff7d9b 70%,#ffd2dc)}
+  .cover:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;right:-30px;top:-30px;border:1px solid rgba(255,255,255,.35)}
+  .no{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--dim)}
+  .card h2{font-size:19px;font-weight:700;margin:5px 0 4px;letter-spacing:-.4px}
+  .card p{font-size:12.5px;line-height:1.6;color:var(--muted)}
+  footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);margin-top:12px;padding:12px 0 16px;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><i></i>AURORA</div>
+    <nav><a href="#">Work</a><a href="#">Studio</a><a href="#">Journal</a><a href="#">Contact</a></nav>
+    <button class="cta">Start a project</button>
+  </header>
+
+  <main class="hero">
+    <div class="eyebrow">Brand · Product · Motion — since 2019</div>
+    <h1>把想法，<br>做成看得见的<em>东西</em>。</h1>
+    <p class="sub">我们做品牌、界面与动态设计。清晰、克制、有记忆点——让每一次出现，都值得被记住。</p>
+    <div class="actions">
+      <button class="btn primary">看看作品</button>
+      <button class="btn">预约聊聊</button>
+    </div>
+  </main>
+
+  <section class="work">
+    <article class="card">
+      <div class="cover a"></div>
+      <div class="no">01 / BRAND</div>
+      <h2>品牌系统</h2>
+      <p>从标识到语气，让每一次出现都保持一致。</p>
+    </article>
+    <article class="card">
+      <div class="cover b"></div>
+      <div class="no">02 / PRODUCT</div>
+      <h2>产品界面</h2>
+      <p>把复杂流程拆开，让使用的人不需要说明书。</p>
+    </article>
+    <article class="card">
+      <div class="cover c"></div>
+      <div class="no">03 / MOTION</div>
+      <h2>动态语言</h2>
+      <p>让画面有呼吸感，也让反馈更直觉。</p>
+    </article>
+  </section>
+
+  <footer><span>AURORA STUDIO</span><span>Based in Hangzhou · 2026</span></footer>
+</div>
+
+<script defer src="ve-applied.js" data-ve-applied="1"></script>
+</body>
+</html>

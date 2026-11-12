@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f2efe8"/>
+  <rect x="70" y="70" width="660" height="460" fill="none" stroke="#111" stroke-width="6"/>
+  <g fill="#111">
+    <rect x="130" y="150" width="60" height="300"/>
+    <rect x="230" y="150" width="60" height="300"/>
+    <rect x="330" y="150" width="60" height="300"/>
+  </g>
+  <circle cx="560" cy="300" r="110" fill="#2f5cff"/>
+  <text x="130" y="520" font-family="Helvetica, Arial" font-size="20" fill="#111" letter-spacing="4">POSTER / 2026</text>
+</svg>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>白点 · 视觉编辑器演示页</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="nav" data-ve-id="demo/index.html:10:1">
+  <div class="brand">PORTFOLIO<span class="dot">·</span>白点</div>
+  <nav>
+    <a href="#work">作品</a>
+    <a href="#about">简介</a>
+    <a href="#contact">联系</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h1 data-ve-id="demo/index.html:21:5">Less, but<br>better.</h1>
+    <p class="lede" data-ve-id="demo/index.html:22:5">品牌设计 / 海报 / 文化墙 —— 把复杂的东西做安静。<br>Brand identity, posters and spatial graphics, gathered into one quiet record.</p>
+    <div class="hero-actions">
+      <button class="btn">看作品 →</button>
+      <button class="btn ghost">下载 PDF</button>
+    </div>
+  </section>
+
+  <section class="gallery" id="work">
+    <figure class="card">
+      <img src="/assets/photo.svg" alt="品牌设计示例">
+      <figcaption>01 · 品牌识别 / Identity</figcaption>
+    </figure>
+    <figure class="card">
+      <img src="/assets/photo2.svg" alt="海报示例">
+      <figcaption>02 · 活动海报 / Poster</figcaption>
+    </figure>
+    <figure class="card logo-card">
+      <svg class="logo" viewBox="0 0 120 120" width="120" height="120">
+        <circle cx="60" cy="60" r="46" fill="none" stroke="#111" stroke-width="8"/>
+        <circle cx="60" cy="60" r="12" fill="#111"/>
+      </svg>
+      <figcaption>03 · 标志 / Mark</figcaption>
+    </figure>
+  </section>
+
+  <section class="split" id="about">
+    <div>
+      <h2 data-ve-id="demo/index.html:45:5">简介 / Profile</h2>
+      <p>十年品牌与空间图形经验，服务过文化机构、独立品牌与城市更新项目。擅长把策略翻译成可被感知的图形秩序。</p>
+      <p class="muted">Selected work 2016–2026. Based in Hangzhou.</p>
+    </div>
+    <div class="canvas-box">
+      <canvas id="scene" width="640" height="400"></canvas>
+      <p class="cap">three.js 场景（模拟）· 可拖动改尺寸</p>
+    </div>
+  </section>
+
+  <section class="chart">
+    <h2>数据 / Numbers</h2>
+    <canvas id="chart" width="900" height="260"></canvas>
+  </section>
+</main>
+
+<footer class="foot" id="contact">
+  <p>© 2026 白点工作室 · hello@example.com</p>
+</footer>
+
+<script src="/app.js"></script>
+
+<script defer src="ve-applied.js" data-ve-applied="1"></script>
+</body>
+</html>

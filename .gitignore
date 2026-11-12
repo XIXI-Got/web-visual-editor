@@ -1,0 +1,33 @@
+# 本地状态 / 依赖
+node_modules/
+.ve-data/
+.ve-plugin-test/node_modules/
+.ve-plugin-test/package-lock.json
+*.log
+
+# 发布备份目录（保留最新 tgz；旧版本/源码备份不上传）
+releases/dsh-ui-editor-1.0.0-original/
+releases/installed-1.0.0-before-workbench/
+releases/source-*/
+
+# 测试产物（可重新生成）
+shots/_*.html
+
+# 图文素材的原始帧（体积大，可重新生成）
+deliverables/*/_src/
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+
+deliverables/**/*.zip
+deliverables/video/*.mp4
+deliverables/video/*.wav
+deliverables/video/_frames/
+deliverables/video/_frames4/
+deliverables/video/_rec/
+deliverables/video/_tts/
+deliverables/video/_tts2/
+
+# 私有风格包（外部提取，不公开）
+deliverables/private-styles/

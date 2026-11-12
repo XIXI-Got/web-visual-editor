@@ -1,0 +1,51 @@
+{
+  "name": "dsh-ui-editor",
+  "version": "1.1.68",
+  "description": "DSH 组合包：原生右栏可视化编辑本地网页项目（文字/样式/图片/组件，撤销/自动备份/AI 改稿），并带独立网页工作台、UI 风格库与固化导出",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ],
+      "immediately": true
+    }
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "dsh-bundle",
+    "web-editor",
+    "visual-editor",
+    "page-editor",
+    "ui-style",
+    "workbench",
+    "style-library"
+  ],
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "docs"
+  ],
+  "license": "MIT",
+  "author": "dsh-ui-editor contributors"
+}

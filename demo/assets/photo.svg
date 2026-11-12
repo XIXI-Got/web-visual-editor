@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e9e4d8"/>
+      <stop offset="1" stop-color="#d6d0c2"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#g)"/>
+  <circle cx="560" cy="200" r="150" fill="#111"/>
+  <rect x="90" y="330" width="380" height="14" fill="#111"/>
+  <rect x="90" y="380" width="270" height="14" fill="#111"/>
+  <rect x="90" y="430" width="320" height="14" fill="#111"/>
+  <text x="90" y="140" font-family="Helvetica, Arial" font-size="64" fill="#111" letter-spacing="-3">BRAND</text>
+  <text x="90" y="205" font-family="Helvetica, Arial" font-size="64" fill="#111" letter-spacing="-3">SYSTEM</text>
+  <text x="640" y="540" font-family="Helvetica, Arial" font-size="16" fill="#666">01 / identity</text>
+</svg>

@@ -1,0 +1,158 @@
+/* ============================================================
+   Prmpt 白点 · design-tokens.css
+   版本 1.0 · 2026.11 · 参考视口 1440 × 960 / 移动端 390 × 844
+   与 design-tokens.json、UI-SPEC.md 数值一一对应。
+   用法：复制或 @import 到项目最上层，页面样式只引用变量，不写死数值。
+
+   字体加载（可选，按需开启）：
+   @import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;500;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap");
+   Meutas Medium（woff2）需自行放入项目，并按需添加：
+   @font-face {
+     font-family: "Meutas Medium";
+     src: url("/fonts/meutas-medium.woff2") format("woff2");
+     font-weight: 500;
+     font-style: normal;
+     font-display: swap;
+   }
+   ============================================================ */
+
+:root {
+  /* ---------- 色彩：单色纸面系统，无彩色强调 ---------- */
+  --paper: #FBFBFB;               /* 页面底色：全站默认背景 */
+  --paper-raised: #FFFFFF;        /* 衬底白：作品图衬底、海报卡底、灯箱 */
+  --ink: #000000;                 /* 主文字 / 满黑块 */
+  --ink-strong: #141414;          /* 点阵圆点、光标字形、图形 */
+  --stroke: #111111;              /* Hero 标题 3px 轮廓回声 */
+  --ink-80: rgba(0, 0, 0, 0.80);  /* 中文正文 */
+  --ink-70: rgba(0, 0, 0, 0.70);  /* 次级文字：职务、aside */
+  --ink-60: rgba(0, 0, 0, 0.60);  /* 等宽正文 */
+  --ink-55: rgba(0, 0, 0, 0.55);  /* 英文正文 / 元数据（正文下限 4.72:1） */
+  --ink-45: rgba(0, 0, 0, 0.45);  /* 弱化大字 ≥24px */
+  --ink-40: rgba(0, 0, 0, 0.40);  /* 装饰，不承载信息 */
+  --line: rgba(0, 0, 0, 0.70);    /* 组件描边 1px */
+  --line-soft: rgba(0, 0, 0, 0.50); /* 次级描边：技能条轨道 */
+
+  /* ---------- 字体 ---------- */
+  --font-display: "Meutas Medium", "Inter Tight", "Helvetica Neue", Arial,
+    "PingFang SC", "Noto Sans SC", sans-serif;
+  --font-sans: "Inter Tight", Inter, "Helvetica Neue", Arial, "PingFang SC",
+    "Noto Sans SC", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---------- 字阶（桌面 → 移动） ---------- */
+  --fs-hero: 300px;
+  --fs-hero-year: clamp(36px, 7.6vw, 110px);
+  --fs-section-title: clamp(52px, 6.1vw, 88px);
+  --fs-end-title: clamp(64px, 8.3vw, 120px);
+  --fs-chapter-zh: clamp(26px, 5.4vw, 78px);
+  --fs-chapter-en: clamp(22px, 4.4vw, 64px);
+  --fs-nav-logo: clamp(18px, 1.8vw, 26px);
+  --fs-nav-link: clamp(13px, 1.04vw, 15px);
+  --fs-name: clamp(43px, 3.8vw, 55px);
+  --fs-role: clamp(21px, 1.6vw, 23px);
+  --fs-heading: clamp(22px, 1.8vw, 26px);
+  --fs-body: clamp(16px, 1.25vw, 18px);
+  --fs-mono-kicker: clamp(10px, 0.83vw, 12px);
+  --fs-mono-body: clamp(12px, 0.97vw, 14px);
+  --fs-blurb: clamp(15px, 1.11vw, 16px);
+  --fs-chip: clamp(18px, 1.39vw, 20px);
+  --measure: 36em;
+
+  /* ---------- 间距（4px 基准，2px 半步） ---------- */
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-28: 28px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-56: 56px;
+  --space-64: 64px;
+  --space-96: 96px;
+
+  /* ---------- 圆角：只有方角与全圆 ---------- */
+  --radius-none: 0;
+  --radius-full: 999px;
+
+  /* ---------- 阴影：只在 hover 出现 ---------- */
+  --shadow-card-hover: 0 28px 44px rgba(0, 0, 0, 0.18);
+  --shadow-poster-hover: 0 28px 50px rgba(0, 0, 0, 0.45);
+  --shadow-lightbox: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* ---------- 动效 ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-view: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-slide: cubic-bezier(0.4, 0.02, 0.12, 1);
+  --dur-micro: 300ms;
+  --dur-hover: 500ms;
+  --dur-lightbox: 420ms;
+  --page-snap: 1500ms;
+  --snap-slow: 2400ms;
+  --hero-zoom: 2400ms;
+  --snap-cooldown: 240ms;
+  --stagger-ring: 32ms;
+  --stagger-brand: 100ms;
+
+  /* ---------- 版式 ---------- */
+  --stage-max: 1400px;
+  --category-max: 960px;
+  --gutter: 24px;
+  --gutter-lg: 64px;
+  --poster-gutter: 8%;
+  --nav-h: 58px;
+  --nav-h-lg: 76px;
+  --chapter-title-top: 11vh;
+  --hero-portrait-h: 92vh;
+  --hero-portrait-max-w: 70vw;
+  --culture-tile-max-h: 56vh;
+  --dot-grid: 34px;
+  --dot-size: 6.4px;
+  --dot-color: var(--ink-strong);
+
+  /* ---------- 层叠 ---------- */
+  --z-dots: 0;
+  --z-hero-title: 5;
+  --z-panel: 10;
+  --z-end-sheet: 15;
+  --z-nav: 40;
+  --z-cursor: 50;
+  --z-brand-lightbox: 80;
+  --z-poster-lightbox: 90;
+}
+
+/* 基础重置：纸面、字体、平滑滚动由脚本控制 */
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: var(--gutter-lg);
+    --nav-h: var(--nav-h-lg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 关闭位移/缩放，仅保留 ≤150ms 透明度变化 */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+    scroll-behavior: auto !important;
+  }
+}

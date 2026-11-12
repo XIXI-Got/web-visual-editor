@@ -1,0 +1,214 @@
+{
+  "_readme": "Prmpt 白点 的机器可读令牌。系统只提取 meta / color / typography.families / spacing / radius / shadow / motion；其余段落（typography.roles / layout / components / imagery / breakpoints / motionDetail）仅供人与 Agent 阅读。所有以 _ 开头的键会被忽略。",
+  "meta": {
+    "name": "Prmpt 白点",
+    "version": "1.0",
+    "edition": "01",
+    "date": "2026-11",
+    "referenceViewport": "1440x960",
+    "phoneViewport": "390x844",
+    "source": "Prmpt Portfolio（白点）"
+  },
+
+  "color": {
+    "paper": { "value": "#FBFBFB", "rgb": "251, 251, 251", "role": "页面底色：全站默认背景与所有固定层" },
+    "paperRaised": { "value": "#FFFFFF", "rgb": "255, 255, 255", "role": "衬底白：作品图衬底、海报卡底、灯箱底" },
+    "ink": { "value": "#000000", "rgb": "0, 0, 0", "role": "主文字与满黑块：标题、导航、按钮、结构边框" },
+    "inkStrong": { "value": "#141414", "rgb": "20, 20, 20", "role": "点阵圆点、光标字形、图形填充" },
+    "stroke": { "value": "#111111", "rgb": "17, 17, 17", "role": "Hero 标题 3px 轮廓回声" },
+    "ink80": { "value": "rgba(0, 0, 0, 0.80)", "role": "中文正文：简介、工作描述" },
+    "ink70": { "value": "rgba(0, 0, 0, 0.70)", "role": "次级文字：职务、说明性 aside" },
+    "ink60": { "value": "rgba(0, 0, 0, 0.60)", "role": "等宽正文：Hero 简介句、说明段" },
+    "ink55": { "value": "rgba(0, 0, 0, 0.55)", "role": "英文正文与元数据：正文颜色下限（4.72:1）" },
+    "ink45": { "value": "rgba(0, 0, 0, 0.45)", "role": "弱化大字：结尾眉题等 ≥24px 文字" },
+    "ink40": { "value": "rgba(0, 0, 0, 0.40)", "role": "装饰：仅大字或悬停前状态，不承载信息" },
+    "line": { "value": "rgba(0, 0, 0, 0.70)", "role": "组件描边：按钮、头像、回顶按钮 1px 边框" },
+    "lineSoft": { "value": "rgba(0, 0, 0, 0.50)", "role": "次级描边：技能条轨道等辅助边框" }
+  },
+
+  "typography": {
+    "families": {
+      "display": "Meutas Medium, Inter Tight, Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif",
+      "sans": "Inter Tight, Inter, Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
+    },
+    "roles": {
+      "hero": { "family": "display", "size": "300px", "weight": 500, "leading": 1, "tracking": "0.02em", "case": "uppercase", "color": "ink" },
+      "heroYear": { "family": "display", "size": "36 → 110px", "weight": 500, "leading": 1, "tracking": "0", "color": "ink" },
+      "sectionTitle": { "family": "sans", "size": "52 → 88px", "weight": 700, "leading": 1, "tracking": "-0.04em", "color": "ink" },
+      "endTitle": { "family": "sans", "size": "64 → 120px", "weight": 700, "leading": 0.9, "tracking": "-0.05em", "color": "ink" },
+      "chapterTitleZh": { "family": "sans", "size": "26 → 78px", "weight": 700, "leading": 1, "tracking": "-0.03em", "color": "ink" },
+      "chapterTitleEn": { "family": "sans", "size": "22 → 64px", "weight": 700, "leading": 1, "tracking": "-0.03em", "color": "ink" },
+      "navLogo": { "family": "sans", "size": "18 → 26px", "weight": 500, "leading": 1, "tracking": "-0.04em", "case": "uppercase", "color": "ink" },
+      "navLink": { "family": "sans", "size": "13 → 15px", "weight": 500, "leading": 1.2, "tracking": "0.08em", "color": "ink" },
+      "name": { "family": "sans", "size": "43 → 55px", "weight": 700, "leading": 1, "tracking": "0.06em", "case": "uppercase", "color": "ink" },
+      "role": { "family": "sans", "size": "21 → 23px", "weight": 300, "leading": 1, "tracking": "0.04em", "color": "ink70" },
+      "heading": { "family": "sans", "size": "22 → 26px", "weight": 700, "leading": 1.2, "tracking": "-0.03em", "color": "ink" },
+      "bodyZh": { "family": "sans", "size": "16 → 18px", "weight": 300, "leading": 1.65, "tracking": "0", "measure": "36em", "color": "ink80" },
+      "bodyEn": { "family": "sans", "size": "16 → 18px", "weight": 300, "leading": 1.65, "tracking": "0", "measure": "36em", "color": "ink55" },
+      "monoKicker": { "family": "mono", "size": "10 → 12px", "weight": 400, "leading": 1.2, "tracking": "0.30em", "case": "uppercase", "color": "ink55" },
+      "monoBody": { "family": "mono", "size": "12 → 14px", "weight": 400, "leading": 1.6, "tracking": "0", "color": "ink60" },
+      "chipMark": { "family": "sans", "size": "18 → 20px", "weight": 500, "leading": 1, "tracking": "-0.04em", "color": "ink" },
+      "blurb": { "family": "sans", "size": "15 → 16px", "weight": 300, "leading": 1.5, "tracking": "0", "color": "ink55" },
+      "cta": { "family": "mono", "size": "12px", "weight": 400, "leading": 1.2, "tracking": "0.20em", "case": "uppercase", "color": "paperRaised" }
+    }
+  },
+
+  "spacing": {
+    "unit": "4px base（2px 半步只用于描边偏移）",
+    "scale": [2, 4, 8, 12, 16, 20, 24, 28, 32, 40, 48, 56, 64, 96]
+  },
+
+  "radius": {
+    "none": "0",
+    "full": "999px"
+  },
+
+  "shadow": {
+    "cardHover": "0 28px 44px rgba(0, 0, 0, 0.18)",
+    "posterHover": "0 28px 50px rgba(0, 0, 0, 0.45)",
+    "lightbox": "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+  },
+
+  "motion": {
+    "easeOut": "cubic-bezier(0.22, 1, 0.36, 1)",
+    "easeView": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "easeSlide": "cubic-bezier(0.4, 0.02, 0.12, 1)",
+    "easeSnap": "1 - (1 - t)^1.23",
+    "durMicro": "300ms",
+    "durHover": "500ms",
+    "durLightbox": "420ms",
+    "pageSnap": "1500ms",
+    "snapSlow": "2400ms",
+    "heroZoom": "2400ms",
+    "snapCooldown": "240ms"
+  },
+
+  "motionDetail": {
+    "lenis": { "lerp": 0.1, "smoothWheel": true, "overscroll": false },
+    "heroZoom": { "scale": "1 → 9", "veilOpacity": "0 → 1", "duration": "2400ms", "easing": "easeInOutCubic" },
+    "pageSnap": {
+      "stops": 9,
+      "default": "1500ms",
+      "profileToDesigns": "1700ms",
+      "designsToBrand": "2200ms",
+      "brandToPoster": "2400ms",
+      "cultureIn": "1450ms",
+      "cultureGallery": "2100ms",
+      "cultureEnd": "1200ms",
+      "posterWaveHop": "780–860ms",
+      "cooldown": "240ms",
+      "easing": "easeOutTwoOne（1 − (1 − t)^1.23）"
+    },
+    "hover": { "micro": "300ms", "card": "500–550ms", "poster": "550ms cubic-bezier(0.22,1,0.36,1)" },
+    "lightbox": { "fade": "380ms", "contentScale": "420ms", "posterMorph": "620ms" },
+    "galleryIn": { "duration": "1420ms", "easing": "cubic-bezier(0.4,0.02,0.12,1)" },
+    "dotField": {
+      "grid": "34px",
+      "dotDraw": "6.4px",
+      "opacity": "0.20–0.65",
+      "pointerReach": "340px",
+      "maxDisplacement": "96px",
+      "velocityDamping": 0.92,
+      "restore": 0.012
+    },
+    "stagger": { "ringCard": "32ms", "brandCard": "100ms" }
+  },
+
+  "layout": {
+    "_note": "以下段落不参与 token 提取，供人与 Agent 阅读",
+    "panel": "100vh 固定面板，隐藏滚动条驱动；总滚动长度约 7.38 屏",
+    "sectionVh": {
+      "hero": 0.5,
+      "profile": 0.9,
+      "designs": 1.15,
+      "brand": 0.905,
+      "poster": 1.678,
+      "culture": 1.1,
+      "end": 1.15
+    },
+    "holds": { "profile": 0.45, "page": 0.5 },
+    "grid": {
+      "ringStageMaxWidth": "1400px",
+      "categoryRowMaxWidth": "960px",
+      "bodyMeasure": "36em",
+      "gutterPhone": "24px",
+      "gutterDesktop": "64px",
+      "posterGutter": "8% of viewport width",
+      "chapterTitleTop": "11vh"
+    },
+    "hero": {
+      "titleCenterOffset": "-200px",
+      "titleSolidOffset": "20px",
+      "titleEchoOffset": "50px",
+      "portraitHeight": "92vh",
+      "portraitMaxWidth": "70vw",
+      "portraitBottom": "-200px",
+      "navHeight": "58 / 76px"
+    },
+    "designs": {
+      "ringCards": 5,
+      "ringSpanDeg": 160,
+      "ringRadius": "490px",
+      "ringRadiusExit": "520px",
+      "perspective": "1600px",
+      "cardSize": "min(280px, 22vw) × calc(46vh - 200px)",
+      "categoryGap": "10px",
+      "brandCards": 3
+    },
+    "poster": {
+      "waves": 3,
+      "perWave": 5,
+      "cardAspect": "2 / 3",
+      "cardWidth": "min(340px, 28vw)"
+    },
+    "culture": {
+      "tileAspect": "16 / 9",
+      "tileMaxHeight": "56vh",
+      "tileMinWidth": "min(78vw, 1200px)"
+    },
+    "zIndex": {
+      "dots": 0,
+      "heroTitle": 5,
+      "panel": 10,
+      "endSheet": 15,
+      "nav": 40,
+      "cursor": 50,
+      "brandLightbox": 80,
+      "posterLightbox": 90
+    }
+  },
+
+  "components": {
+    "_note": "组件规格：尺寸 / 状态 / 禁用做法（不参与 token 提取）",
+    "nav": { "height": "58 / 76px", "logoSize": "18 → 26px", "linkSize": "13 → 15px", "menuIcon": "20 / 28px" },
+    "cornerButton": { "background": "ink", "text": "paperRaised", "padding": "40px / 14px", "cornerMark": "2px black, 16×16, -8px offset", "radius": 0 },
+    "iconButton": { "size": "40 / 44px", "icon": "18px", "cornerMark": "12×12" },
+    "outlineButton": { "border": "1px line", "padding": "24px / 12px", "radius": 0 },
+    "skillChip": { "size": "58 / 64px", "border": "1px black", "hover": "-4px / 1.10" },
+    "skillBar": { "trackHeight": "7px", "border": "1px lineSoft", "fill": "ink" },
+    "categoryLabel": { "zh": "26 → 34px / 700", "en": "22 → 30px / 700", "blurb": "15 → 16px / 300 / ink55" },
+    "ringCard": { "size": "min(280px, 22vw) × calc(46vh - 200px)", "radius": 0, "hover": "-16px / 1.07" },
+    "posterCard": { "aspect": "2 / 3", "width": "min(340px, 28vw)", "hover": "-32px / 1.12", "neighborShift": "42px" },
+    "cultureTile": { "aspect": "16 / 9", "maxHeight": "56vh", "gap": "32px" },
+    "lightbox": { "backdrop": "rgba(255,255,255,0.78)", "blur": "24px", "radius": 0, "closeButton": "48px circle" },
+    "dotCursor": { "size": "48px", "ring": "2.5px white", "glyph": "16px P", "blend": "exclusion", "minWidth": "1024px" }
+  },
+
+  "imagery": {
+    "heroPortrait": "transparent PNG/WebP, height 92vh, max-width 70vw, object-fit contain, bottom offset -200px",
+    "brand": "3:4, object-fit cover",
+    "poster": "2:3, object-fit cover",
+    "culture": "16:9 banner, max-height 56vh",
+    "avatar": "1:1 circle, 72 / 96px, 1px black border, object-position center 18%",
+    "dotTexture": { "grid": "34px", "dot": "6.4px", "color": "#141414", "opacity": "0.20–0.65" },
+    "banned": "圆角、滤镜、彩色渐变、常驻投影、装饰贴纸、图片边框"
+  },
+
+  "breakpoints": {
+    "phoneMax": 639,
+    "tabletMin": 640,
+    "desktopMin": 1024,
+    "wideMin": 1280
+  }
+}

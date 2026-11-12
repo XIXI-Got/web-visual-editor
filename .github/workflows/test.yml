@@ -1,0 +1,41 @@
+﻿name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-tests:
+    name: Windows 全量测试（core/api + 宿主 + 渲染端 + 撤销 + 工作台）
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 安装测试夹具依赖（Vite / React，供 host-e2e 的 Vite 用例使用）
+        working-directory: .ve-plugin-test
+        run: npm install --no-audit --no-fund --loglevel=error
+
+      - name: 运行全部测试
+        run: node tools/visual-editor/e2e/run-all.mjs
+
+      - name: 失败时上传截图
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: |
+            shots/
+            screenshots/
+          if-no-files-found: ignore
