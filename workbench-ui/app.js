@@ -757,45 +757,82 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     );
   }
 
-  function styleSection() {
-    var st = S.style || {};
-    var styles = S.styles || [];
-    var base = String(S.apiBase || '').replace(/\/+$/, '');
-    var target = st.target || (S.projects[0] && S.projects[0].dir) || '';
-    var cards = styles.map(function (s) {
-      return (
-        '<div class="stylecard-item" data-act="style-apply" data-id="' + esc(s.id) + '" data-name="' + esc(s.name) + '" title="点击应用这个风格">' +
-        styleCoverHtml(s) +
-        '</div>'
-      );
-    }).join('');
-    var addCard =
-      '<div class="stylecard-item stylecard-add" data-act="style-add-open" title="添加风格：填规范目录（含 design-tokens.json / UI-SPEC.md）">' +
-      '<div class="stylecard-cover"><div class="stylecard-plus">＋</div><div class="stylecard-addtext">添加风格</div></div>' +
-      '</div>';
-    return (
-      '<div class="stylelib">' +
-      '<div class="stylelib-head"><h2 class="stylelib-title">风格优化</h2>' +
-      '<span class="stylelib-sub">选一个风格，Agent 会按它把当前项目改成同样的视觉语言</span></div>' +
-      '<div class="stylelib-target"><span>目标项目</span>' +
-      (S.projects.length
-        ? '<select data-field="styleTarget">' + S.projects.map(function (p) { return '<option value="' + esc(p.dir) + '"' + (target === p.dir ? ' selected' : '') + '>' + esc(baseName(p.dir)) + ' — ' + esc(p.dir) + '</option>'; }).join('') + '</select>'
-        : '<span class="hint">先打开一个项目</span>') +
-      (styles.length ? '' : '<span class="hint">还没有风格：点「＋ 添加风格」导入一份</span>') +
-      '</div>' +
-      (st.addOpen
-        ? '<div class="stylelib-addrow">' +
-          '<input data-field="styleAddPath" placeholder="规范目录，例如 D:\\styles\\my-style" value="' + esc(st.addPath || '') + '">' +
-          '<button class="btn pri" data-act="style-add-confirm"' + (st.busy ? ' disabled' : '') + '>' + (st.busy ? '导入中…' : '导入') + '</button>' +
-          '<button class="btn ghost" data-act="style-add-cancel">取消</button>' +
-          '</div>'
-        : '') +
-      '<div class="style-grid">' + cards + addCard + '</div>' +
-      (st.msg ? '<div class="note' + (/失败|错误/.test(st.msg) ? ' err' : '') + '">' + esc(st.msg) + '</div>' : '') +
-      '</div>'
-    );
-  }
-
+  function stylePreviewHtml(s) {
+    var bg = s.bgColor || (s.colors && s.colors[0]) || '#ffffff';
+    var ink = s.titleColor || '#111111';
+    var family = s.fontStack || 'var(--sans)';
+    var accents = (s.colors || []).filter(function (c) { return /^#|rgb/i.test(String(c)); });
+    var accent = ink;
+    for (var i = 0; i < accents.length; i++) {
+      var c = String(accents[i]).toLowerCase();
+      if (c !== String(bg).toLowerCase() && c !== String(ink).toLowerCase()) { accent = accents[i]; break; }
+    }
+    return '<div class="srp" style="background:' + esc(bg) + ';color:' + esc(ink) + ';font-family:' + esc(family) + ';--srp-accent:' + esc(accent) + '">' +
+      '<div class="srp-bar"><i></i><span></span><span></span><span></span><b></b></div>' +
+      '<div class="srp-body">' +
+        '<div class="srp-copy"><small>THE FIELD / SYSTEM</small>' +
+          '<strong>让内容<br>更有秩序</strong>' +
+          '<p>留白、比例与克制的强调，组成安静的阅读节奏。</p>' +
+          '<span class="srp-btn">阅读更多</span>' +
+        '</div>' +
+        '<div class="srp-stack"><div class="srp-card a"></div><div class="srp-card b"></div><div class="srp-card c"></div></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function styleSection() {
+    var st = S.style || {};
+    var styles = S.styles || [];
+    var target = st.target || (S.projects[0] && S.projects[0].dir) || '';
+    var rows = styles.map(function (s, idx) {
+      var nameLines = String(s.name || '').split('\n');
+      var main = nameLines[0] || '';
+      var sub = nameLines.slice(1).join(' ').trim();
+      var tags = s.titleEffect === 'stroke'
+        ? ['描边', '编辑']
+        : (s.cardStyle === 'glass' ? ['玻璃', '层次'] : ['纯色', '干净']);
+      var desc = String(s.description || '').replace(/\s+/g, ' ').trim();
+      if (desc.length > 90) desc = desc.slice(0, 88).trim() + '…';
+      return (
+        '<div class="style-row" data-act="style-apply" data-id="' + esc(s.id) + '" data-name="' + esc(s.name) + '" title="点击应用这个风格">' +
+          '<div class="style-row-copy">' +
+            '<div class="style-row-kicker">STYLE / 0' + (idx + 1) + '</div>' +
+            '<h3 class="style-row-name"><b>' + esc(main) + '</b>' + (sub ? '<em>' + esc(sub) + '</em>' : '') + '</h3>' +
+            '<div class="style-row-tags">' + tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
+            (desc ? '<p class="style-row-desc">' + esc(desc) + '</p>' : '') +
+          '</div>' +
+          '<div class="style-row-visual">' + stylePreviewHtml(s) + '</div>' +
+        '</div>'
+      );
+    }).join('');
+    var addRow =
+      '<button class="style-row-add" data-act="style-add-open" title="添加风格：填规范目录（含 design-tokens.json / UI-SPEC.md）">' +
+        '<span class="style-row-plus">＋</span>' +
+        '<span class="style-row-addcopy"><b>添加风格</b><small>导入 UI-SPEC.md / design-tokens.json</small></span>' +
+      '</button>';
+    return (
+      '<div class="stylelib">' +
+        '<div class="stylelib-head"><h2 class="stylelib-title">风格优化</h2>' +
+          '<span class="stylelib-sub">选一个风格，Agent 会按它把当前项目改成同样的视觉语言</span></div>' +
+        '<div class="stylelib-target"><span>目标项目</span>' +
+          (S.projects.length
+            ? '<select data-field="styleTarget">' + S.projects.map(function (p) { return '<option value="' + esc(p.dir) + '"' + (target === p.dir ? ' selected' : '') + '>' + esc(baseName(p.dir)) + ' — ' + esc(p.dir) + '</option>'; }).join('') + '</select>'
+            : '<span class="hint">先打开一个项目</span>') +
+          (styles.length ? '' : '<span class="hint">还没有风格：点「＋ 添加风格」导入一份</span>') +
+        '</div>' +
+        (st.addOpen
+          ? '<div class="stylelib-addrow">' +
+            '<input data-field="styleAddPath" placeholder="规范目录，例如 D:\\styles\\my-style" value="' + esc(st.addPath || '') + '">' +
+            '<button class="btn pri" data-act="style-add-confirm"' + (st.busy ? ' disabled' : '') + '>' + (st.busy ? '导入中…' : '导入') + '</button>' +
+            '<button class="btn ghost" data-act="style-add-cancel">取消</button>' +
+            '</div>'
+          : '') +
+        '<div class="style-rows">' + rows + addRow + '</div>' +
+        (st.msg ? '<div class="note' + (/失败|错误/.test(st.msg) ? ' err' : '') + '">' + esc(st.msg) + '</div>' : '') +
+      '</div>'
+    );
+  }
+
   function pagesModal() {
     var pm = S.pagesModal || {};
     var base = String(S.apiBase || '').replace(/\/+$/, '');
