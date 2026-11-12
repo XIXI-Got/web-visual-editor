@@ -19,7 +19,7 @@
   body{min-height:0;padding-bottom:0;overflow:hidden}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);overflow-x:clip}
   .preview-wrap{width:min(1120px,calc(100% - 40px));height:400px;margin:0 auto;display:flex;align-items:center;overflow:visible}
-  .preview-block{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,5vw,64px);align-items:center}
+  .preview-block{width:100%;display:grid;transform:scale(.88);transform-origin:center;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,5vw,64px);align-items:center}
   .preview-copy{min-width:0;max-width:520px}
   .preview-eyebrow{margin:0 0 14px;font:500 10px/1.4 var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
   .preview-title{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(30px,4.8vw,60px);line-height:1.06;letter-spacing:-.035em}
@@ -31,14 +31,37 @@
   .preview-figure{position:relative;margin:0;width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;max-height:calc(420 * var(--u));background:#F1EEE8;box-shadow:0 18px 45px rgba(17,17,17,.08)}
   .preview-figure img{display:block;width:100%;height:100%;object-fit:cover}
   @media (max-width:760px){
-    .preview-block{grid-template-columns:1fr;gap:24px}
-    .preview-copy{max-width:none}
+    .preview-block{grid-template-columns:1fr;gap:24px;transform:none}
+    .preview-copy{max-width:none;margin-left:0}
     .preview-figure{aspect-ratio:16/9}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .preview-nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+  .preview-nav-inner{width:min(1120px,calc(100% - 40px));height:64px;margin:0 auto;display:flex;align-items:center;gap:32px}
+  .preview-brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font:600 11px/1 var(--font-sans);letter-spacing:.16em;white-space:nowrap}
+  .preview-brand-mark{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;font:700 12px/1 var(--font-sans);letter-spacing:0}
+  .preview-nav-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+  .preview-nav-links a{color:var(--muted);text-decoration:none;font:500 12px/1 var(--font-sans);padding:8px 0;white-space:nowrap}
+  .preview-nav-links a.is-active{color:var(--ink)}
+  .preview-nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 18px;border-radius:var(--radius-pill);background:var(--ink);color:#fff;text-decoration:none;font:600 11px/1 var(--font-sans);white-space:nowrap}
+  @media (max-width:640px){.preview-nav-links a:not(.is-active){display:none}.preview-nav-inner{gap:16px}.preview-brand{font-size:10px}.preview-nav-cta{padding:0 14px}}
 </style>
 </head>
 <body>
+
+  <header class="preview-nav">
+    <div class="preview-nav-inner">
+      <a class="preview-brand" href="#"><span class="preview-brand-mark">S</span>STYLE TEMPLATE</a>
+      <nav class="preview-nav-links" aria-label="主导航">
+        <a class="is-active" href="#preview">预览</a>
+        <a href="#styles">风格库</a>
+        <a href="#templates">模板</a>
+        <a href="#about">关于</a>
+      </nav>
+      <a class="preview-nav-cta" href="#start">使用模板</a>
+    </div>
+  </header>
   <main class="preview-wrap">
     <!-- 复制范围：从 <section> 到 </section>；替换图片和文案即可 -->
     <section class="preview-block" aria-labelledby="preview-title">

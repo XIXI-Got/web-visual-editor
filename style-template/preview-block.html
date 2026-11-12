@@ -36,8 +36,8 @@
   body{background:linear-gradient(180deg,var(--paper) 0%,var(--soft) 100%)}
   .preview-wrap{width:min(calc(1120 * var(--u)),calc(100% - calc(40 * var(--u))));height:400px;margin:0 auto;display:flex;align-items:center;overflow:visible}
   /* 左右布局：左文案/按钮，右图片 */
-  .preview-block{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:calc(64 * var(--u));align-items:center}
-  .preview-copy{min-width:0;max-width:calc(520 * var(--u))}
+  .preview-block{width:100%;display:grid;transform:scale(.88);transform-origin:center;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:calc(64 * var(--u));align-items:center}
+  .preview-copy{min-width:0;max-width:calc(520 * var(--u));margin-left:30px}
   .preview-eyebrow{margin:0 0 calc(14 * var(--u));font:500 max(10px,calc(10 * var(--u)))/1.4 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
   .preview-title{margin:0;font-family:var(--font-sans);font-weight:800;font-size:max(30px,calc(58 * var(--u)));line-height:1.06;letter-spacing:-.04em;color:var(--ink)}
   .preview-lead{margin:calc(16 * var(--u)) 0 0;max-width:46ch;color:var(--muted);font-size:max(13px,calc(15 * var(--u)));line-height:1.75}
@@ -50,14 +50,37 @@
   @media (max-width:760px){
     .preview-wrap{width:calc(100% - calc(28 * var(--u)));height:auto;min-height:0;margin:calc(36 * var(--u)) auto;display:block;overflow:visible}
     .preview-block{grid-template-columns:1fr;gap:calc(24 * var(--u))}
-    .preview-copy{max-width:none}
+    .preview-copy{max-width:none;margin-left:0}
     .preview-title{font-size:max(28px,calc(48 * var(--u)))}
     .preview-figure{aspect-ratio:16/9}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .preview-nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+  .preview-nav-inner{width:min(1120px,calc(100% - 40px));height:64px;margin:0 auto;display:flex;align-items:center;gap:32px}
+  .preview-brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font:600 11px/1 var(--font-sans);letter-spacing:.16em;white-space:nowrap}
+  .preview-brand-mark{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;font:700 12px/1 var(--font-sans);letter-spacing:0}
+  .preview-nav-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+  .preview-nav-links a{color:var(--muted);text-decoration:none;font:500 12px/1 var(--font-sans);padding:8px 0;white-space:nowrap}
+  .preview-nav-links a.is-active{color:var(--ink)}
+  .preview-nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 18px;border-radius:var(--radius-pill);background:var(--ink);color:#fff;text-decoration:none;font:600 11px/1 var(--font-sans);white-space:nowrap}
+  @media (max-width:640px){.preview-nav-links a:not(.is-active){display:none}.preview-nav-inner{gap:16px}.preview-brand{font-size:10px}.preview-nav-cta{padding:0 14px}}
 </style>
 </head>
 <body>
+
+  <header class="preview-nav">
+    <div class="preview-nav-inner">
+      <a class="preview-brand" href="#"><span class="preview-brand-mark">S</span>STYLE TEMPLATE</a>
+      <nav class="preview-nav-links" aria-label="主导航">
+        <a class="is-active" href="#preview">预览</a>
+        <a href="#styles">风格库</a>
+        <a href="#templates">模板</a>
+        <a href="#about">关于</a>
+      </nav>
+      <a class="preview-nav-cta" href="#start">使用模板</a>
+    </div>
+  </header>
   <main class="preview-wrap">
     <!-- 复制范围：从 <section> 到 </section>；替换图片和文案即可 -->
     <section class="preview-block" aria-labelledby="preview-title">
