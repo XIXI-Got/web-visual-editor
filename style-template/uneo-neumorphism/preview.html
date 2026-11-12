@@ -31,8 +31,8 @@
   .preview-figure img{display:block;width:100%;height:100%;object-fit:cover}
 
   /* UNEO 拟物组件：旋钮、凹槽、双光源 */
-  .neo-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 18px 12px;aspect-ratio:2.2/1;background:linear-gradient(145deg,#F8F6F2,#F3EFE9);border:1px solid rgba(255,255,255,.78);box-shadow:16px 16px 34px #E2DDD4,-16px -16px 34px #FFFFFF;border-radius:32px}
-  .neo-dial{position:relative;width:min(150px,48%);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;flex:0 0 auto}
+  .neo-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:0;width:100%;height:100%;aspect-ratio:auto;max-height:none;background:transparent;border:0;box-shadow:none;border-radius:0;overflow:visible}
+  .neo-dial{position:relative;width:min(210px,62%);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;flex:0 0 auto}
   .neo-ring,.neo-arc{position:absolute;inset:0;border-radius:50%;pointer-events:none}
   .neo-ring{background:repeating-conic-gradient(from 210deg,#D5CFC4 0deg 1.2deg,transparent 1.2deg 9deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));opacity:.9}
   .neo-arc{background:conic-gradient(from 205deg,transparent 0 35deg,#8C6F52 35deg 148deg,transparent 148deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px))}
