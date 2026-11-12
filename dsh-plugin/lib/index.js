@@ -1615,8 +1615,11 @@ export function apply(ctx) {
           const text = String(body.text || "");
           if (!text) { sendJson(res, 400, { ok: false, error: "缺少 text" }); return; }
           const attempts = [];
-          // 找当前会话：工具执行上下文捕获的优先，其次取最近有 prompt 的会话
-          let sid = agentSessionId || "";
+          // 找当前会话：调用方显式指定的优先（工作台/编辑器会带上自己的会话），
+          // 其次工具执行上下文捕获的，最后取最近有 prompt 的会话
+          const wantSid = String(body.sessionId || "").trim();
+          if (wantSid) attempts.push("explicit:" + wantSid.slice(0, 10));
+          let sid = wantSid || agentSessionId || "";
           if (!sid) {
             try {
               const sessions = typeof ctx.get === "function" ? ctx.get("sessions") : null;

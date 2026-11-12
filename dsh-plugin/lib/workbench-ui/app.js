@@ -565,7 +565,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
         var cu = styleCompareUrl(true, dir);
         if (cu) { try { window.open(cu, '_blank'); } catch (e) { /* ignore */ } }
       }
-      var sent = await hostCall('agent.prompt', { text: r.text });
+      var sent = await hostCall('agent.prompt', { text: r.text, sessionId: (S.session || QS.get("session") || "") });
       var ok = Boolean(sent && (sent.ok || sent.via));
       try { wbToast(ok ? '已发送风格，Agent 开始改页面' : '风格发送失败', 3000); } catch (e) {}
       st.msg = ok ? (opts.openCompare ? '已应用「' + (name || '') + '」风格，对比页已打开，等待新风格生成' : '已把「' + (name || '') + '」风格发给 Agent，切回对话继续') : '发送失败：' + String((sent && (sent.reason || sent.error)) || '未知');
@@ -748,7 +748,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     a.busy = true; a.msg = "正在发送给对话里的 AI…";
     render();
     try {
-      var sent = await hostCall("agent.prompt", { text: lines.join("\n") });
+      var sent = await hostCall("agent.prompt", { text: lines.join("\n"), sessionId: (S.session || QS.get("session") || "") });
       if (sent && sent.ok === false) throw new Error(String(sent.reason || sent.error || "发送失败"));
       a.busy = false; a.open = false; a.text = ""; a.sel = null; a.msg = "";
       S.msg = "已把调整要求发给对话里的 AI（Agent 会在对话里继续改，改完回来自动生效）";
@@ -1228,7 +1228,8 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     // 从 DSH 宿主打开：隐藏独立模式连接条（布局与右侧栏内嵌工作台一致）
     S.fromHost = Boolean(qApi);
     // 已打开项目时点「独立窗口」：宿主会把 dir/page 带过来，直接进编辑
-    var qDir = qs.get("dir");
+    var qDir = qs.get("dir");
+    S.session = qs.get("session") || "";
     if (qDir && !EMBEDDED) S.bootTarget = { dir: qDir, page: qs.get("page") || "" };
   } catch (e) { /* ignore */ }
   S.theme = readLS(STORE_KEYS.theme, "paper") === "ink" ? "ink" : "paper";

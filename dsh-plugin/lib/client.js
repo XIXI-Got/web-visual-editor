@@ -176,9 +176,32 @@ async function sendViaScopedConversation(text) {
 
 /** 读取当前会话 id（DSH 右栏根节点带 data-sidebar-right-session） */
 function dshSessionId() {
+  // 多对话并排 / 多标签时，document.querySelector 会拿到第一个（很可能属于另一个 / 隐藏的旧会话）。
+  // ① 先从插件自己的 DOM 往上找最近的 [data-sidebar-right-session]；
+  // ② 再在所有候选里挑「可见」的那一个（隐藏标签页的右栏不可见）。
+  const nearest = (node) => {
+    let n = node;
+    while (n && n !== document.documentElement) {
+      try {
+        const v = n.getAttribute && n.getAttribute("data-sidebar-right-session");
+        if (v) return v;
+      } catch { /* ignore */ }
+      n = n.parentElement || n.host || null;
+    }
+    return "";
+  };
   try {
-    const el = document.querySelector("[data-sidebar-right-session]");
-    return (el && el.getAttribute("data-sidebar-right-session")) || "";
+    const own = document.querySelector('[data-plugin="web-page-editor"]')
+      || document.querySelector(".wpe-tabview")
+      || document.querySelector(".wpe-workbench");
+    const v0 = own ? nearest(own) : "";
+    if (v0) return v0;
+  } catch { /* ignore */ }
+  try {
+    const all = Array.from(document.querySelectorAll("[data-sidebar-right-session]"));
+    const vis = all.filter((el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; });
+    const pick = vis[vis.length - 1] || all[all.length - 1];
+    return (pick && pick.getAttribute("data-sidebar-right-session")) || "";
   } catch { return ""; }
 }
 
@@ -223,7 +246,7 @@ async function deliverToChat(text) {
   console.warn("[dsh-ui-editor] 会话接口不可用（" + lastReason + "），继续尝试 /handoff 与 DOM 发送");
   // ②b 宿主侧直发（/handoff：宿主用会话服务把消息送进对话）
   try {
-    const r = await api("/handoff", { method: "POST", body: JSON.stringify({ text }) });
+    const r = await api("/handoff", { method: "POST", body: JSON.stringify({ text, sessionId: dshSessionId() }) });
     if (r && r.ok) return { ok: true, via: "host" };
     console.warn("[dsh-ui-editor] 宿主直发失败", r);
   } catch (e) { console.warn("[dsh-ui-editor] /handoff 请求失败", e); }
@@ -4475,7 +4498,7 @@ const API_PATH = "/ve/plugin";
                   if (base !== null) {
                     const q = '?api=' + encodeURIComponent(String(base)) + '&standalone=1'
                       + (args && args.dir ? '&dir=' + encodeURIComponent(String(args.dir)) : '')
-                      + (args && args.page ? '&page=' + encodeURIComponent(String(args.page)) : '');
+                      + (args && args.page ? '&page=' + encodeURIComponent(String(args.page)) : '') + '&session=' + encodeURIComponent(dshSessionId());
                     window.open(String(base).replace(/\/+$/, '') + '/ve/wb/index.html' + q, 've-workbench', 'width=1440,height=920');
                     data = { ok: true };
                   } else data = { ok: false };
@@ -4493,7 +4516,7 @@ const API_PATH = "/ve/plugin";
                 try { sent = await deliverToChat(text); } catch (e) { sent = { ok: false, reason: String((e && e.message) || e) }; }
                 if (!sent || sent.ok === false) {
                   try {
-                    const r = await api('/handoff', { method: 'POST', body: JSON.stringify({ text: text }) });
+                    const r = await api('/handoff', { method: 'POST', body: JSON.stringify({ text: text, sessionId: dshSessionId() }) });
                     if (r && r.ok !== false) sent = r;
                     else sent = { ok: false, reason: String((r && (r.reason || r.error)) || 'handoff-failed') };
                   } catch (e) {
