@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.78（修复工作台 500）
+- 修复 `/ve/wb` 静态路由里 `stat.isFile()` 被误写成多次调用导致的工作台 500。
+- 风格配图 `/styles/file` 同步修正。
+
+
 ## 1.1.77（风格配图接入）
 - 风格库支持 `preview.png` / `meta.preview`；列表返回 preview，风格行卡右侧直接显示配图。
 - 新增 `/ve/plugin/styles/file` 读取风格目录图片（png/jpg/webp/svg/gif）。

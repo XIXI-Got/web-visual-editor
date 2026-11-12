@@ -1913,7 +1913,7 @@ export function apply(ctx) {
           if (!id || !/\.(png|jpe?g|webp|svg|gif)$/i.test(name)) { res.writeHead(404); res.end('not found'); return; }
           const file = path.join(styleRoot(), id, name);
           try {
-            if (!fsExists(file) || !fsStat(file).isFile()()) { res.writeHead(404); res.end('not found'); return; }
+            if (!fsExists(file) || !fsStat(file).isFile()) { res.writeHead(404); res.end('not found'); return; }
             const ext = path.extname(name).toLowerCase();
             const mime = ext === '.svg' ? 'image/svg+xml' : ext === '.jpg' || ext === '.jpeg' ? 'image/jpeg' : ext === '.webp' ? 'image/webp' : ext === '.gif' ? 'image/gif' : 'image/png';
             const buf = fs.readFileSync(file);
@@ -2013,7 +2013,7 @@ export function apply(ctx) {
           if (rel === "/" || rel === "") rel = "/index.html";
           if (rel.split("/").some((p) => p.startsWith(".") || p.includes(".."))) { res.writeHead(404); res.end("not found"); return; }
           const file = path.join(WB_DIR, rel.replace(/^[/\\]+/, ""));
-          if (!file.startsWith(WB_DIR) || !fsExists(file) || !fsStat(file).isFile()()()) { res.writeHead(404); res.end("not found"); return; }
+          if (!file.startsWith(WB_DIR) || !fsExists(file) || !fsStat(file).isFile()) { res.writeHead(404); res.end("not found"); return; }
           res.writeHead(200, {
             "content-type": WB_MIME[path.extname(file).toLowerCase()] || "application/octet-stream",
             "content-length": fsStat(file).size,
