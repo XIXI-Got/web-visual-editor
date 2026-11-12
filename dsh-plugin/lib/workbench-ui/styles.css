@@ -1330,20 +1330,20 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
 }
 
 /* 按 SVG 胶囊比例：左侧文字 / 右侧预留配图 */
-.style-row{grid-template-columns:42% 58%;aspect-ratio:auto;height:clamp(214px,17.2vw,234px);min-height:0;border:1px solid var(--line);border-radius:999px;box-shadow:0 10px 30px rgba(17,17,17,.055);transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out),border-color .25s var(--ease-out)}
-.style-row-copy{padding:clamp(26px,3.8vw,44px) clamp(28px,4.8vw,58px);padding-left:calc(clamp(28px,4.8vw,58px) + 30px);gap:9px}
+.style-row{grid-template-columns:42% 58%;aspect-ratio:auto;height:clamp(194px,15.8vw,214px);min-height:0;border:1px solid var(--line);border-radius:999px;background:linear-gradient(135deg,rgba(255,255,255,.80),rgba(255,255,255,.50) 50%,rgba(255,255,255,.70));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(17,17,17,.055);transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out),border-color .25s var(--ease-out)}
+.style-row-copy{padding:clamp(20px,2.6vw,30px) clamp(28px,4.8vw,58px);padding-left:calc(clamp(28px,4.8vw,58px) + 60px);gap:7px}
 .style-row-kicker{font-size:9px;letter-spacing:.2em}
-.style-row-name{font-size:clamp(24px,2.7vw,38px);line-height:1.02}
-.style-row-name em{font-size:.54em;line-height:1.15;margin-top:4px;color:currentColor;opacity:.78}
+.style-row-name{font-size:clamp(22px,2.45vw,34px);line-height:1.02}
+.style-row-name em{font-size:.46em;line-height:1.15;margin-top:3px;color:currentColor;opacity:.76}
 .style-row-tags{margin-top:2px}
 .style-row-tags span{padding:6px 12px;font-size:10px;background:#373435;color:#FEFEFE}
 .style-row-desc{font-size:11px;line-height:1.5;color:var(--ink55);-webkit-line-clamp:1;margin-top:1px}
 .style-row-visual{background:transparent;border-left:0}
-.style-row-image{position:absolute;inset:10px;border-radius:999px;background:#F6F6F4;overflow:hidden}
+.style-row-image{position:absolute;inset:10px;border-radius:999px;background:transparent;overflow:hidden}
 .style-row:hover .style-row-image{background:transparent}
 @media (max-width:760px){
   .style-row{grid-template-columns:1fr;aspect-ratio:auto;height:auto;min-height:0;border-radius:34px}
-  .style-row-copy{padding:26px 26px 20px 36px;gap:8px}
+  .style-row-copy{padding:24px 26px 20px 66px;gap:8px}
   .style-row-visual{min-height:170px;border-top:1px solid var(--line)}
   .style-row-image{inset:10px;border-radius:20px}
 }
