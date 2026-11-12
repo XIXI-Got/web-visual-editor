@@ -1,0 +1,113 @@
+/* ==========================================================================
+   Spatial Glass 拟态玻璃暗色界面 — design tokens
+   与 design-tokens.json 同值；系统在缺少 json 时也会从这里解析 --name: value
+   ========================================================================== */
+
+:root {
+  /* ---- 缩放基准：1440 视口时 1u = 1px ---- */
+  --design-w: 1440;
+  --u: clamp(.45px, calc(100vw / var(--design-w)), 1px);
+
+  /* ---- 色彩 ---- */
+  --paper: #07060a;
+  --void: #07060a;
+  --void-warm: #0d0a07;
+  --ink: #f6f1e9;
+  --ink-strong: #fffcfa;
+  --ink-dim: rgba(243, 236, 224, 0.64);
+  --ink-faint: rgba(243, 236, 224, 0.42);
+  --ink-ghost: rgba(243, 236, 224, 0.24);
+  --amber: #e8c496;
+  --amber-hi: #fbe6c4;
+  --amber-lo: #b98a56;
+  --mint: #86dcae;
+  --sky: #a9c7de;
+  --rose: #e8a292;
+  --glass-tint: rgba(18, 13, 10, 0.20);
+  --glass-stroke: rgba(255, 255, 255, 0.155);
+  --line: rgba(255, 255, 255, 0.10);
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --focus: #e8c496;
+
+  /* ---- 字体 ---- */
+  --font-display: "Inter Tight", "Neue Haas Grotesk Display", "Helvetica Neue",
+                  "Segoe UI Variable Display", "Segoe UI", Inter, system-ui, Arial, sans-serif;
+  --font-sans: Inter, "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system,
+               "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Mono", "SF Mono", Consolas, "Courier New", monospace;
+
+  /* ---- 字阶（统一走 --u） ---- */
+  --fs-hero: clamp(46px, calc(60 * var(--u) + 16px), 84px);
+  --fs-h2: clamp(15px, calc(14 * var(--u) + 2px), 18px);
+  --fs-body: clamp(12.5px, calc(11 * var(--u) + 1.6px), 14.5px);
+  --fs-sm: clamp(11px, calc(9 * var(--u) + 1.4px), 12.5px);
+  --fs-xs: clamp(10px, calc(8 * var(--u) + 1.2px), 11.5px);
+  --fs-metric: clamp(30px, calc(30 * var(--u) + 6px), 46px);
+  --tracking-display: .048em;
+  --tracking-label: .16em;
+
+  /* ---- 间距 ---- */
+  --space-2xs: calc(2 * var(--u));
+  --space-xs: calc(4 * var(--u));
+  --space-sm: calc(6 * var(--u));
+  --space-md: calc(8 * var(--u));
+  --space-base: calc(10 * var(--u));
+  --space-lg: calc(12 * var(--u));
+  --space-xl: calc(14 * var(--u));
+  --space-2xl: calc(16 * var(--u));
+  --space-3xl: calc(18 * var(--u));
+  --space-panel: calc(20 * var(--u));
+  --space-gutter: max(16px, calc(30 * var(--u)));
+  --space-block: calc(38 * var(--u));
+
+  /* ---- 圆角 ---- */
+  --radius-sm: calc(10 * var(--u));
+  --radius-md: calc(14 * var(--u));
+  --radius-lg: calc(22 * var(--u));
+  --radius-xl: calc(30 * var(--u));
+  --radius-pill: 999px;
+
+  /* ---- 玻璃表面 ---- */
+  --glass-blur: calc(20 * var(--u));
+  --glass-sat: 118%;
+  --glass-grad: linear-gradient(158deg,
+      rgba(255, 247, 235, .105) 0%,
+      rgba(255, 246, 232, .038) 34%,
+      rgba(0, 0, 0, .05) 64%,
+      rgba(0, 0, 0, .19) 100%);
+  --shadow-glass:
+      0 42px 90px -36px rgba(0, 0, 0, .92),
+      0 16px 34px -18px rgba(0, 0, 0, .72),
+      0 2px 6px -2px rgba(0, 0, 0, .55);
+  --shadow-glass-inner:
+      inset 0 1px 0 rgba(255, 255, 255, .20),
+      inset 0 -1px 0 rgba(0, 0, 0, .30),
+      inset 1px 0 0 rgba(255, 255, 255, .06),
+      inset -1px 0 0 rgba(255, 255, 255, .05);
+  --shadow-amber-glow: 0 0 0 4px rgba(232, 196, 150, .14);
+  --shadow-switch-glow: 0 0 14px rgba(232, 196, 150, .26);
+  --shadow-knob: 0 0 8px rgba(232, 196, 150, .60);
+
+  /* ---- 动效 ---- */
+  --ease-out: cubic-bezier(.22, .68, .28, 1);
+  --ease-soft: cubic-bezier(.4, .2, 0, 1);
+  --dur: .55s;
+  --dur-reveal: .9s;
+  --stagger-reveal: 65ms;
+}
+
+/* 玻璃质感开关：off 态退化为实心暖玻璃 */
+html[data-glass="off"] {
+  --glass-blur: 0px;
+  --glass-tint: rgba(16, 13, 10, .62);
+  --glass-grad: linear-gradient(158deg, rgba(28, 22, 17, .72), rgba(14, 11, 8, .78));
+  --shadow-glass: 0 20px 50px -30px rgba(0, 0, 0, .90);
+}
+
+/* 模糊三档 */
+html[data-blur-level="off"]  { --glass-blur: 0px; }
+html[data-blur-level="low"]  { --glass-blur: calc(7 * var(--u)); }
+html[data-blur-level="md"]   { --glass-blur: calc(20 * var(--u)); }
+html[data-blur-level="high"] { --glass-blur: calc(34 * var(--u)); }
+
+html[data-glass="off"] { --glass-blur: 0px; } /* off 优先于任何档位 */

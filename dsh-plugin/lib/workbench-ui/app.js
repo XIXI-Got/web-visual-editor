@@ -830,9 +830,11 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       var nameLines = String(s.name || '').split('\n');
       var main = nameLines[0] || '';
       var sub = nameLines.slice(1).join(' ').trim();
-      var tags = s.titleEffect === 'stroke'
-        ? ['描边', '编辑']
-        : (s.cardStyle === 'glass' ? ['玻璃', '层次'] : ['纯色', '干净']);
+      var styleText = String(s.name || '') + ' ' + String(s.description || '');
+      var glassStyle = /glass|拟态玻璃|玻璃拟态/i.test(String(s.name || ''));
+      var tags = glassStyle
+        ? ['玻璃', '层次']
+        : (s.titleEffect === 'stroke' ? ['描边', '编辑'] : (s.cardStyle === 'glass' ? ['玻璃', '层次'] : ['纯色', '干净']));
       var desc = String(s.description || '').replace(/\s+/g, ' ').trim();
       if (desc.length > 90) desc = desc.slice(0, 88).trim() + '…';
       // 暗色风格的胶囊别跟着变暗：画布色只取一点点做底色，文字仍用主题墨色；
@@ -856,7 +858,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       };
       var coloredCanvas = hexChroma(canvasHex) > 0.22;
       var inkLum = hexLum(s.titleColor);
-      var rowCanvas = coloredCanvas ? 'var(--paper-raised)' : (darkCanvas ? 'color-mix(in srgb,' + canvasHex + ' 15%,#fff)' : (s.bgColor || 'var(--paper-raised)'));
+      var rowCanvas = (coloredCanvas || darkCanvas) ? 'var(--paper-raised)' : (s.bgColor || 'var(--paper-raised)');
       var rowInk = darkCanvas ? 'var(--ink)' : (s.titleColor || 'var(--ink)');
       var rowAccent = (inkLum != null && inkLum > 0.66) ? '#373435' : (s.titleColor || 'var(--ink)');
       var rowVars = '--sr-title-font:' + esc(s.fontStack || 'var(--font-display)') + ';--sr-body-font:' + esc(s.smallFontStack || 'var(--font-sans)') + ';--sr-ink:' + esc(rowInk) + ';--sr-accent:' + esc(rowAccent) + ';--sr-canvas:' + esc(rowCanvas) + ';';

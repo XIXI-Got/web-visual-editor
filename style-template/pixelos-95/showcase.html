@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="win95">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PixelOS 95 · Showcase — 左边迷你 Hero，右边组件与元素</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+<style>
+  /* ==========================================================================
+     PixelOS 95 · Design System Showcase
+     Format: Triptych —— 左：迷你 hero 页；右：组件 / 元素 2×2 展板；底：令牌条
+     设计基准 1440×900；360–1920 自适应，无横向滚动
+     ========================================================================== */
+  :root {
+    --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+    --font-body: 'Courier New', SimSun, 'Microsoft YaHei', monospace;
+    --font-vt: 'VT323', SimSun, monospace;
+
+    /* Win95 经典灰（默认皮肤） */
+    --desktop-bg: #008080;
+    --desktop-dot: rgba(255, 255, 255, 0.14);
+    --win-bg: #C0C0C0;
+    --win-surface: #DFDFDF;
+    --win-inset: #FFFFFF;
+    --b-light: #FFFFFF;
+    --b-mid: #DFDFDF;
+    --b-dark: #808080;
+    --b-black: #000000;
+    --title-bg: linear-gradient(90deg, #000080, #1084D0);
+    --title-text: #FFFFFF;
+    --text-main: #000000;
+    --text-muted: #4A4A4A;
+    --accent: #000080;
+    --accent-light: #3B3BB3;
+    --accent-ink: #FFFFFF;
+    --accent-2: #D12C2C;
+    --accent-2-light: #E86A6A;
+    --bar-hp: #D9383A;
+    --bar-mp: #2864D8;
+    --bar-exp: #2E9E44;
+    --desktop-text: #FFFFFF;
+    --desktop-shadow: 2px 2px 0 #000000;
+    --desktop-shadow-sm: 1px 1px 0 #000000;
+    --desk-rule: rgba(255, 255, 255, 0.35);
+
+    --pad-card: clamp(14px, 1.7vw, 26px);
+    --gap-card: clamp(10px, 1.1vw, 16px);
+  }
+
+  [data-theme="gameboy"] {
+    --desktop-bg: #8BAC0F;
+    --desktop-dot: rgba(15, 56, 15, 0.16);
+    --win-bg: #9BBC0F;
+    --win-surface: #8BAC0F;
+    --win-inset: #9BBC0F;
+    --b-light: #B5D329;
+    --b-mid: #9BBC0F;
+    --b-dark: #306230;
+    --b-black: #0F380F;
+    --title-bg: linear-gradient(90deg, #0F380F, #306230);
+    --title-text: #9BBC0F;
+    --text-main: #0F380F;
+    --text-muted: #306230;
+    --accent: #0F380F;
+    --accent-light: #2A5A2A;
+    --accent-ink: #9BBC0F;
+    --accent-2: #306230;
+    --accent-2-light: #4E7F4E;
+    --bar-hp: #0F380F;
+    --bar-mp: #306230;
+    --bar-exp: #0F380F;
+    --desktop-text: #0F380F;
+    --desktop-shadow: none;
+    --desktop-shadow-sm: none;
+    --desk-rule: rgba(15, 56, 15, 0.35);
+  }
+
+  [data-theme="neon"] {
+    --desktop-bg: #120B24;
+    --desktop-dot: rgba(0, 245, 212, 0.14);
+    --win-bg: #1E1538;
+    --win-surface: #281C49;
+    --win-inset: #130C26;
+    --b-light: #00F5D4;
+    --b-mid: #5C459C;
+    --b-dark: #0A0614;
+    --b-black: #FF2A85;
+    --title-bg: linear-gradient(90deg, #FF2A85, #7B2CBF);
+    --title-text: #FFFFFF;
+    --text-main: #F3EFFF;
+    --text-muted: #A99AD6;
+    --accent: #00F5D4;
+    --accent-light: #7CFFEB;
+    --accent-ink: #130C26;
+    --accent-2: #FF2A85;
+    --accent-2-light: #FF7AB5;
+    --bar-hp: #FF2A85;
+    --bar-mp: #00F5D4;
+    --bar-exp: #FEE440;
+    --desktop-text: #F3EFFF;
+    --desktop-shadow: 2px 2px 0 #FF2A85;
+    --desktop-shadow-sm: 1px 1px 0 #FF2A85;
+    --desk-rule: rgba(243, 239, 255, 0.28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  html, body { overflow-x: clip; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--desktop-bg);
+    background-image: radial-gradient(var(--desktop-dot) 1.5px, transparent 0);
+    background-size: 16px 16px;
+    color: var(--text-main);
+    font-family: var(--font-body);
+    font-size: clamp(12px, 0.88vw, 13px);
+    line-height: 1.55;
+    transition: background-color 250ms ease, color 100ms ease;
+  }
+
+  .stage *, .taskbar *, .toolbar * { min-width: 0; }
+
+  .font-pixel { font-family: var(--font-pixel); letter-spacing: .08em; }
+  .muted { color: var(--text-muted); }
+
+  /* ── 立体材质 ───────────────────────────────────────────── */
+  .px-outset {
+    background-color: var(--win-bg);
+    border-top: 2px solid var(--b-light);
+    border-left: 2px solid var(--b-light);
+    border-right: 2px solid var(--b-black);
+    border-bottom: 2px solid var(--b-black);
+    box-shadow: inset 1px 1px 0 var(--b-mid), inset -1px -1px 0 var(--b-dark);
+  }
+  .px-inset {
+    background-color: var(--win-inset);
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-black), inset -1px -1px 0 var(--b-mid);
+  }
+  .px-inset-panel {
+    background-color: var(--win-surface);
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+  }
+
+  /* ── 按钮 ───────────────────────────────────────────────── */
+  .px-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 26px;
+    padding: 3px 10px;
+    font: inherit;
+    font-size: clamp(11px, 0.8vw, 12px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-main);
+    background-color: var(--win-bg);
+    border-top: 2px solid var(--b-light);
+    border-left: 2px solid var(--b-light);
+    border-right: 2px solid var(--b-black);
+    border-bottom: 2px solid var(--b-black);
+    box-shadow: inset -1px -1px 0 var(--b-dark);
+    border-radius: 0;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: none;
+  }
+  .px-btn:hover { filter: brightness(1.03); }
+  .px-btn:active,
+  .px-btn.is-active {
+    border-top-color: var(--b-black);
+    border-left-color: var(--b-black);
+    border-right-color: var(--b-light);
+    border-bottom-color: var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-dark);
+    filter: none;
+  }
+  .px-btn:focus-visible,
+  .icon-btn:focus-visible,
+  .px-switch input:focus-visible + .sw-track,
+  .px-check input:focus-visible + .ck-box,
+  .px-tabs .px-btn:focus-visible {
+    outline: 1px dotted var(--text-main);
+    outline-offset: -4px;
+  }
+  .px-btn:disabled {
+    color: var(--b-dark);
+    cursor: not-allowed;
+    filter: none;
+  }
+  [data-theme="neon"] .px-btn:disabled { color: #5C459C; }
+
+  .btn-primary {
+    background-color: var(--accent);
+    color: var(--accent-ink);
+    border-top-color: var(--accent-light);
+    border-left-color: var(--accent-light);
+    border-right-color: var(--b-black);
+    border-bottom-color: var(--b-black);
+    box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.38);
+  }
+  .btn-primary:hover { filter: brightness(1.12); }
+  .btn-primary:active,
+  .btn-primary.is-active {
+    border-top-color: var(--b-black);
+    border-left-color: var(--b-black);
+    border-right-color: var(--accent-light);
+    border-bottom-color: var(--accent-light);
+    box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.38);
+    filter: none;
+  }
+  .btn-danger {
+    background-color: var(--accent-2);
+    color: #FFFFFF;
+    border-top-color: var(--accent-2-light);
+    border-left-color: var(--accent-2-light);
+  }
+  .btn-danger:active,
+  .btn-danger.is-active {
+    border-top-color: var(--b-black);
+    border-left-color: var(--b-black);
+    border-right-color: var(--accent-2-light);
+    border-bottom-color: var(--accent-2-light);
+  }
+  .btn-sm { min-height: 22px; padding: 1px 7px; font-size: clamp(10px, 0.7vw, 11px); }
+  .icon-btn {
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-main);
+    background-color: var(--win-bg);
+    border-top: 2px solid var(--b-light);
+    border-left: 2px solid var(--b-light);
+    border-right: 2px solid var(--b-black);
+    border-bottom: 2px solid var(--b-black);
+    box-shadow: inset -1px -1px 0 var(--b-dark);
+    border-radius: 0;
+    cursor: pointer;
+    transition: none;
+  }
+  .icon-btn:hover { filter: brightness(1.03); }
+  .icon-btn:active { border-color: var(--b-black) var(--b-light) var(--b-light) var(--b-black); box-shadow: inset 1px 1px 0 var(--b-dark); }
+
+  /* ── 顶部工具条 ─────────────────────────────────────────── */
+  .toolbar {
+    width: min(1400px, 100% - clamp(16px, 3vw, 48px));
+    margin: clamp(6px, 0.9vw, 12px) auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: clamp(10.5px, 0.78vw, 11.5px);
+  }
+  .toolbar-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--desktop-text); text-shadow: var(--desktop-shadow-sm); }
+  .toolbar-left .dot {
+    width: 8px;
+    height: 8px;
+    flex: none;
+    background: var(--accent);
+    border: 1px solid var(--b-black);
+    box-shadow: 1px 1px 0 var(--b-black);
+  }
+  [data-theme="gameboy"] .toolbar-left .dot { background: #0F380F; }
+  .toolbar-left b { font-weight: 700; letter-spacing: .04em; }
+  .toolbar-left .edition { color: var(--desktop-text); text-shadow: var(--desktop-shadow-sm); }
+  .toolbar-right { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .skin-switch { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px 5px; }
+
+  /* ── 主展板 ─────────────────────────────────────────────── */
+  .stage {
+    width: min(1400px, 100% - clamp(16px, 3vw, 48px));
+    margin: clamp(6px, 0.9vw, 12px) auto 0;
+    display: grid;
+    gap: var(--gap-card);
+    padding-bottom: clamp(10px, 1.2vw, 14px);
+  }
+
+  .triptych {
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+    gap: var(--gap-card);
+    align-items: stretch;
+  }
+
+  /* ── 左侧：迷你 hero 页（直接浮在桌面上，不套面板/按钮壳） ── */
+  .hero-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: clamp(8px, 1.1vw, 14px);
+    padding: clamp(2px, 0.5vw, 6px) 0;
+    position: relative;
+  }
+
+  .hero-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--desktop-text);
+    text-decoration: none;
+  }
+  .brand-logo {
+    display: grid;
+    grid-template-columns: repeat(2, 6px);
+    gap: 2px;
+    padding: 4px;
+    flex: none;
+  }
+  .brand-logo i { width: 6px; height: 6px; display: block; }
+  .brand-logo i:nth-child(1) { background: #EF4444; }
+  .brand-logo i:nth-child(2) { background: #22C55E; }
+  .brand-logo i:nth-child(3) { background: #3B82F6; }
+  .brand-logo i:nth-child(4) { background: #EAB308; }
+  .brand-name { font-size: clamp(8px, 0.62vw, 9.5px); }
+  .brand-sub { font-size: clamp(10px, 0.78vw, 11px); color: var(--desktop-text); border-left: 1px solid var(--desk-rule); padding-left: 8px; white-space: nowrap; text-shadow: var(--desktop-shadow-sm); }
+
+  .hero-nav { display: flex; align-items: center; gap: clamp(10px, 1.4vw, 20px); }
+  .hero-nav a {
+    color: var(--desktop-text);
+    text-decoration: none;
+    font-size: clamp(11px, 0.8vw, 12px);
+    white-space: nowrap;
+    text-shadow: var(--desktop-shadow-sm);
+  }
+  .hero-nav a:hover { text-decoration: underline; }
+  .hero-nav a:focus-visible { outline: 1px dotted var(--desktop-text); outline-offset: 3px; }
+
+  .hero-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: clamp(10px, 1.2vw, 18px);
+    align-items: center;
+    flex: 1 1 auto;
+  }
+  .hero-copy { display: grid; gap: 12px; align-content: start; }
+  .hero-kicker {
+    display: inline-block;
+    justify-self: start;
+    padding: 4px 7px;
+    font-size: clamp(7.5px, 0.58vw, 8.5px);
+    color: var(--win-inset);
+    background: var(--accent);
+  }
+  .hero-title {
+    margin: 0;
+    font-family: var(--font-pixel);
+    font-size: clamp(20px, 2vw, 30px);
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--desktop-text);
+    text-shadow: var(--desktop-shadow);
+    overflow-wrap: anywhere;
+  }
+  .hero-title span {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--font-body);
+    font-size: clamp(13px, 1.1vw, 16px);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: none;
+    color: var(--desktop-text);
+  }
+  .hero-lede {
+    margin: 0;
+    max-width: 34ch;
+    font-size: clamp(11.5px, 0.84vw, 12.5px);
+    line-height: 1.7;
+    color: var(--desktop-text);
+    text-shadow: var(--desktop-shadow-sm);
+  }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 7px; padding-top: 2px; }
+
+  /* 迷你窗口（hero 视觉） */
+  .hero-visual { display: grid; gap: 6px; align-content: center; }
+  .mini-window { width: 100%; max-width: 310px; margin-inline: auto; }
+  .mini-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 20px;
+    padding: 2px 3px 2px 5px;
+    background: var(--title-bg);
+    color: var(--title-text);
+  }
+  .mini-titlebar b { font-size: clamp(10px, 0.72vw, 11px); font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mini-titlebar .dots { display: flex; gap: 2px; flex: none; }
+  .mini-titlebar .dots .icon-btn { width: 15px; height: 15px; min-height: 15px; font-size: 9px; }
+  .mini-body { padding: 6px; display: grid; gap: 5px; }
+  .mini-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .mini-chip {
+    padding: 2px 6px;
+    font-size: clamp(9px, 0.66vw, 10px);
+    font-weight: 700;
+    background: var(--win-bg);
+    border-top: 1px solid var(--b-light);
+    border-left: 1px solid var(--b-light);
+    border-right: 1px solid var(--b-black);
+    border-bottom: 1px solid var(--b-black);
+    box-shadow: inset 1px 1px 0 var(--b-mid);
+    white-space: nowrap;
+  }
+  .readme-body {
+    padding: 7px 8px;
+    display: grid;
+    gap: 2px;
+    font-size: clamp(9.5px, 0.7vw, 10.5px);
+    line-height: 1.5;
+    background: var(--win-inset);
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-black);
+  }
+  .readme-body em { font-style: normal; color: var(--text-muted); }
+  .readme-body .readme-title { font-weight: 700; }
+  .mini-profile { display: flex; gap: 8px; align-items: flex-start; }
+  .mini-avatar { width: 44px; padding: 3px; flex: none; background: #1E293B; }
+  .mini-avatar svg { display: block; width: 100%; height: auto; }
+  .mini-info { display: grid; gap: 5px; flex: 1 1 auto; }
+  .mini-name { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+  .mini-name strong { font-size: clamp(10.5px, 0.76vw, 11.5px); }
+  .badge {
+    display: inline-block;
+    padding: 2px 5px;
+    font-size: clamp(7px, 0.52vw, 8px);
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--win-inset);
+    background: var(--accent);
+    white-space: nowrap;
+  }
+  .mini-role { margin: 0; font-size: clamp(10px, 0.7vw, 11px); color: var(--text-muted); }
+  .bar-label { display: flex; justify-content: space-between; gap: 6px; font-size: clamp(9.5px, 0.68vw, 10.5px); font-weight: 700; }
+  .bar-label .font-pixel { font-size: clamp(7px, 0.52vw, 8px); letter-spacing: .02em; }
+  .bar-track { height: 12px; padding: 2px; }
+  .bar-fill { display: block; height: 100%; }
+
+  /* hero 桌面快捷方式 */
+  .hero-icons { display: flex; flex-wrap: wrap; gap: clamp(8px, 1vw, 12px); align-items: flex-start; }
+  .desk-icon {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    display: grid;
+    justify-items: center;
+    gap: 3px;
+    cursor: pointer;
+    font: inherit;
+  }
+  .desk-icon:focus-visible { outline: 1px dotted var(--text-main); outline-offset: 3px; }
+  .desk-tile {
+    width: clamp(28px, 2.2vw, 32px);
+    height: clamp(28px, 2.2vw, 32px);
+    display: grid;
+    place-items: center;
+  }
+  .desk-tile svg { width: 20px; height: 20px; display: block; image-rendering: pixelated; }
+  .desk-label {
+    padding: 1px 4px;
+    font-size: clamp(9px, 0.66vw, 10px);
+    line-height: 1.35;
+    color: #FFFFFF;
+    background: rgba(0, 0, 0, 0.55);
+    white-space: nowrap;
+  }
+
+  /* hero 底部 4 个特性 */
+  .hero-features {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding-top: clamp(6px, 0.8vw, 10px);
+    border-top: 1px solid var(--desk-rule);
+  }
+  .feature { display: grid; gap: 2px; align-content: start; }
+  .feature-icon {
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    color: var(--desktop-text);
+    text-shadow: var(--desktop-shadow-sm);
+    margin-bottom: 2px;
+  }
+  .feature b { font-size: clamp(10px, 0.72vw, 11px); font-weight: 700; line-height: 1.3; color: var(--desktop-text); }
+  .feature span { font-size: clamp(9.5px, 0.68vw, 10.5px); color: var(--desktop-text); line-height: 1.4; }
+
+  /* ── 右侧：组件 / 元素展板 ──────────────────────────────── */
+  .right-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: auto;
+    gap: var(--gap-card);
+    align-items: stretch;
+  }
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 0.7vw, 9px);
+    padding: clamp(9px, 0.9vw, 12px);
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--b-dark);
+  }
+  .panel-head h2 {
+    margin: 0;
+    font-size: clamp(12px, 0.9vw, 13.5px);
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+  .panel-head .code {
+    font-family: var(--font-pixel);
+    font-size: clamp(6.5px, 0.5vw, 7.5px);
+    letter-spacing: .06em;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .group { display: grid; gap: 4px; align-content: start; }
+  .group-label {
+    font-size: clamp(9px, 0.64vw, 10px);
+    letter-spacing: .06em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
+  /* 控件：开关 */
+  .px-switch { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: clamp(10.5px, 0.76vw, 11.5px); }
+  .px-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .sw-track {
+    position: relative;
+    width: 38px;
+    height: 20px;
+    padding: 2px;
+    flex: none;
+    background: var(--win-inset);
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-black);
+  }
+  .sw-track::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 12px;
+    background: var(--win-bg);
+    border-top: 1px solid var(--b-light);
+    border-left: 1px solid var(--b-light);
+    border-right: 1px solid var(--b-black);
+    border-bottom: 1px solid var(--b-black);
+    transition: left 0s;
+  }
+  .px-switch input:checked + .sw-track { background: var(--accent); }
+  .px-switch input:checked + .sw-track::after { left: 18px; }
+
+  /* 控件：复选 / 单选（像素方形） */
+  .px-check { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: clamp(10.5px, 0.76vw, 11.5px); }
+  .px-check input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .ck-box {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--win-inset);
+    background: var(--win-inset);
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-black);
+  }
+  .px-check input:checked + .ck-box { background: var(--accent); color: var(--accent-ink); }
+  .ck-radio { width: 16px; height: 16px; padding: 3px; flex: none; display: inline-flex; background: var(--win-inset);
+    border-top: 2px solid var(--b-dark); border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light); border-bottom: 2px solid var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-black); }
+  .ck-radio::after { content: ""; display: block; width: 100%; height: 100%; background: transparent; }
+  .px-check input:checked + .ck-radio::after { background: var(--accent); }
+
+  /* 控件：下拉 / 滑杆 / 标签页 */
+  .select-wrap { position: relative; display: inline-flex; width: min(100%, 168px); }
+  .select-wrap::after {
+    content: "▾";
+    position: absolute;
+    right: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    background: var(--win-bg);
+    border-top: 1px solid var(--b-light);
+    border-left: 1px solid var(--b-light);
+    border-right: 1px solid var(--b-black);
+    border-bottom: 1px solid var(--b-black);
+    pointer-events: none;
+  }
+  .px-select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    min-height: 26px;
+    padding: 3px 24px 3px 6px;
+    font: inherit;
+    font-size: clamp(10.5px, 0.76vw, 11.5px);
+    color: var(--text-main);
+    background: var(--win-inset);
+    border-radius: 0;
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-black);
+    outline: none;
+  }
+  .px-select:focus-visible { outline: 1px dotted var(--text-main); outline-offset: -4px; }
+
+  .px-range {
+    appearance: none;
+    -webkit-appearance: none;
+    width: min(100%, 180px);
+    height: 14px;
+    margin: 0;
+    padding: 2px;
+    background: var(--win-inset);
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-black);
+    cursor: pointer;
+  }
+  .px-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-top: -2px;
+    background: var(--win-bg);
+    border-top: 1px solid var(--b-light);
+    border-left: 1px solid var(--b-light);
+    border-right: 1px solid var(--b-black);
+    border-bottom: 1px solid var(--b-black);
+    box-shadow: inset -1px -1px 0 var(--b-dark);
+    border-radius: 0;
+  }
+  .px-range::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: var(--win-bg);
+    border: 1px solid var(--b-black);
+    border-radius: 0;
+  }
+  .px-range::-webkit-slider-runnable-track { height: 8px; background: transparent; }
+
+  .px-tabs { display: flex; flex-wrap: wrap; gap: 2px; align-items: stretch; }
+  .px-tabs .px-btn { min-height: 22px; padding: 1px 8px; font-size: clamp(10px, 0.7vw, 11px); }
+  .px-tabs .px-btn.is-active { font-weight: 700; }
+
+  /* 元素：窗口片段 / 徽章 / 图标 / 任务栏 */
+  .snippet-window { width: 100%; }
+  .snippet-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    min-height: 20px;
+    padding: 2px 3px 2px 5px;
+    background: var(--title-bg);
+    color: var(--title-text);
+    font-size: clamp(9.5px, 0.7vw, 10.5px);
+    font-weight: 700;
+  }
+  .snippet-titlebar .icon-btn { width: 15px; height: 15px; min-height: 15px; font-size: 9px; }
+  .snippet-body { padding: 5px 6px; display: grid; gap: 5px; }
+  .snippet-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: clamp(10px, 0.72vw, 11px); }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .badge-outline {
+    display: inline-block;
+    padding: 2px 5px;
+    font-size: clamp(9px, 0.66vw, 10px);
+    font-weight: 700;
+    border: 1px solid var(--b-black);
+    background: var(--win-surface);
+    white-space: nowrap;
+  }
+  .badge-muted {
+    display: inline-block;
+    padding: 2px 5px;
+    font-size: clamp(9px, 0.66vw, 10px);
+    color: var(--text-muted);
+    background: var(--win-surface);
+    border: 1px solid var(--b-dark);
+    white-space: nowrap;
+  }
+
+  .icon-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .icon-tile {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--win-bg);
+    border-top: 2px solid var(--b-light);
+    border-left: 2px solid var(--b-light);
+    border-right: 2px solid var(--b-black);
+    border-bottom: 2px solid var(--b-black);
+    box-shadow: inset 1px 1px 0 var(--b-mid), inset -1px -1px 0 var(--b-dark);
+  }
+  .icon-tile svg { width: 16px; height: 16px; display: block; image-rendering: pixelated; }
+
+  .taskbar-mini {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px;
+    background: var(--win-bg);
+    border-top: 2px solid var(--b-light);
+    border-left: 2px solid var(--b-light);
+    border-right: 2px solid var(--b-black);
+    border-bottom: 2px solid var(--b-black);
+    box-shadow: inset 1px 1px 0 var(--b-mid), inset -1px -1px 0 var(--b-dark);
+  }
+  .taskbar-mini .px-btn { min-height: 20px; padding: 1px 6px; font-size: clamp(9px, 0.66vw, 10px); }
+  .taskbar-mini .tray { margin-left: auto; padding: 1px 5px; font-size: clamp(9px, 0.66vw, 10px); font-weight: 700; white-space: nowrap; }
+
+  /* 字体与色彩 */
+  .type-row { display: grid; gap: 2px; padding-bottom: 4px; border-bottom: 1px solid rgba(128, 128, 128, 0.45); }
+  .type-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .type-tag { font-size: clamp(9px, 0.64vw, 10px); color: var(--text-muted); }
+  .t-pixel { font-family: var(--font-pixel); font-size: clamp(9px, 0.78vw, 11px); letter-spacing: .04em; }
+  .t-title { font-size: clamp(12px, 0.92vw, 13.5px); font-weight: 700; }
+  .t-body { font-size: clamp(11px, 0.8vw, 12px); }
+  .t-meta { font-size: clamp(10px, 0.72vw, 11px); color: var(--text-muted); }
+
+  .swatches { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+  .swatch { display: block; height: 17px; border: 2px solid var(--b-black); }
+  .token-list { display: grid; gap: 3px; margin-top: 7px; }
+  .token-line { display: flex; justify-content: space-between; gap: 8px; font-size: clamp(9px, 0.66vw, 10px); color: var(--text-muted); }
+  .token-line code { font-family: var(--font-body); font-weight: 700; color: var(--text-main); }
+
+  /* ── 底部令牌条 ─────────────────────────────────────────── */
+  .guidelines {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) auto;
+    gap: clamp(10px, 1.2vw, 18px);
+    align-items: center;
+    padding: clamp(9px, 1vw, 13px) clamp(12px, 1.2vw, 16px);
+  }
+  .guide-left { display: grid; gap: 4px; align-content: center; }
+  .guide-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .guide-badge {
+    padding: 2px 6px;
+    font-family: var(--font-pixel);
+    font-size: clamp(6.5px, 0.5vw, 7.5px);
+    letter-spacing: .08em;
+    color: var(--accent-ink);
+    background: var(--accent);
+  }
+  .guide-title { font-size: clamp(12px, 0.9vw, 13.5px); font-weight: 700; }
+  .guide-desc { margin: 0; font-size: clamp(10px, 0.72vw, 11px); color: var(--text-muted); line-height: 1.5; }
+  .code-box {
+    margin: 0;
+    padding: 4px 8px;
+    font-family: var(--font-body);
+    font-size: clamp(9.5px, 0.68vw, 10.5px);
+    line-height: 1.5;
+    color: var(--text-main);
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .guide-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .palette-dots { display: flex; flex-wrap: wrap; gap: 4px; }
+  .palette-dots span { width: 16px; height: 16px; border: 2px solid var(--b-black); display: inline-block; }
+
+  /* ── 底部任务栏 ─────────────────────────────────────────── */
+  .taskbar {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 6px;
+    background-color: var(--win-bg);
+    border-top: 2px solid var(--b-light);
+  }
+  .taskbar .start-btn { min-height: 30px; gap: 6px; }
+  .taskbar .start-icon { display: grid; grid-template-columns: repeat(2, 5px); gap: 2px; flex: none; }
+  .taskbar .start-icon i { width: 5px; height: 5px; display: block; }
+  .taskbar .start-icon i:nth-child(1) { background: #EF4444; }
+  .taskbar .start-icon i:nth-child(2) { background: #22C55E; }
+  .taskbar .start-icon i:nth-child(3) { background: #3B82F6; }
+  .taskbar .start-icon i:nth-child(4) { background: #EAB308; }
+  .taskbar .divider { width: 2px; height: 22px; flex: none; border-left: 1px solid var(--b-dark); border-right: 1px solid var(--b-light); }
+  .taskbar .tabs { display: flex; align-items: center; gap: 4px; flex: 1 1 auto; overflow-x: auto; }
+  .taskbar .tab {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 28px;
+    font-size: clamp(10px, 0.74vw, 11px);
+  }
+  .taskbar .tray { display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 8px; flex: none; font-size: clamp(10.5px, 0.76vw, 11.5px); font-weight: 700; }
+  .taskbar .clock { font-size: clamp(8px, 0.6vw, 9px); letter-spacing: .02em; white-space: nowrap; }
+
+  /* ── CRT 氛围层 ─────────────────────────────────────────── */
+  .crt {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background:
+      repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0 1.5px, rgba(0, 0, 0, 0) 1.5px 3px),
+      repeating-linear-gradient(to right, rgba(255, 0, 0, 0.035) 0 2px, rgba(0, 255, 0, 0.018) 2px 4px, rgba(0, 0, 255, 0.035) 4px 6px);
+  }
+  .crt.is-off { display: none; }
+
+  /* ── 响应式 ─────────────────────────────────────────────── */
+  /* 桌面宽度下把展板垂直居中，让整页保持「扁」的长方形构图 */
+  @media (min-width: 1181px) {
+    .stage { flex: 1 1 auto; align-content: center; }
+  }
+
+  @media (max-width: 1180px) {
+    .triptych { grid-template-columns: minmax(0, 1fr); }
+    .right-grid { grid-auto-rows: auto; }
+    .hero-title { font-size: clamp(24px, 3vw, 34px); }
+  }
+  @media (max-width: 900px) {
+    .guidelines { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .right-grid { grid-template-columns: minmax(0, 1fr); }
+    .hero-body { grid-template-columns: minmax(0, 1fr); }
+    .mini-window { max-width: 100%; }
+    .hero-features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hero-nav { display: none; }
+    .brand-sub { display: none; }
+    .taskbar .tab:nth-child(2),
+    .taskbar .tab:nth-child(3) { display: none; }
+    .taskbar .tray [aria-hidden="true"] { display: none; }
+  }
+  @media (max-width: 420px) {
+    .swatches { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="crt" id="crt" aria-hidden="true"></div>
+
+  <!-- ==========================================================================
+       顶部极简工具条：系统标识 + 三套皮肤 + CRT 开关
+       ========================================================================== -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <span class="dot" aria-hidden="true"></span>
+      <b class="font-pixel">PIXELOS 95</b>
+      <span class="edition">Design System v1.0 · Win95 Classic Edition</span>
+    </div>
+    <div class="toolbar-right">
+      <div class="skin-switch px-outset" role="group" aria-label="切换皮肤">
+        <button type="button" class="px-btn is-active" data-skin="win95">经典灰</button>
+        <button type="button" class="px-btn" data-skin="gameboy">绿豆沙</button>
+        <button type="button" class="px-btn" data-skin="neon">8-Bit 霓虹</button>
+      </div>
+      <button type="button" class="px-btn is-active" id="crt-btn">📺 扫描线: 开</button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       主展板：左（迷你 hero 页，6/12）+ 右（组件与元素，2×2）
+       ========================================================================== -->
+  <main class="stage">
+    <div class="triptych">
+
+      <!-- ── 左：迷你 hero 页 ─────────────────────────────── -->
+      <section class="hero-card" aria-label="PixelOS 95 迷你 Hero 首页">
+        <header class="hero-head">
+          <a class="brand" href="#guidelines">
+            <span class="brand-logo px-outset" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span class="brand-name font-pixel">PIXELOS 95</span>
+            <span class="brand-sub">SYSTEM</span>
+          </a>
+          <nav class="hero-nav" aria-label="展板导航">
+            <a href="#panel-buttons">组件</a>
+            <a href="#panel-controls">控件</a>
+            <a href="#panel-elements">元素</a>
+            <a href="#guidelines">规范</a>
+          </nav>
+          <button type="button" class="px-btn btn-primary">
+            <span class="brand-logo" aria-hidden="true" style="padding:0;grid-template-columns:repeat(2,4px);gap:1px"><i style="width:4px;height:4px"></i><i style="width:4px;height:4px"></i><i style="width:4px;height:4px"></i><i style="width:4px;height:4px"></i></span>
+            <span>开始</span>
+          </button>
+        </header>
+
+        <div class="hero-body">
+          <div class="hero-copy">
+            <span class="hero-kicker font-pixel">STYLE SPEC · 01</span>
+            <h1 class="hero-title">
+              PixelOS 95
+              <span>像素桌面 · 复古操作系统设计系统</span>
+            </h1>
+            <p class="hero-lede">
+              青绿桌面、2px 立体边框、0 圆角与像素字体——把 1995 年的桌面搬进现代网页，同时保持 360–1920 自适应。
+            </p>
+            <div class="hero-cta">
+              <button type="button" class="px-btn btn-primary">打开画板</button>
+              <button type="button" class="px-btn">查看规范</button>
+            </div>
+          </div>
+
+          <!-- hero 视觉：迷你系统窗口 + README 便签 -->
+          <div class="hero-visual">
+            <div class="mini-window px-outset" role="img" aria-label="PIXEL.EXE 系统窗口示意">
+            <div class="mini-titlebar">
+              <b>PIXEL.EXE // 个人档案</b>
+              <span class="dots" aria-hidden="true">
+                <span class="icon-btn">_</span>
+                <span class="icon-btn">×</span>
+              </span>
+            </div>
+            <div class="mini-body">
+              <div class="mini-profile">
+                <div class="mini-avatar px-inset" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" width="42" height="42">
+                    <rect width="16" height="16" fill="#1E293B"/>
+                    <rect x="2" y="2" width="1" height="1" fill="#FDE047"/>
+                    <rect x="13" y="3" width="1" height="1" fill="#38BDF8"/>
+                    <rect x="4" y="2" width="8" height="2" fill="#78350F"/>
+                    <rect x="3" y="4" width="10" height="2" fill="#EF4444"/>
+                    <rect x="12" y="5" width="2" height="2" fill="#EF4444"/>
+                    <rect x="4" y="6" width="8" height="5" fill="#FDBA74"/>
+                    <rect x="4" y="7" width="3" height="2" fill="#000000"/>
+                    <rect x="9" y="7" width="3" height="2" fill="#000000"/>
+                    <rect x="7" y="7" width="2" height="1" fill="#000000"/>
+                    <rect x="5" y="7" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="10" y="7" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="6" y="10" width="4" height="1" fill="#9A3412"/>
+                    <rect x="3" y="11" width="10" height="5" fill="#2563EB"/>
+                    <rect x="6" y="11" width="4" height="5" fill="#FACC15"/>
+                  </svg>
+                </div>
+                <div class="mini-info">
+                  <div class="mini-name">
+                    <strong>像素架构师 · LV.99</strong>
+                    <span class="badge font-pixel">ONLINE</span>
+                  </div>
+                  <p class="mini-role">职业：全栈像素炼金术士</p>
+                </div>
+              </div>
+              <div>
+                <div class="bar-label"><span>HP 生命值</span><span class="font-pixel">980/999</span></div>
+                <div class="bar-track px-inset"><span class="bar-fill" style="width:96%;background:var(--bar-hp)"></span></div>
+              </div>
+              <div>
+                <div class="bar-label"><span>MP 灵感值</span><span class="font-pixel">850/999</span></div>
+                <div class="bar-track px-inset"><span class="bar-fill" style="width:85%;background:var(--bar-mp)"></span></div>
+                <div class="mini-chips" aria-hidden="true">
+                  <span class="mini-chip">8-Bit 像素绘 MAX</span>
+                  <span class="mini-chip">前端架构 S+</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+            <div class="mini-window px-outset" role="img" aria-label="README 便签示意">
+              <div class="mini-titlebar">
+                <b>README.TXT // 设计说明</b>
+                <span class="dots" aria-hidden="true"><span class="icon-btn">×</span></span>
+              </div>
+              <div class="readme-body">
+                <span class="readme-title">PIXELOS 95 设计系统 v1.0</span>
+                <span>0 圆角 · 2px bevel · 等宽正文</span>
+                <span><em>皮肤</em> 经典灰 / 绿豆沙 / 8-Bit 霓虹</span>
+                <span><em>基准</em> 1440 × 900，自适应 360–1920</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-icons" aria-label="桌面快捷方式示例">
+          <button type="button" class="desk-icon">
+            <span class="desk-tile px-outset" aria-hidden="true">
+              <svg viewBox="0 0 16 16">
+                <rect x="4" y="2" width="8" height="2" fill="#D9383A"/>
+                <rect x="3" y="4" width="10" height="3" fill="#3B82F6"/>
+                <rect x="4" y="7" width="8" height="5" fill="#FDBA74"/>
+                <rect x="5" y="8" width="2" height="2" fill="#000000"/>
+                <rect x="9" y="8" width="2" height="2" fill="#000000"/>
+                <rect x="6" y="11" width="4" height="1" fill="#9A3412"/>
+                <rect x="3" y="12" width="10" height="3" fill="#2563EB"/>
+              </svg>
+            </span>
+            <span class="desk-label">PIXEL.EXE</span>
+          </button>
+          <button type="button" class="desk-icon">
+            <span class="desk-tile px-outset" aria-hidden="true">
+              <svg viewBox="0 0 16 16">
+                <rect x="3" y="3" width="10" height="10" fill="#FDE68A"/>
+                <rect x="2" y="5" width="12" height="6" fill="#FDE68A"/>
+                <rect x="4" y="5" width="2" height="2" fill="#EF4444"/>
+                <rect x="8" y="4" width="2" height="2" fill="#3B82F6"/>
+                <rect x="10" y="7" width="2" height="2" fill="#10B981"/>
+                <rect x="5" y="9" width="2" height="2" fill="#8B5CF6"/>
+              </svg>
+            </span>
+            <span class="desk-label">像素画板</span>
+          </button>
+          <button type="button" class="desk-icon">
+            <span class="desk-tile px-outset" aria-hidden="true">
+              <svg viewBox="0 0 16 16">
+                <rect x="2" y="4" width="12" height="8" fill="#374151"/>
+                <rect x="3" y="5" width="10" height="4" fill="#E5E7EB"/>
+                <rect x="4" y="6" width="2" height="2" fill="#111827"/>
+                <rect x="10" y="6" width="2" height="2" fill="#111827"/>
+                <rect x="4" y="10" width="8" height="2" fill="#F59E0B"/>
+              </svg>
+            </span>
+            <span class="desk-label">8-Bit音乐</span>
+          </button>
+          <button type="button" class="desk-icon">
+            <span class="desk-tile px-outset" aria-hidden="true">
+              <svg viewBox="0 0 16 16">
+                <rect x="2" y="5" width="12" height="7" fill="#4B5563"/>
+                <rect x="4" y="7" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="3" y="8" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="10" y="8" width="2" height="2" fill="#EF4444"/>
+                <rect x="12" y="7" width="2" height="2" fill="#FBBF24"/>
+              </svg>
+            </span>
+            <span class="desk-label">打砖块</span>
+          </button>
+        </div>
+
+        <footer class="hero-features">
+          <div class="feature">
+            <span class="feature-icon" aria-hidden="true">0</span>
+            <b>0 圆角</b>
+            <span>像素棱角，出现圆角即走样</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon" aria-hidden="true">2</span>
+            <b>2px 立体边框</b>
+            <span>亮上左 / 暗下右 + 1px 内衬</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon" aria-hidden="true">A</span>
+            <b>像素字体</b>
+            <span>Press Start 2P + 等宽正文</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon" aria-hidden="true">▤</span>
+            <b>CRT 扫描线</b>
+            <span>氛围层可关，不占布局</span>
+          </div>
+        </footer>
+      </section>
+
+      <!-- ── 右：组件与元素 2×2 ─────────────────────────── -->
+      <div class="right-grid">
+
+        <!-- 1. 按钮 -->
+        <section class="panel px-outset" id="panel-buttons" aria-label="按钮组件">
+          <div class="panel-head">
+            <h2>按钮</h2>
+            <span class="code">BTN.DAT</span>
+          </div>
+          <div class="group">
+            <span class="group-label">变体</span>
+            <div class="row">
+              <button type="button" class="px-btn btn-primary">确定</button>
+              <button type="button" class="px-btn">取消</button>
+              <button type="button" class="px-btn btn-danger">删除</button>
+            </div>
+          </div>
+          <div class="group">
+            <span class="group-label">状态</span>
+            <div class="row">
+              <button type="button" class="px-btn">默认</button>
+              <button type="button" class="px-btn is-active">按下</button>
+              <button type="button" class="px-btn" disabled>禁用</button>
+            </div>
+          </div>
+          <div class="group">
+            <span class="group-label">尺寸 / 图标</span>
+            <div class="row">
+              <button type="button" class="px-btn btn-sm">小号</button>
+              <button type="button" class="icon-btn" aria-label="最小化">_</button>
+              <button type="button" class="icon-btn" aria-label="关闭">×</button>
+              <button type="button" class="icon-btn" aria-label="播放">▶</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. 控件 -->
+        <section class="panel px-outset" id="panel-controls" aria-label="表单控件">
+          <div class="panel-head">
+            <h2>控件</h2>
+            <span class="code">FORM.DAT</span>
+          </div>
+          <div class="group">
+            <span class="group-label">开关</span>
+            <div class="row">
+              <label class="px-switch">
+                <input type="checkbox" checked />
+                <span class="sw-track" aria-hidden="true"></span>
+                <span>扫描线</span>
+              </label>
+              <label class="px-switch">
+                <input type="checkbox" />
+                <span class="sw-track" aria-hidden="true"></span>
+                <span>音效</span>
+              </label>
+            </div>
+          </div>
+          <div class="group">
+            <span class="group-label">复选 / 单选</span>
+            <div class="row">
+              <label class="px-check">
+                <input type="checkbox" checked />
+                <span class="ck-box" aria-hidden="true">✓</span>
+                <span>记住设置</span>
+              </label>
+              <label class="px-check">
+                <input type="checkbox" />
+                <span class="ck-box" aria-hidden="true">✓</span>
+                <span>自动更新</span>
+              </label>
+            </div>
+            <div class="row">
+              <label class="px-check">
+                <input type="radio" name="scope" checked />
+                <span class="ck-radio" aria-hidden="true"></span>
+                <span>仅本机</span>
+              </label>
+              <label class="px-check">
+                <input type="radio" name="scope" />
+                <span class="ck-radio" aria-hidden="true"></span>
+                <span>全部设备</span>
+              </label>
+            </div>
+          </div>
+          <div class="group">
+            <span class="group-label">下拉 / 滑杆</span>
+            <div class="row">
+              <span class="select-wrap">
+                <select class="px-select" aria-label="皮肤选择">
+                  <option>经典灰</option>
+                  <option>绿豆沙</option>
+                  <option>8-Bit 霓虹</option>
+                </select>
+              </span>
+              <input class="px-range" type="range" min="0" max="100" value="64" aria-label="音量" />
+            </div>
+          </div>
+          <div class="group">
+            <span class="group-label">标签页</span>
+            <div class="px-tabs" role="tablist" aria-label="标签页示例">
+              <button type="button" class="px-btn is-active" role="tab" aria-selected="true">档案</button>
+              <button type="button" class="px-btn" role="tab" aria-selected="false">装备</button>
+              <button type="button" class="px-btn" role="tab" aria-selected="false">帮助</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. 元素 -->
+        <section class="panel px-outset" id="panel-elements" aria-label="界面元素">
+          <div class="panel-head">
+            <h2>元素</h2>
+            <span class="code">ELEM.DAT</span>
+          </div>
+          <div class="group">
+            <span class="group-label">窗口片段 + 状态条</span>
+            <div class="snippet-window px-outset">
+              <div class="snippet-titlebar">
+                <span>SYSTEM.PROPERTIES</span>
+                <span class="icon-btn" aria-hidden="true">×</span>
+              </div>
+              <div class="snippet-body">
+                <div class="snippet-row">
+                  <span>HP</span>
+                  <div class="bar-track px-inset" style="flex:1"><span class="bar-fill" style="width:96%;background:var(--bar-hp)"></span></div>
+                </div>
+                <div class="snippet-row">
+                  <span>MP</span>
+                  <div class="bar-track px-inset" style="flex:1"><span class="bar-fill" style="width:85%;background:var(--bar-mp)"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="group">
+            <span class="group-label">徽章</span>
+            <div class="badges">
+              <span class="badge font-pixel">ONLINE</span>
+              <span class="badge-outline">LV.99</span>
+              <span class="badge-muted">MAX</span>
+            </div>
+          </div>
+          <div class="group">
+            <span class="group-label">16×16 像素图标</span>
+            <div class="icon-grid">
+              <span class="icon-tile" aria-label="勇者">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <rect x="4" y="2" width="8" height="2" fill="#D9383A"/>
+                  <rect x="3" y="4" width="10" height="3" fill="#3B82F6"/>
+                  <rect x="4" y="7" width="8" height="5" fill="#FDBA74"/>
+                  <rect x="5" y="8" width="2" height="2" fill="#000000"/>
+                  <rect x="9" y="8" width="2" height="2" fill="#000000"/>
+                  <rect x="6" y="11" width="4" height="1" fill="#9A3412"/>
+                  <rect x="3" y="12" width="10" height="3" fill="#2563EB"/>
+                </svg>
+              </span>
+              <span class="icon-tile" aria-label="画板">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <rect x="3" y="3" width="10" height="10" fill="#FDE68A"/>
+                  <rect x="2" y="5" width="12" height="6" fill="#FDE68A"/>
+                  <rect x="4" y="5" width="2" height="2" fill="#EF4444"/>
+                  <rect x="8" y="4" width="2" height="2" fill="#3B82F6"/>
+                  <rect x="10" y="7" width="2" height="2" fill="#10B981"/>
+                  <rect x="5" y="9" width="2" height="2" fill="#8B5CF6"/>
+                </svg>
+              </span>
+              <span class="icon-tile" aria-label="音乐">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <rect x="2" y="4" width="12" height="8" fill="#374151"/>
+                  <rect x="3" y="5" width="10" height="4" fill="#E5E7EB"/>
+                  <rect x="4" y="6" width="2" height="2" fill="#111827"/>
+                  <rect x="10" y="6" width="2" height="2" fill="#111827"/>
+                  <rect x="4" y="10" width="8" height="2" fill="#F59E0B"/>
+                </svg>
+              </span>
+              <span class="icon-tile" aria-label="游戏">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <rect x="2" y="5" width="12" height="7" fill="#4B5563"/>
+                  <rect x="4" y="7" width="1" height="3" fill="#FFFFFF"/>
+                  <rect x="3" y="8" width="3" height="1" fill="#FFFFFF"/>
+                  <rect x="10" y="8" width="2" height="2" fill="#EF4444"/>
+                  <rect x="12" y="7" width="2" height="2" fill="#FBBF24"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div class="group">
+            <span class="group-label">任务栏片段</span>
+            <div class="taskbar-mini">
+              <button type="button" class="px-btn">
+                <span class="start-icon" aria-hidden="true"><i style="width:4px;height:4px"></i><i style="width:4px;height:4px"></i><i style="width:4px;height:4px"></i><i style="width:4px;height:4px"></i></span>
+                <span>开始</span>
+              </button>
+              <button type="button" class="px-btn">PIXEL.EXE</button>
+              <span class="tray px-inset" aria-hidden="true">📺 🔊</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. 字体与色彩 -->
+        <section class="panel px-outset" id="panel-type" aria-label="字体与色彩">
+          <div class="panel-head">
+            <h2>字体与色彩</h2>
+            <span class="code">TYPE.DAT</span>
+          </div>
+          <div class="type-row">
+            <span class="type-tag">像素标签 · Press Start 2P / 9px</span>
+            <span class="t-pixel">PIXEL 8-BIT 0123</span>
+          </div>
+          <div class="type-row">
+            <span class="type-tag">窗口标题 · Courier New / 12px / 700</span>
+            <span class="t-title">SYSTEM.PROPERTIES</span>
+          </div>
+          <div class="type-row">
+            <span class="type-tag">正文 · Courier New / 12px / 1.6</span>
+            <span class="t-body">像素由手工雕琢，点击有 8-Bit 回响。</span>
+          </div>
+          <div class="type-row">
+            <span class="type-tag">说明 · 11px / 弱化</span>
+            <span class="t-meta">1995 · 640×480 · 256 COLOR</span>
+          </div>
+          <div class="group">
+            <span class="group-label">12 色复古调色盘</span>
+            <div class="swatches" id="swatches" aria-label="调色盘"></div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ── 底部令牌条 ──────────────────────────────────────── -->
+    <section class="guidelines px-outset" id="guidelines" aria-label="设计令牌">
+      <div class="guide-left">
+        <div class="guide-head">
+          <span class="guide-badge">DESIGN TOKENS</span>
+          <span class="guide-title">Live Token Inspector</span>
+        </div>
+        <p class="guide-desc">
+          皮肤只换 CSS 变量，不改结构；0 圆角 + 2px 立体边框是底线。
+        </p>
+        <pre class="code-box px-inset" id="code-box">--canvas:#008080;  --surface:#C0C0C0;  --accent:#000080;  --radius:0;</pre>
+      </div>
+      <div class="guide-right">
+        <div class="palette-dots" aria-label="关键颜色">
+          <span style="background:#008080" title="--canvas #008080"></span>
+          <span style="background:#C0C0C0" title="--surface #C0C0C0"></span>
+          <span style="background:#000080" title="--accent #000080"></span>
+          <span style="background:#1084D0" title="--accentBright #1084D0"></span>
+          <span style="background:#000000" title="--ink #000000"></span>
+        </div>
+        <button type="button" class="px-btn btn-primary" id="copy-btn">复制 CSS 变量</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       底部系统任务栏
+       ========================================================================== -->
+  <footer class="taskbar">
+    <button type="button" class="px-btn start-btn">
+      <span class="start-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>开始</span>
+    </button>
+    <span class="divider" aria-hidden="true"></span>
+    <div class="tabs">
+      <button type="button" class="px-btn tab is-active">PIXEL.EXE // 个人档案</button>
+      <button type="button" class="px-btn tab">像素画板 (16×16)</button>
+      <button type="button" class="px-btn tab">8-Bit 音乐</button>
+    </div>
+    <div class="tray px-inset">
+      <span aria-hidden="true">📺</span>
+      <span aria-hidden="true">🔊</span>
+      <span class="clock font-pixel" id="clock">12:00</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var crt = document.getElementById('crt');
+      var crtBtn = document.getElementById('crt-btn');
+      var skinBtns = Array.prototype.slice.call(document.querySelectorAll('[data-skin]'));
+      var swatchBox = document.getElementById('swatches');
+      var clock = document.getElementById('clock');
+      var codeBox = document.getElementById('code-box');
+      var copyBtn = document.getElementById('copy-btn');
+
+      var colors = [
+        '#000000', '#FFFFFF', '#EF4444', '#F97316', '#FACC15', '#22C55E',
+        '#06B6D4', '#3B82F6', '#8B5CF6', '#EC4899', '#92400E', '#9CA3AF'
+      ];
+
+      colors.forEach(function (hex) {
+        var i = document.createElement('span');
+        i.className = 'swatch';
+        i.style.background = hex;
+        i.title = hex;
+        swatchBox.appendChild(i);
+      });
+
+      function setSkin(skin) {
+        document.documentElement.setAttribute('data-theme', skin);
+        skinBtns.forEach(function (b) {
+          b.classList.toggle('is-active', b.getAttribute('data-skin') === skin);
+        });
+      }
+      skinBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () { setSkin(btn.getAttribute('data-skin')); });
+      });
+
+      if (crtBtn) {
+        crtBtn.addEventListener('click', function () {
+          var off = crt.classList.toggle('is-off');
+          crtBtn.classList.toggle('is-active', !off);
+          crtBtn.textContent = off ? '📺 扫描线' : '📺 扫描线: 开';
+        });
+      }
+
+      // 标签页切换
+      Array.prototype.forEach.call(document.querySelectorAll('.px-tabs'), function (tabs) {
+        var btns = Array.prototype.slice.call(tabs.querySelectorAll('[role="tab"]'));
+        btns.forEach(function (b) {
+          b.addEventListener('click', function () {
+            btns.forEach(function (x) {
+              x.classList.toggle('is-active', x === b);
+              x.setAttribute('aria-selected', x === b ? 'true' : 'false');
+            });
+          });
+        });
+      });
+
+      // 复制 token
+      if (copyBtn && codeBox) {
+        copyBtn.addEventListener('click', function () {
+          var text = codeBox.textContent;
+          var done = function () {
+            var old = copyBtn.textContent;
+            copyBtn.textContent = '已复制 ✓';
+            setTimeout(function () { copyBtn.textContent = old; }, 1600);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () {});
+          } else {
+            done();
+          }
+        });
+      }
+
+      function tick() {
+        var d = new Date();
+        var hh = String(d.getHours()).padStart(2, '0');
+        var mm = String(d.getMinutes()).padStart(2, '0');
+        if (clock) clock.textContent = hh + ':' + mm;
+      }
+      tick();
+      setInterval(tick, 10000);
+    })();
+  </script>
+</body>
+</html>

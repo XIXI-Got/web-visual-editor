@@ -1,0 +1,218 @@
+{
+  "_readme": "Spatial Glass（拟态玻璃暗色界面）风格令牌。提取自 D:\\AI\\网站测试集合\\测试图生网站 的 tokens.css / base.css / dashboard.css / rail.css。系统提取 meta、color、typography.families、spacing、radius、shadow、motion；以下划线开头的键与 layout / components / imagery / effects / breakpoints 仅供人读。",
+  "meta": {
+    "name": "Spatial Glass 拟态玻璃暗色界面",
+    "version": "1.0",
+    "edition": "01",
+    "date": "2026-11",
+    "referenceViewport": "1440 × 900 / 390 × 844",
+    "phoneViewport": "390x844",
+    "source": "D:\\AI\\网站测试集合\\测试图生网站（index.html + assets/css）",
+    "extractedAt": "2026-11-13",
+    "houseRule": "界面不是贴在页面上，而是浮在一张失焦夜景照片前面：全站只有一块玻璃，所有光都来自照片里的室内灯。"
+  },
+
+  "color": {
+    "paper": {
+      "value": "#07060a",
+      "role": "页面最底 / 遮罩底；全站唯一「黑」，不用 #000"
+    },
+    "void-warm": {
+      "value": "#0d0a07",
+      "role": "背景照片未加载时的暖炭兜底"
+    },
+    "ink": {
+      "value": "#f6f1e9",
+      "role": "主文字、面板标题、数值；不用 #fff"
+    },
+    "ink-strong": {
+      "value": "#fffcfa",
+      "role": "Hero 大字与选中态文字，全站最亮"
+    },
+    "ink-dim": {
+      "value": "rgba(243, 236, 224, 0.64)",
+      "role": "正文、次级说明、kicker（正文唯一允许的颜色）"
+    },
+    "ink-faint": {
+      "value": "rgba(243, 236, 224, 0.42)",
+      "role": "单位、时间码、微标签、页脚"
+    },
+    "ink-ghost": {
+      "value": "rgba(243, 236, 224, 0.24)",
+      "role": "极弱元数据：图表轴、占位，仅装饰"
+    },
+    "amber": {
+      "value": "#e8c496",
+      "role": "唯一强调色：选中日期、滑杆填充、状态点、图表峰值、焦点环（面积 < 3%）"
+    },
+    "amber-hi": {
+      "value": "#fbe6c4",
+      "role": "琥珀高光：焦点、大号数字高光"
+    },
+    "amber-lo": {
+      "value": "#b98a56",
+      "role": "琥珀暗部：头像底、渐变暗端"
+    },
+    "mint": {
+      "value": "#86dcae",
+      "role": "状态语义 Done（仅 6px 圆点 / 10px 文字）"
+    },
+    "sky": {
+      "value": "#a9c7de",
+      "role": "状态语义 In Progress / 日程点"
+    },
+    "rose": {
+      "value": "#e8a292",
+      "role": "状态语义 Review"
+    },
+    "glass-tint": {
+      "value": "rgba(18, 13, 10, 0.20)",
+      "role": "玻璃面板底着色（叠加 158° 线性渐变）"
+    },
+    "glass-stroke": {
+      "value": "rgba(255, 255, 255, 0.155)",
+      "role": "玻璃 1px 外框；hover 提到 .30，固定 1px 不加重"
+    },
+    "line": {
+      "value": "rgba(255, 255, 255, 0.10)",
+      "role": "分隔线 / 外框"
+    },
+    "line-soft": {
+      "value": "rgba(255, 255, 255, 0.06)",
+      "role": "卡片内细分隔线"
+    },
+    "focus": {
+      "value": "#e8c496",
+      "role": "键盘焦点环：2px 实线 + offset 3px，永不移除"
+    }
+  },
+
+  "typography": {
+    "families": {
+      "display": "\"Inter Tight\", \"Neue Haas Grotesk Display\", \"Helvetica Neue\", \"Segoe UI Variable Display\", \"Segoe UI\", Inter, system-ui, Arial, sans-serif",
+      "sans": "Inter, \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial, sans-serif",
+      "mono": "\"Cascadia Mono\", \"SF Mono\", Consolas, \"Courier New\", monospace"
+    },
+    "roles": {
+      "hero": "clamp(46px, calc(60*--u + 16px), 84px) / .92 / 230 / .048em / uppercase / ink-strong",
+      "lede": "max(9.5px, calc(8.6*--u + 1px)) / 2.1 / 400 / .215em / uppercase / ink-dim",
+      "panelTitle": "clamp(15px, calc(14*--u + 2px), 18px) / 1.14 / 460 / -.012em / ink-strong",
+      "metric": "clamp(30px, calc(30*--u + 6px), 46px) / 1 / 300 / -.02em / ink-strong（tabular-nums）",
+      "cardTitle": "clamp(11.5px, calc(10*--u + 2px), 13.5px) / 1.15 / 460 / ink",
+      "body": "clamp(12.5px, calc(11*--u + 1.6px), 14.5px) / 1.5 / 400 / .002em / ink-dim",
+      "kicker": "clamp(10px, calc(8*--u + 1.2px), 11.5px) / 1.3 / 400 / .01em / ink-dim",
+      "label": "max(9px, calc(8*--u + 1.2px)) / 1.2 / 500 / .16em / uppercase / ink-faint",
+      "micro": "7–7.5px / 1.2 / 500 / 0–.06em / uppercase / ink-faint（全站唯一允许 < 9px 处）",
+      "stamp": "max(9.5px, calc(8.6*--u + .6px)) / 2.15 / 400 / .3em / uppercase / ink-faint / mono"
+    },
+    "rules": "数字一律 tabular-nums；大写微标签字距 ≥ .14em，正文 ≤ .005em；正文行宽 ≤ 34ch；中文只用 sans 且字重 ≥ 400。"
+  },
+
+  "spacing": {
+    "unit": "1 design unit = var(--u)；1440 视口时 1u = 1px（clamp(.45px, 100vw/1440, 1px)）",
+    "2xs": "calc(2 * var(--u))",
+    "xs": "calc(4 * var(--u))",
+    "sm": "calc(6 * var(--u))",
+    "md": "calc(8 * var(--u))",
+    "base": "calc(10 * var(--u))",
+    "lg": "calc(12 * var(--u))",
+    "xl": "calc(14 * var(--u))",
+    "2xl": "calc(16 * var(--u))",
+    "3xl": "calc(18 * var(--u))",
+    "panel": "calc(20 * var(--u))",
+    "gutter": "max(16px, calc(30 * var(--u)))",
+    "block": "calc(38 * var(--u))"
+  },
+
+  "radius": {
+    "sm": "calc(10 * var(--u))",
+    "md": "calc(14 * var(--u))",
+    "lg": "calc(22 * var(--u))",
+    "xl": "calc(30 * var(--u))",
+    "pill": "999px",
+    "round": "50%"
+  },
+
+  "shadow": {
+    "glass": "0 42px 90px -36px rgba(0,0,0,.92), 0 16px 34px -18px rgba(0,0,0,.72), 0 2px 6px -2px rgba(0,0,0,.55)",
+    "glass-inner": "inset 0 1px 0 rgba(255,255,255,.20), inset 0 -1px 0 rgba(0,0,0,.30), inset 1px 0 0 rgba(255,255,255,.06), inset -1px 0 0 rgba(255,255,255,.05)",
+    "glass-off": "0 20px 50px -30px rgba(0,0,0,.90)",
+    "amber-glow": "0 0 0 4px rgba(232,196,150,.14)",
+    "switch-glow": "0 0 14px rgba(232,196,150,.26)",
+    "knob": "0 0 8px rgba(232,196,150,.60)"
+  },
+
+  "motion": {
+    "ease-out": "cubic-bezier(.22,.68,.28,1)",
+    "ease-soft": "cubic-bezier(.4,.2,0,1)",
+    "dur": ".55s",
+    "reveal": "900ms",
+    "reveal-stagger": "65ms",
+    "panel-hover": "500ms",
+    "glass-toggle": "320ms",
+    "blur-switch": "500ms",
+    "chart-draw": "1400ms",
+    "bar-stagger": "20ms",
+    "counter": "1200ms",
+    "equalizer": "1500ms",
+    "scan": "5500ms",
+    "parallax-pointer": "16px",
+    "parallax-scroll": "-0.035"
+  },
+
+  "layout": {
+    "_note": "不参与 token 提取，供人/Agent 阅读",
+    "designWidth": 1440,
+    "shell": "min(calc(1400 * var(--u)), calc(100% - 2 * var(--gutter)))",
+    "heroColumns": "minmax(0,.62fr) minmax(0,2.1fr)",
+    "heroGap": "calc(30 * var(--u))",
+    "workspaceColumns": "minmax(0,1.92fr) minmax(0,1fr)",
+    "workspaceColumnsCompact": "minmax(0,1.72fr) minmax(0,1.06fr)（≤1420px）",
+    "stage": "repeat(12, minmax(0,1fr)) × 4 rows, gap calc(12 * var(--u))",
+    "stageRows": "minmax(100u,auto) minmax(100u,auto) minmax(106u,auto) minmax(112u,auto)",
+    "stageAreas": "focus 4col×2row / overview 5col×2row / profile 3col×3row / weather 4col / upcoming 5col / performance 6col / tasks 6col",
+    "rail": "2 columns masonry，左列 toggles→levels→music，右列 calendar→volume→brightness→activity",
+    "pageHeight": "1440×900 一屏完整呈现（1280–1920 均 page height = 900）"
+  },
+
+  "components": {
+    "_note": "组件规格：尺寸 / 状态 / 禁用做法（不参与 token 提取）",
+    "glassPanel": "radius 22u / padding 20u / 1px rgba(255,255,255,.155) / tint rgba(18,13,10,.20) + 158° 渐变 / backdrop-filter blur(20u) saturate(118%)；hover 仅边色提到 .30，不位移",
+    "glassStates": "html[data-glass] on|off；html[data-blur-level] off|low|md|high = blur 0 / 7u / 20u / 34u",
+    "switch": "40u × 22u，knob 16u，on 时轨道 rgba(232,196,150,.35) + knob 右移 18u",
+    "segmented": "3 档等宽 grid，active 项 rgba(255,255,255,.10) + 图标转 amber + radius sm",
+    "calendar": "7 等宽列 / 单元格 aspect-ratio 1 / 10.5px；选中日 amber 实心圆 + 4px 光晕；今日 1px 亮环",
+    "slider": "轨道 2px（未填充 rgba(255,255,255,.16)）、拇指 9u 白圆 + amber 光；--fill 由 JS 写入",
+    "dock": "胶囊 glass，padding 4u，item 30u 方形，active 拉高并显示 9px 标签",
+    "chip": "pill / rgba(255,255,255,.055) / 10.5px / 1px var(--line)",
+    "button": "solid #f6f1e9+#14100a；glass 1px --glass-stroke；outline 透明底 + 10px 字距 .16em；icon 29u 圆；hover translateY(-1px)"
+  },
+
+  "effects": {
+    "backdropLayers": "照片 → amber glow(screen .20) → 竖向窗格线(1px / 84u, opacity .14) → 颗粒 → 三段暗角",
+    "grain": "SVG feTurbulence 170px tile，opacity .055，mix-blend-mode: overlay",
+    "vignette": "左向 linear-gradient(100deg, rgba(5,4,7,.60) 0%, rgba(5,4,7,.30) 24%, rgba(5,4,7,.08) 38%, transparent 50%) + 径向 rgba(4,3,6,.46) + 上下线性 rgba(4,3,6,.38/.55)",
+    "sceneBrightness": "--scene-brightness 0.62–1.18，仅作用于照片层（Brightness 滑杆）",
+    "panelSheen": "radial-gradient 白光，rotate(-7deg)，blur 12u，仅 hero 级大面板"
+  },
+
+  "imagery": {
+    "_note": "影像规则，写比例与裁切，不附截图",
+    "desktop": "2560 × 1102（约 2.32:1）失焦夜景建筑，object-fit: cover，焦点 50% 50%",
+    "portrait": "1200 × 1800（2:3），由主图中部裁切放大，medium 断点以下启用",
+    "fallback": "1600 × 689，σ26 高斯模糊，供不支持 backdrop-filter 时作面板底",
+    "processing": "对比 +6%、饱和 +4%、颗粒 2.2/255、JPEG q87 progressive",
+    "forbidden": "亮底照片、清晰对焦主体、大面积纯色天空、霓虹彩光、二次彩色渐变"
+  },
+
+  "breakpoints": {
+    "narrowDesktopMax": 1420,
+    "laptopMax": 1180,
+    "tabletMax": 1023,
+    "smallTabletMax": 900,
+    "phoneMax": 760,
+    "narrowPhoneMax": 620,
+    "tinyMax": 400,
+    "desktopMin": 1024
+  }
+}
