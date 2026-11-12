@@ -801,7 +801,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
             '<div class="style-row-tags">' + tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
             (desc ? '<p class="style-row-desc">' + esc(desc) + '</p>' : '') +
           '</div>' +
-          '<div class="style-row-visual">' + stylePreviewHtml(s) + '</div>' +
+          '<div class="style-row-visual"><div class="style-row-image" data-style-image="' + esc(s.id) + '"></div></div>' +
         '</div>'
       );
     }).join('');
