@@ -1,0 +1,154 @@
+{
+  "meta": {
+    "name": "DEMO 蓝白",
+    "version": "1.0",
+    "edition": "01",
+    "date": "2026-11",
+    "referenceViewport": "1440x960",
+    "phoneViewport": "390x844",
+    "source": "demo/muse.html 初始版本（自有示例页，非外部站点）"
+  },
+  "color": {
+    "paper": {
+      "value": "#FFFFFF",
+      "rgb": "255, 255, 255",
+      "role": "页面底色、卡片衬底"
+    },
+    "soft": {
+      "value": "#F5F8FD",
+      "rgb": "245, 248, 253",
+      "role": "浅灰蓝分区底、输入/次级表面"
+    },
+    "sky": {
+      "value": "#EAF1FF",
+      "rgb": "234, 241, 255",
+      "role": "蓝色浅底、选中 tab、柔和强调"
+    },
+    "ink": {
+      "value": "#0B1220",
+      "rgb": "11, 18, 32",
+      "role": "标题、正文与深色结构"
+    },
+    "muted": {
+      "value": "#5B667A",
+      "rgb": "91, 102, 122",
+      "role": "正文次级信息"
+    },
+    "dim": {
+      "value": "#8B95A8",
+      "rgb": "139, 149, 168",
+      "role": "元数据、弱化说明"
+    },
+    "blue": {
+      "value": "#2563EB",
+      "rgb": "37, 99, 235",
+      "role": "唯一主强调色：按钮、图标、选中框、数据高亮"
+    },
+    "blue2": {
+      "value": "#4D6BFE",
+      "rgb": "77, 107, 254",
+      "role": "蓝色亮部与 hover"
+    },
+    "line": {
+      "value": "#E6EBF4",
+      "rgb": "230, 235, 244",
+      "role": "1px 分隔线与卡片描边"
+    }
+  },
+  "typography": {
+    "families": {
+      "sans": "Inter, Segoe UI, Microsoft YaHei, PingFang SC, sans-serif",
+      "mono": "Consolas, SFMono-Regular, monospace"
+    },
+    "roles": {
+      "hero": {
+        "family": "sans",
+        "size": "68px @1440",
+        "weight": 800,
+        "leading": 1.04,
+        "tracking": "-0.038em",
+        "color": "ink"
+      },
+      "sectionTitle": {
+        "family": "sans",
+        "size": "42px @1440",
+        "weight": 800,
+        "leading": 1.08,
+        "tracking": "-0.03em",
+        "color": "ink"
+      },
+      "eyebrow": {
+        "family": "mono",
+        "size": "10.5px",
+        "weight": 500,
+        "leading": 1.2,
+        "tracking": "2.5px",
+        "case": "uppercase",
+        "color": "dim"
+      },
+      "body": {
+        "family": "sans",
+        "size": "16px",
+        "weight": 400,
+        "leading": 1.8,
+        "color": "muted"
+      },
+      "small": {
+        "family": "sans",
+        "size": "13px",
+        "weight": 400,
+        "leading": 1.7,
+        "color": "dim"
+      },
+      "button": {
+        "family": "sans",
+        "size": "14px",
+        "weight": 600,
+        "leading": 1,
+        "color": "paper"
+      }
+    }
+  },
+  "spacing": {
+    "unit": "1px (--u) 基准 1440 设计宽",
+    "scale": [
+      4,
+      8,
+      12,
+      16,
+      22,
+      26,
+      32,
+      38,
+      44,
+      48,
+      56,
+      68,
+      86,
+      120
+    ]
+  },
+  "radius": {
+    "none": "0",
+    "sm": "8px",
+    "md": "14px",
+    "lg": "20px",
+    "pill": "999px"
+  },
+  "shadow": {
+    "card": "0 24px 60px rgba(20, 40, 90, 0.12)",
+    "float": "0 10px 26px rgba(20, 40, 90, 0.14)"
+  },
+  "motion": {
+    "easings": {
+      "out": "cubic-bezier(0.16, 0.84, 0.3, 1)",
+      "view": "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
+    "durations": {
+      "fast": "160ms",
+      "base": "280ms",
+      "slow": "520ms"
+    },
+    "reducedMotion": true
+  }
+}
