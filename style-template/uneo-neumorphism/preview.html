@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UNEO 暖石拟物 · 内容块</title>
+<style>
+  :root{
+    --canvas:#F3EFE9;--card:#F6F3EE;--elevated:#F8F6F2;--recessed:#EDE8E0;
+    --shadowDark:#E2DDD4;--shadowDeep:#D5CFC4;--shadowLight:#FFFFFF;
+    --espresso:#33281E;--bronze:#8C6F52;--bronzeSoft:#B69D82;
+    --textSecondary:#756B61;--textMuted:#A39A90;
+    --font-display:"Playfair Display","Lora","Noto Serif SC","Songti SC",Georgia,serif;
+    --font-sans:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    --u:clamp(.45px,calc(100vw / 1440),1px);--r-sm:10px;--r-md:16px;--r-lg:24px;--r-xl:32px;--r-full:999px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--canvas);color:var(--espresso);font-family:var(--font-sans);overflow-x:clip}
+  body{background-image:radial-gradient(rgba(51,40,30,.022) 1px,transparent 0);background-size:4px 4px;padding-bottom:50px}
+  .preview-wrap{width:min(1120px,calc(100% - 40px));margin:clamp(36px,6vw,72px) auto}
+  .preview-block{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,5vw,64px);align-items:center}
+  .preview-copy{min-width:0;max-width:520px}
+  .preview-eyebrow{margin:0 0 14px;font:500 10px/1.4 var(--font-sans);letter-spacing:.16em;text-transform:uppercase;color:var(--bronze)}
+  .preview-title{margin:0;font-family:var(--font-display);font-weight:600;font-size:clamp(30px,4.8vw,60px);line-height:1.02;letter-spacing:-.02em;color:var(--espresso)}
+  .preview-lead{margin:16px 0 0;max-width:46ch;color:var(--textSecondary);font-size:clamp(13px,1.5vw,16px);line-height:1.75}
+  .preview-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:clamp(22px,3vw,34px)}
+  .preview-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:var(--r-full);background:linear-gradient(145deg,#3D3024,#2B2118);color:#FAF8F5;text-decoration:none;font-weight:500;font-size:13px;box-shadow:7px 9px 18px rgba(51,40,30,.26),-4px -4px 10px #FFFFFF;transition:transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s cubic-bezier(.22,1,.36,1)}
+  .preview-btn:hover{transform:translateY(-1px);box-shadow:9px 11px 22px rgba(51,40,30,.32),-5px -5px 12px #FFFFFF}
+  .preview-meta{color:var(--textMuted);font-size:10px;font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em}
+  .preview-figure{position:relative;margin:0;width:100%;aspect-ratio:16/9;max-height:calc(420 * var(--u));border-radius:var(--r-xl);overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.78);box-shadow:16px 16px 34px var(--shadowDark),-16px -16px 34px var(--shadowLight)}
+  .preview-figure img{display:block;width:100%;height:100%;object-fit:cover}
+  @media (max-width:760px){.preview-wrap{width:calc(100% - 28px)}.preview-block{grid-template-columns:1fr;gap:24px}.preview-copy{max-width:none}.preview-figure{max-height:none}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+  <main class="preview-wrap">
+    <section class="preview-block" aria-labelledby="preview-title">
+      <div class="preview-copy">
+        <p class="preview-eyebrow">UNEO / WARM STONE</p>
+        <h2 class="preview-title" id="preview-title">让温度回到界面里</h2>
+        <p class="preview-lead">暖石纸面、深咖啡文字与古铜细节，用双侧光源把按钮、卡片和旋钮做成可按的实体；不是扁平的色块。</p>
+        <div class="preview-actions">
+          <a class="preview-btn" href="#">体验组件</a>
+          <span class="preview-meta">TITLE / IMAGE / BUTTON</span>
+        </div>
+      </div>
+      <figure class="preview-figure">
+        <img src="preview-uneo.png" alt="UNEO 暖石拟物组件预览" loading="lazy">
+      </figure>
+    </section>
+  </main>
+</body>
+</html>
