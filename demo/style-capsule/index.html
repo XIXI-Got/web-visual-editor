@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>风格优化 · 胶囊行结构（可改）</title>
+<!--
+  这是「风格优化」里风格胶囊的独立 HTML 版，结构和线上工作台一致，随便改。
+
+  ── 结构 ─────────────────────────────────────────────
+  一行胶囊 = .style-row
+    ├─ .style-row-copy    左半边：STYLE / 01、风格名、标签、简介
+    └─ .style-row-visual  右半边舞台：里面 .style-card 是浮起来的网页卡片，卡片里才是截图
+
+  ── 右侧显示区域怎么调（改下面 :root 里的变量即可）──────
+    --row-split       左文字 / 右侧展示区 的宽度比例，默认 42% 58%
+    --visual-ratio    右侧展示区的宽高比，默认 3 / 1（越大越扁，越小越高）
+    --card-inset      网页卡片在胶囊里内缩多少，默认 13% 8% 0（上 左右 底）
+                      → 顶部和两侧的留白就是「浮在胶囊内部」；底部 0 = 贴住胶囊底部
+    --card-radius     网页卡片的圆角，默认 16px 16px 0 0（底部不留圆角，和胶囊底接住）
+    --preview-fit     cover = 页面裁进卡片（默认）  contain = 整页完整塞进卡片
+    --preview-pos     卡片里显示页面哪一块：50% 0% = 从最顶端开始（当前）
+                                     50% 50% = 中间
+                                     50% 100% = 底部
+    --preview-zoom    卡片里图片的放大倍数，1 = 原样，1.2 = 再放大 20%
+
+  ── 想改什么直接改，改完发我 ────────────────────────────
+-->
+<style>
+/* ══════════ 基础变量 ══════════ */
+:root{
+  --paper:#FBFAF8;
+  --ink:#141414;
+  --ink60:rgba(20,20,20,.60);
+  --ink55:rgba(20,20,20,.55);
+  --line:rgba(20,20,20,.14);
+  --font-display:"Source Han Serif SC","Noto Serif SC","Songti SC",STSong,Georgia,serif;
+  --font-sans:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  /* ══════════ 可改：胶囊总体 ══════════ */
+  --row-split:42% 58%;          /* 左文字 / 右配图 */
+  --row-radius:999px;           /* 胶囊圆角，想改圆角矩形就写 28px */
+  --row-gap:22px;               /* 行与行间距 */
+
+  /* ══════════ 可改：右侧「显示区域」══════════ */
+  --visual-ratio:3 / 1;         /* 显示区宽高比 */
+  --preview-fit:cover;          /* cover 裁剪铺满卡片 / contain 完整显示 */
+  --preview-pos:50% 0%;         /* 卡片里显示页面哪一块：50% 0% = 顶部 */
+  --preview-zoom:1;             /* 卡片里图片的放大倍数 */
+  --card-inset:13% 8% 0;        /* 卡片内缩：上 13%、左右 8%、底部 0（贴住胶囊底） */
+  --card-radius:16px 16px 0 0;  /* 卡片圆角：只有上面两个角，底部接胶囊底、不留圆角 */
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;overflow-x:clip}
+body{
+  color:var(--ink);
+  font-family:var(--font-sans);
+  background-color:var(--paper);
+  /* 工作台同款点阵底 */
+  background-image:radial-gradient(rgba(20,20,20,.10) 1px,transparent 1px);
+  background-size:34px 34px;
+  background-position:0 0;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ══════════ 页面容器 ══════════ */
+.page{
+  width:min(100% - 48px,1154px);
+  margin-inline:auto;
+  padding:clamp(28px,4vw,56px) 0 clamp(60px,8vw,96px);
+}
+
+/* ══════════ 栏目头（风格优化 + 说明） ══════════ */
+.stylelib-head{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:16px;
+  margin-bottom:clamp(18px,2.4vw,28px);
+  padding-top:26px;
+  border-top:1px solid var(--line);
+}
+.stylelib-title{
+  margin:0;
+  font:600 clamp(26px,3vw,40px)/1 var(--font-display);
+  letter-spacing:-.02em;
+}
+.stylelib-sub{
+  flex:1 1 320px;
+  min-width:0;
+  color:var(--ink60);
+  font:400 11.5px/1.6 var(--font-mono);
+}
+.stylelib-target{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:clamp(18px,2.4vw,26px);
+  font:400 11px/1.4 var(--font-mono);
+  color:var(--ink60);
+}
+.stylelib-target b{
+  padding:6px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  font-weight:500;
+  color:var(--ink);
+  background:#fff;
+}
+
+/* ══════════ 胶囊行 ══════════ */
+.style-rows{display:flex;flex-direction:column;gap:var(--row-gap)}
+
+.style-row{
+  display:grid;
+  grid-template-columns:var(--row-split);
+  align-items:stretch;
+  min-width:0;
+  border:1px solid var(--line);
+  border-radius:var(--row-radius);
+  overflow:hidden;                 /* 关键：让右侧图被胶囊圆角裁 */
+  background:#fff;
+  box-shadow:0 10px 30px rgba(17,17,17,.055);
+  cursor:pointer;
+  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+}
+.style-row:hover{
+  transform:translateY(-2px);
+  border-color:var(--ink);
+  box-shadow:0 20px 48px rgba(17,17,17,.10);
+}
+
+/* ── 左半边：文字 ── */
+.style-row-copy{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:8px;
+  min-width:0;
+  padding:clamp(20px,2.6vw,30px) clamp(24px,4.4vw,54px)
+          clamp(20px,2.6vw,30px) calc(clamp(24px,4.4vw,54px) + clamp(10px,3vw,52px));
+}
+.style-row-kicker{
+  font:500 10px/1.2 var(--font-mono);
+  letter-spacing:.2em;
+  color:var(--ink55);
+}
+.style-row-name{
+  margin:0;
+  font-family:var(--row-name-font,var(--font-display));
+  font-weight:700;
+  color:var(--row-ink,var(--ink));
+  font-size:clamp(22px,2.45vw,34px);
+  line-height:1.04;
+  letter-spacing:-.02em;
+}
+.style-row-name b{display:block;font-weight:700}
+.style-row-name em{
+  display:block;
+  margin-top:3px;
+  font:400 .46em/1.15 var(--font-sans);
+  font-style:normal;
+  opacity:.76;
+}
+.style-row-tags{display:flex;flex-wrap:wrap;gap:6px}
+.style-row-tags span{
+  padding:6px 12px;
+  border-radius:999px;
+  background:var(--row-accent,#373435);
+  color:#FEFEFE;
+  font:500 10px/1 var(--font-sans);
+}
+.style-row-desc{
+  margin:0;
+  max-width:34ch;
+  color:var(--ink55);
+  font:400 11.5px/1.55 var(--font-sans);
+}
+
+/* ── 右半边：网页截图（= 显示区域） ── */
+.style-row-visual{
+  position:relative;
+  min-width:0;
+  aspect-ratio:var(--visual-ratio);
+  /* 底色透明：卡片四周那一圈让胶囊自己的渐变透出来 */
+  background:transparent;
+  overflow:hidden;
+}
+/* ── 网页卡片：浮在胶囊内部（内缩 + 圆角 + 投影） ── */
+.style-card{
+  position:absolute;
+  inset:var(--card-inset,13% 8% 0);
+  border-radius:var(--card-radius,16px 16px 0 0);
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 10px 22px rgba(17,17,17,.10),0 1px 3px rgba(17,17,17,.05);
+  transition:transform .28s ease,box-shadow .28s ease;
+}
+.style-row:hover .style-card{
+  transform:translateY(-2px);
+  box-shadow:0 16px 30px rgba(17,17,17,.14),0 2px 4px rgba(17,17,17,.06);
+}
+/* 卡片里的网页截图：从页面最顶端开始，多出来的高度裁在卡片里 */
+.style-row-image{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:var(--preview-fit);
+  object-position:var(--preview-pos);
+  transform:scale(var(--preview-zoom));
+  transform-origin:var(--preview-pos);
+}
+
+/* ── 「添加风格」虚线胶囊（不需要可以删） ── */
+.style-row-add{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  min-height:clamp(96px,10vw,130px);
+  border:1px dashed var(--line);
+  border-radius:var(--row-radius);
+  background:transparent;
+  color:var(--ink55);
+  font:400 12px/1.4 var(--font-sans);
+  cursor:pointer;
+}
+.style-row-add:hover{border-color:var(--ink);color:var(--ink);background:#fff}
+
+/* ══════════ 窄屏：上下堆叠 ══════════ */
+@media (max-width:760px){
+  .page{width:min(100% - 32px,1154px)}
+  .style-row{
+    grid-template-columns:1fr;
+    border-radius:34px;
+  }
+  .style-row-copy{
+    padding:24px 26px 18px;
+    gap:8px;
+  }
+  .style-row-visual{
+    aspect-ratio:auto;
+    height:clamp(170px,52vw,240px);
+    border-top:1px solid var(--line);
+  }
+  .style-card{inset:14px 16px 0;border-radius:14px 14px 0 0}
+  .style-row-add{border-radius:34px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════ 栏目头 ══════════ -->
+  <div class="stylelib-head">
+    <h2 class="stylelib-title">风格优化</h2>
+    <span class="stylelib-sub">选一个风格，Agent 会按它把当前项目改成同样的视觉语言</span>
+  </div>
+  <div class="stylelib-target">
+    <span>目标项目</span><b>style-template — F:\AI_Sandbox\网页调整工具\style-template</b>
+  </div>
+
+  <div class="style-rows">
+
+    <!-- ══════════ 胶囊 1：UNEO 暖石拟物 ══════════ -->
+    <div class="style-row"
+         style="--row-name-font:'Source Han Serif SC','Noto Serif SC','Songti SC',STSong,Georgia,serif;
+                --row-ink:#33281E; --row-accent:#373435; --row-canvas:#F3EFE9;">
+      <!-- 左：文字 -->
+      <div class="style-row-copy">
+        <div class="style-row-kicker">STYLE / 01</div>
+        <h3 class="style-row-name"><b>UNEO 暖石拟物</b></h3>
+        <div class="style-row-tags"><span>纯色</span><span>干净</span></div>
+        <p class="style-row-desc">自有拟物组件页 uneo.html 的视觉系统。暖石纸面、深咖啡与古铜细节。</p>
+      </div>
+      <!-- 右：网页截图（显示区域） -->
+      <div class="style-row-visual">
+        <div class="style-card">
+          <img class="style-row-image" src="./preview-uneo.png" alt="UNEO 风格网页截图">
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 胶囊 2：DEMO 蓝白 ══════════ -->
+    <div class="style-row"
+         style="--row-name-font:Inter,'PingFang SC','Microsoft YaHei',sans-serif;
+                --row-ink:#111827; --row-accent:#2563EB; --row-canvas:#F5F8FF;">
+      <div class="style-row-copy">
+        <div class="style-row-kicker">STYLE / 02</div>
+        <h3 class="style-row-name"><b>DEMO 蓝白</b></h3>
+        <div class="style-row-tags"><span>纯色</span><span>干净</span></div>
+        <p class="style-row-desc">自有示例页 demo/muse.html 初始版本的视觉系统。白纸、浅灰分区和唯一蓝色强调。</p>
+      </div>
+      <div class="style-row-visual">
+        <div class="style-card">
+          <img class="style-row-image" src="./preview-blue-white.png" alt="DEMO 蓝白风格网页截图">
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 胶囊 3：极简白点风格 ══════════ -->
+    <div class="style-row"
+         style="--row-name-font:'PingFang SC','Microsoft YaHei',sans-serif;
+                --row-ink:#111111; --row-accent:#111111; --row-canvas:#FFFFFF;">
+      <div class="style-row-copy">
+        <div class="style-row-kicker">STYLE / 03</div>
+        <h3 class="style-row-name"><b>极简白点风格</b><em>Minimal White Dot Editorial</em></h3>
+        <div class="style-row-tags"><span>描边</span><span>编辑</span></div>
+        <p class="style-row-desc">Prmpt Portfolio / 白点作品集设计系统 版本 1.0。</p>
+      </div>
+      <div class="style-row-visual">
+        <div class="style-card">
+          <img class="style-row-image" src="./preview-white-dot.png" alt="极简白点风格网页截图">
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 添加风格（可删） ══════════ -->
+    <div class="style-row-add">＋　添加风格　·　导入 UI-SPEC.md / design-tokens.json</div>
+
+  </div>
+</div>
+
+<!--
+  现在是「网页卡片浮在胶囊内部」的展示：
+    .style-row-visual  透明底，只当舞台；留白处透出胶囊自己的渐变
+    .style-card        网页卡片：inset:var(--card-inset) 内缩 + 上圆角 + 弱投影，底部贴住胶囊底，hover 浮起 2px
+  你之前在编辑器里拖的临时改动、以及固化进源码的那段 style 都已经清掉，
+  想调留白大小就改 --card-inset（现在 13% 8% 0），想调圆角改 --card-radius。
+-->
+</body>
+</html>

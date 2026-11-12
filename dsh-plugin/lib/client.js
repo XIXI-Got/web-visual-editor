@@ -3015,6 +3015,29 @@ const API_PATH = "/ve/plugin";
         win.postMessage({ __ve: "cmd", type, ...(payload || {}) }, "*");
       }, []);
 
+      // 固化前先把编辑器里未保存的改动落盘：发 save 命令给预览内核，等它回 saved（4s 超时兜底）
+      const flushSaveFromPreview = useCallback(() => new Promise((resolve) => {
+        const win = iframeRef.current && iframeRef.current.contentWindow;
+        if (!win) { resolve(false); return; }
+        let done = false;
+        const finish = (ok) => {
+          if (done) return;
+          done = true;
+          try { window.removeEventListener("message", onSaved); } catch (e) { /* ignore */ }
+          resolve(ok);
+        };
+        const onSaved = (ev) => {
+          const d = ev.data;
+          if (!d || d.__ve !== "evt" || d.type !== "saved") return;
+          if (ev.source !== win) return;
+          finish(true);
+        };
+        try { window.addEventListener("message", onSaved); } catch (e) { /* ignore */ }
+        try { win.postMessage({ __ve: "cmd", type: "save" }, "*"); } catch (e) { finish(false); return; }
+        setTimeout(() => finish(false), 4000);
+      }), []);
+
+
       useEffect(() => {
         const onMsg = (ev) => {
           const d = ev.data;
@@ -3286,6 +3309,8 @@ const API_PATH = "/ve/plugin";
             setConfirmAsk(null);
             setMsg("正在应用改动到源码…");
             try {
+              // 先强制保存一次，避免刚刚改完（自动保存还没落盘）就固化，漏掉最后一步改动
+              try { await flushSaveFromPreview(); } catch (e) { /* ignore */ }
               const r = await api('/fixate', { method: 'POST', body: JSON.stringify({ dir: (preview && preview.dir) || '', vw: (typeof window !== "undefined" ? window.innerWidth : 0) }) });
               if (!r || !r.ok) { setMsg("固化失败：" + String((r && r.error) || "未知")); return; }
               setMsg("固化成功：" + String(r.message || (r.files || []).join(" / ")));

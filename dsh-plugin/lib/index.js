@@ -684,21 +684,44 @@ export function apply(ctx) {
       const m = statMtime(p);
       if (m) { scriptPath = p; fixedAt = Math.max(fixedAt, m); }
     }
-    // 入口是否已注入
+    // 入口是否已注入：扫描项目里的所有 HTML（固化常发生在子页面，例如 uneo-neumorphism/preview.html，
+    // 之前只看 index.html，导致子页面固化后状态永远显示「未固化」）
     let injected = false;
-    try {
-      const htmls = ['index.html', 'public/index.html'].map((h) => path.join(projectDir, h)).filter((p) => fsExists(p));
-      for (const h of htmls) { const t = readTextSafe(h, 4000000) || ''; if (t.includes('ve-applied-style') || t.includes('ve-applied')) { injected = true; fixedAt = Math.max(fixedAt, statMtime(h)); } }
-      if (!injected) {
-        for (const js of ['src/main.tsx', 'src/main.jsx', 'src/main.ts', 'src/main.js', 'src/index.tsx', 'src/index.jsx', 'src/index.ts', 'src/index.js']) {
-          const p = path.join(projectDir, js);
-          if (fsExists(p) && (readTextSafe(p, 800000) || '').includes('ve-applied')) injected = true;
+    const injectedFiles = [];
+    const scanInjectedHtml = (abs, depth) => {
+      if (depth > 3 || injectedFiles.length >= 120) return;
+      let entries = [];
+      try { entries = fs.readdirSync(abs, { withFileTypes: true }); } catch (e) { return; }
+      for (const ent of entries) {
+        if (['node_modules', '.ve-data', 'dist', 'build', 'out', '.git'].includes(ent.name)) continue;
+        if (ent.name.startsWith('.') && ent.name !== '.well-known') continue;
+        const p = path.join(abs, ent.name);
+        if (ent.isDirectory()) { scanInjectedHtml(p, depth + 1); continue; }
+        if (!/\.html?$/i.test(ent.name)) continue;
+        let t = '';
+        try {
+          if (fsStat(p).size > 8 * 1024 * 1024) continue;
+          t = readTextSafe(p, 8 * 1024 * 1024) || '';
+        } catch (e) { continue; }
+        if (t.includes('ve-applied-style') || t.includes('ve-applied')) {
+          injected = true;
+          fixedAt = Math.max(fixedAt, statMtime(p));
+          injectedFiles.push(path.relative(projectDir, p).split(path.sep).join('/'));
         }
       }
-    } catch (e) { /* ignore */ }
-    if (!fixedAt || !injected) return { state: overridesAt ? 'unfixed' : 'none', fixedAt: fixedAt, overridesAt: overridesAt, injected: injected, scriptPath: scriptPath };
-    if (overridesAt > fixedAt + 300) return { state: 'stale', fixedAt: fixedAt, overridesAt: overridesAt, injected: injected, scriptPath: scriptPath };
-    return { state: 'fixed', fixedAt: fixedAt, overridesAt: overridesAt, injected: injected, scriptPath: scriptPath };
+    };
+    try { scanInjectedHtml(projectDir, 0); } catch (e) { /* ignore */ }
+    if (!injected) {
+      try {
+        for (const js of ['src/main.tsx', 'src/main.jsx', 'src/main.ts', 'src/main.js', 'src/index.tsx', 'src/index.jsx', 'src/index.ts', 'src/index.js']) {
+          const p = path.join(projectDir, js);
+          if (fsExists(p) && (readTextSafe(p, 800000) || '').includes('ve-applied')) { injected = true; break; }
+        }
+      } catch (e) { /* ignore */ }
+    }
+    if (!fixedAt || !injected) return { state: overridesAt ? 'unfixed' : 'none', fixedAt: fixedAt, overridesAt: overridesAt, injected: injected, injectedFiles: injectedFiles, scriptPath: scriptPath };
+    if (overridesAt > fixedAt + 300) return { state: 'stale', fixedAt: fixedAt, overridesAt: overridesAt, injected: injected, injectedFiles: injectedFiles, scriptPath: scriptPath };
+    return { state: 'fixed', fixedAt: fixedAt, overridesAt: overridesAt, injected: injected, injectedFiles: injectedFiles, scriptPath: scriptPath };
   }
 
   /** 把覆写层「固化」成项目里真实生效的文件（不需要编辑器内核也能看到改动）
