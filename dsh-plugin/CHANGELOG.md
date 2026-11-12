@@ -1,5 +1,12 @@
 # 更新日志
 
+## 1.1.112（风格原生背景图：随风格一起落地）
+- 风格可以带**原生背景图**：风格目录里放 `background.jpg`，导入时复制进风格库并记录 `style-spec.json` 的 `backgroundImage`；style-brief 的「推荐背景」段会写明「复制到项目 assets/、用 `url("assets/background.jpg")` 引用」。
+- `/styles/apply` 与 `web_editor_apply_style` 现在会**自动把原生背景图复制到项目 `assets/`**（目录不存在会创建），返回里带 `backgroundImage` 字段；背景 CSS 直接可用，不用 Agent 再找图。
+- Spatial Glass 拟态玻璃补 `background.jpg`（2304×992 暖玻璃幕墙夜景）并把 `background.css` 换成照片版（照片 + 三段暗角 + 琥珀光 + 冷补光 + 窗格线 + 颗粒；找不到图时保留渐变兜底）。
+- demo/muse.html 使用这套原生背景（`assets/background.jpg`），360–1920 无横向滚动，H1 46→76px 随视口缩放。
+- 注意：导入读取 / 自动复制是宿主端改动，需重启 DSH；已导入的其它风格把 `background.css` + `background.jpg` 放进风格目录后重新导入即可。
+
 ## 1.1.111（风格带「推荐背景」：应用风格时一起换背景）
 - 新机制：风格目录里放 `background.css`，导入时读进 `style-spec.json` 的 `background` 字段；生成的 style-brief 会**在最前面**输出「推荐背景（原生背景，必须一起应用）」+ 完整 CSS，并写明「替换原有背景、不叠加、保留 `background-attachment: fixed`」。
 - 短提示词补一句：规范里带推荐背景时，必须和前景一起应用；旧风格（brief 里没有背景段）在 `composeStylePrompt` 里会自动补上背景段。

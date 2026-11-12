@@ -297,22 +297,28 @@
   body{
     background-color:var(--void-warm);
     background-image:
-      linear-gradient(100deg,rgba(5,4,7,.62) 0%,rgba(5,4,7,.32) 24%,rgba(5,4,7,.08) 40%,rgba(5,4,7,0) 54%),
-      radial-gradient(130% 100% at 50% 42%,rgba(4,3,6,0) 34%,rgba(4,3,6,.46) 100%),
-      linear-gradient(180deg,rgba(4,3,6,.44) 0%,rgba(4,3,6,0) 16%,rgba(4,3,6,0) 78%,rgba(4,3,6,.55) 100%),
-      radial-gradient(52% 38% at 84% -6%,rgba(232,196,150,.24) 0%,rgba(232,196,150,.07) 40%,rgba(232,196,150,0) 70%),
-      radial-gradient(46% 34% at 4% 0%,rgba(169,199,222,.10) 0%,rgba(169,199,222,0) 62%),
-      linear-gradient(158deg,#161110 0%,#0c0908 46%,#07060a 100%);
+      /* 三段暗角：左向 100° / 径向 / 上下 */
+      linear-gradient(100deg,rgba(5,4,7,.66) 0%,rgba(5,4,7,.34) 24%,rgba(5,4,7,.10) 40%,rgba(5,4,7,0) 54%),
+      radial-gradient(130% 100% at 50% 42%,rgba(4,3,6,0) 34%,rgba(4,3,6,.48) 100%),
+      linear-gradient(180deg,rgba(4,3,6,.64) 0%,rgba(4,3,6,.34) 18%,rgba(4,3,6,.26) 62%,rgba(4,3,6,.66) 100%),
+      /* 统一压一层暗罩，保证正文对比度（照片仍可见） */
+      linear-gradient(rgba(6,5,8,.22),rgba(6,5,8,.22)),
+      /* 失焦夜景照片（assets/background.jpg，2304×992，2.32:1，object-fit: cover） */
+      url("assets/background.jpg");
     background-attachment:fixed;
     background-repeat:no-repeat;
+    background-position:50% 50%;
     background-size:cover;
     font-size:max(15px,calc(16 * var(--u)));
     line-height:1.68;
     letter-spacing:.008em;
   }
-  /* 竖向窗格线：1px / 84u，opacity .14 */
-  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.14;
-    background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.9) 0 1px,rgba(255,255,255,0) 1px calc(84 * var(--u)));}
+  /* 竖向窗格线 1px / 84u（opacity .14）+ 琥珀室内光（screen 感，.20） */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background-image:
+      radial-gradient(46% 42% at 82% 4%,rgba(232,196,150,.20) 0%,rgba(232,196,150,.05) 46%,rgba(232,196,150,0) 68%),
+      radial-gradient(40% 36% at 8% 82%,rgba(169,199,222,.07) 0%,rgba(169,199,222,0) 60%),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 1px,rgba(255,255,255,0) 1px calc(84 * var(--u)));}
   /* 颗粒：feTurbulence 170px tile，最终 opacity .055，mix-blend-mode: overlay */
   body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.11;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23g)' opacity='.5'/%3E%3C/svg%3E");
@@ -550,7 +556,9 @@
   /* 移动端：保住对比度前提下减模糊，减少合成开销 */
   @media (max-width:620px){
     .nav,.shot,.feat,.q,.dash,.cta-band,.float,.btn.ghost{--glass-blur:blur(calc(10 * var(--u))) saturate(112%)}
-    body::before{background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.9) 0 1px,rgba(255,255,255,0) 1px calc(64 * var(--u)))}
+    body::before{background-image:
+      radial-gradient(60% 46% at 82% 2%,rgba(232,196,150,.18) 0%,rgba(232,196,150,0) 66%),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 1px,rgba(255,255,255,0) 1px calc(64 * var(--u)))}
     /* 窄屏导航：内容决定高度，避免按钮撑出胶囊 */
     .nav{padding:var(--space-xs) var(--space-lg)}
     .nav .btn{padding:calc(9 * var(--u)) calc(13 * var(--u));font-size:max(12px,calc(12 * var(--u)))}

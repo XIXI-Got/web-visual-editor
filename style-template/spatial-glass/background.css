@@ -1,40 +1,44 @@
-/* Spatial Glass 拟态玻璃 · 原生背景（推荐背景）
-   暖炭夜色 + 琥珀室内光 + 冷色补光 + 三段暗角 + 1px 窗格线 + 颗粒
-   用法：整块加到页面的 html/body 上，替换页面原有背景；不要叠加到 section 内部，也不要在旧背景上再叠一层。 */
+/* Spatial Glass 拟态玻璃 · 原生背景（推荐背景，必须和前景一起应用）
+   失焦夜景照片（暖玻璃幕墙 / 琥珀室内光 / 雨夜地面反光）+ 三段暗角 + 琥珀室内光 + 冷色补光 + 1px 窗格线 + 颗粒
+   用法：整块加到页面的 html/body 上，替换页面原有背景；不要叠加到 section 内部，也不要在旧背景上再叠一层。
+   图片：请把风格目录里的 background.jpg 复制到项目的 assets/background.jpg，
+        并让下面的 url("assets/background.jpg") 指到实际位置（页面在子目录时按相对路径调整）。 */
 
 html { background: #07060a; color-scheme: dark; }
 
 body {
   background-color: #0d0a07; /* 照片未加载时的暖炭兜底 */
   background-image:
-    /* 左上压暗，让正文区保持可读 */
-    linear-gradient(100deg, rgba(5, 4, 7, .62) 0%, rgba(5, 4, 7, .32) 24%, rgba(5, 4, 7, .08) 40%, rgba(5, 4, 7, 0) 54%),
-    /* 四周暗角 */
-    radial-gradient(130% 100% at 50% 42%, rgba(4, 3, 6, 0) 34%, rgba(4, 3, 6, .46) 100%),
-    linear-gradient(180deg, rgba(4, 3, 6, .44) 0%, rgba(4, 3, 6, 0) 16%, rgba(4, 3, 6, 0) 78%, rgba(4, 3, 6, .55) 100%),
-    /* 右上琥珀室内光（唯一暖光源） */
-    radial-gradient(52% 38% at 84% -6%, rgba(232, 196, 150, .24) 0%, rgba(232, 196, 150, .07) 40%, rgba(232, 196, 150, 0) 70%),
-    /* 左上冷色补光，给玻璃留一点冷反射 */
-    radial-gradient(46% 34% at 4% 0%, rgba(169, 199, 222, .10) 0%, rgba(169, 199, 222, 0) 62%),
-    /* 底色渐变 */
-    linear-gradient(158deg, #161110 0%, #0c0908 46%, #07060a 100%);
+    /* 三段暗角：左向 100° / 径向 / 上下（压住照片，让正文可读） */
+    linear-gradient(100deg, rgba(5, 4, 7, .66) 0%, rgba(5, 4, 7, .34) 24%, rgba(5, 4, 7, .10) 40%, rgba(5, 4, 7, 0) 54%),
+    radial-gradient(130% 100% at 50% 42%, rgba(4, 3, 6, 0) 34%, rgba(4, 3, 6, .48) 100%),
+    linear-gradient(180deg, rgba(4, 3, 6, .64) 0%, rgba(4, 3, 6, .34) 18%, rgba(4, 3, 6, .26) 62%, rgba(4, 3, 6, .66) 100%),
+    /* 统一压一层暗罩，保证正文对比度（照片仍可见） */
+    linear-gradient(rgba(6, 5, 8, .22), rgba(6, 5, 8, .22)),
+    /* 失焦夜景照片（2304×992，2.32:1，cover 后固定不随滚动） */
+    url("assets/background.jpg");
   background-attachment: fixed;
   background-repeat: no-repeat;
+  background-position: 50% 50%;
   background-size: cover;
+  /* 找不到照片时：删掉上面的 url(...)，保留下面的渐变兜底即可，不要留纯色空背景 */
+  background-color: #0d0a07;
 }
 
-/* 竖向窗格线：1px / 84px，opacity .14 —— 玻璃面板背后的“空间网格” */
+/* 竖向窗格线 1px / 84px（opacity .14）+ 琥珀室内光（screen 感，.20）+ 冷色补光 */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: .14;
-  background-image: repeating-linear-gradient(90deg, rgba(255, 255, 255, .9) 0 1px, rgba(255, 255, 255, 0) 1px 84px);
+  background-image:
+    radial-gradient(46% 42% at 82% 4%, rgba(232, 196, 150, .20) 0%, rgba(232, 196, 150, .05) 46%, rgba(232, 196, 150, 0) 68%),
+    radial-gradient(40% 36% at 8% 82%, rgba(169, 199, 222, .07) 0%, rgba(169, 199, 222, 0) 60%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .14) 0 1px, rgba(255, 255, 255, 0) 1px 84px);
 }
 
-/* 颗粒：feTurbulence 170px tile，opacity .11，mix-blend-mode: overlay —— 压住渐变的塑料感 */
+/* 颗粒：feTurbulence 170px tile，opacity .11，mix-blend-mode: overlay —— 压住照片/渐变的塑料感 */
 body::after {
   content: "";
   position: fixed;
@@ -50,4 +54,4 @@ body::after {
 ::selection { background: rgba(232, 196, 150, .30); color: #fffcfa; }
 
 /* 若页面已经用 body::before / body::after 做装饰：
-   把这两段换成页面自己的容器（如 .page::before / .page::after），或直接省略纹理，只保留 body 背景渐变。 */
+   把这两段换成页面自己的容器（如 .page::before / .page::after），或直接省略纹理，只保留 body 背景。 */

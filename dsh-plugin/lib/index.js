@@ -648,6 +648,13 @@ export function apply(ctx) {
         const fontsSrc = path.join(r.base, 'fonts.css');
         if (fsExists(fontsSrc)) fs.copyFileSync(fontsSrc, path.join(dir, 'fonts.css'));
       } catch (e) { /* ignore */ }
+      // 推荐背景图也复制进风格库：换机器 / 源目录被挪走后仍然能取到
+      try {
+        if (spec.backgroundImage) {
+          const bgSrc = path.join(r.base, spec.backgroundImage);
+          if (fsExists(bgSrc)) fs.copyFileSync(bgSrc, path.join(dir, spec.backgroundImage));
+        }
+      } catch (e) { /* ignore */ }
     } catch (e) { return { ok: false, error: '写入风格文件失败：' + String(e && e.message || e) }; }
     return { ok: true, id: id, name: metaName, styles: listStyles() };
   }
@@ -1259,13 +1266,31 @@ export function apply(ctx) {
     return lines.join('\n');
   }
 
+  /** 应用风格时把「原生背景图」复制到项目 assets/，保证背景 CSS 的 url() 直接可用 */
+  function deliverStyleBackground(style, projectDir) {
+    try {
+      const spec = style && style.spec ? style.spec : null;
+      const name = spec && spec.backgroundImage ? path.basename(String(spec.backgroundImage).replace(/[^a-zA-Z0-9._-]/g, '')) : '';
+      const styleDir = style && style.dir ? style.dir : '';
+      if (!name || !styleDir || !projectDir || !fsExists(projectDir)) return '';
+      const src = path.join(styleDir, name);
+      if (!fsExists(src)) return '';
+      const dstDir = path.join(projectDir, 'assets');
+      try { if (!fsExists(dstDir)) fs.mkdirSync(dstDir, { recursive: true }); } catch (e) { /* ignore */ }
+      const dst = path.join(dstDir, name);
+      try { fs.copyFileSync(src, dst); } catch (e) { return ''; }
+      return 'assets/' + name;
+    } catch (e) { return ''; }
+  }
   function composeStylePrompt(style, dir) {
     let brief = String(style.brief || '').slice(0, 16000);
     // 兼容旧风格：规范里带了推荐背景、但历史 style-brief.md 里没有这一段时补上
     try {
       const bg = style && style.spec && style.spec.background ? String(style.spec.background).trim() : '';
       if (bg && brief.indexOf('推荐背景') < 0) {
-        brief += '\n\n## 推荐背景（原生背景，必须一起应用）\n- 把下面这段背景一起应用到页面 body（替换原有背景，不叠加）：\n\n```css\n' + bg + '\n```\n';
+        var img = style && style.spec && style.spec.backgroundImage ? String(style.spec.backgroundImage) : '';
+        var imgLine = img ? ('- 原生背景图：`' + img + '`，复制到项目 `assets/' + img + '` 并用 `url("assets/' + img + '")` 引用。\n') : '';
+        brief += '\n\n## 推荐背景（原生背景，必须一起应用）\n- 把下面这段背景一起应用到页面 body（替换原有背景，不叠加）：\n' + imgLine + '\n```css\n' + bg + '\n```\n';
       }
     } catch (e) { /* ignore */ }
     return [
@@ -1301,6 +1326,7 @@ export function apply(ctx) {
       fonts: pickFile(['fonts.css', 'font.css', 'typography.css']),
       cover: pickFile(['cover.png', 'cover.jpg', 'cover.webp', 'preview.png', 'preview.jpg', 'preview.webp', 'thumb.png', 'thumb.jpg', 'screenshot.png']),
       background: pickFile(['background.css', 'bg.css', 'backdrop.css']),
+      backgroundImage: pickFile(['background.jpg', 'background.png', 'background.webp', 'bg.jpg', 'bg.png', 'bg.webp', 'bg-night.jpg', 'backdrop.jpg']),
     };
     const sources = [];
     let tokens = [];
@@ -1328,7 +1354,7 @@ export function apply(ctx) {
     if (fsExists(cand.md)) { mdText = readTextSafe(cand.md, 60000); sources.push(cand.md); }
     if (!tokens.length && !mdText) return { ok: false, error: '没找到 token 文件或规范文件（支持 design-tokens.json / tokens.json / theme.json / *.css / UI-SPEC.md / README.md）' };
     const found = [];
-    for (const k of ['json', 'css', 'md', 'html', 'fonts', 'cover', 'background']) {
+    for (const k of ['json', 'css', 'md', 'html', 'fonts', 'cover', 'background', 'backgroundImage']) {
       if (cand[k]) found.push({ kind: k, path: cand[k] });
     }
     const pick = (kind, n) => tokens.filter((x) => x.kind === kind).slice(0, n || 12);
@@ -1346,6 +1372,7 @@ export function apply(ctx) {
       other: pick('other', 20),
       notes: mdText ? mdText.slice(0, 6000) : '',
       background: cand.background ? String(readTextSafe(cand.background, 80000) || '').trim() : '',
+      backgroundImage: cand.backgroundImage ? path.basename(cand.backgroundImage) : '',
     };
     spec.found = found;
     return { ok: true, base: base, spec: spec, found: found, summary: { name: spec.name, colors: spec.colors.slice(0, 8), fonts: spec.fonts, radii: spec.radii.slice(0, 4), found: found.map((f) => path.basename(f.path)) } };
@@ -1375,6 +1402,10 @@ export function apply(ctx) {
       lines.push('- 这套风格的原生背景和前景是一体的（玻璃 / 发光 / 暗色都靠背景托底）：只改前景不换背景，效果会差很多。');
       lines.push('- 应用样式时请把下面这段背景**一起应用**：替换页面原有的 body 背景（不要叠加在旧背景上），并保留 `background-attachment: fixed`。');
       lines.push('- 如果页面已经用 `body::before / body::after` 做装饰，把这两段换成页面自己的容器，或省略纹理只保留 body 背景。');
+      if (spec.backgroundImage) {
+        lines.push('- 原生背景图：风格目录里的 `' + spec.backgroundImage + '`。请复制到项目 `assets/' + spec.backgroundImage + '`，CSS 里用 `url("assets/' + spec.backgroundImage + '")` 引用（页面在子目录时按相对路径调整）。');
+        lines.push('- 如果项目已有背景图 / 背景视频：替换成这张，不要叠加；确实拿不到图片时，删掉 url(...) 只保留渐变层，不要留纯色空背景。');
+      }
       lines.push('```css');
       lines.push(String(spec.background).trim());
       lines.push('```');
@@ -2055,17 +2086,19 @@ export function apply(ctx) {
           const styleName = (st.meta && st.meta.name) || '';
           const backupDir = dir && fsExists(dir) ? backupProjectForStyle(dir, styleName) : '';
           const full = composeStylePrompt(st, dir);
+          const bgRel = deliverStyleBackground(st, dir);
+          const fullText = bgRel ? (full + '\n\n（已自动把「原生背景图」复制到项目：' + bgRel + '，背景 CSS 的 url() 直接引用即可）') : full;
           let briefFile = '';
           if (dir && fsExists(dir)) {
             try {
               const outDir = path.join(dir, '.ve-data');
               fs.mkdirSync(outDir, { recursive: true });
               briefFile = path.join(outDir, 'style-brief.md');
-              fs.writeFileSync(briefFile, full, 'utf8');
+              fs.writeFileSync(briefFile, fullText, 'utf8');
             } catch (e) { /* ignore */ }
           }
-          const shortText = buildShortStylePrompt(styleName, dir, briefFile);
-          sendJson(res, 200, { ok: true, text: shortText, briefFile: briefFile, backupDir: backupDir, fullText: full, style: { id: body.id, name: styleName } });
+          const shortText = buildShortStylePrompt(styleName, dir, briefFile) + (bgRel ? '\n\n背景：这套风格的原生背景图已复制到项目 ' + bgRel + '，应用样式时一起引用。' : '');
+          sendJson(res, 200, { ok: true, text: shortText, briefFile: briefFile, backupDir: backupDir, fullText: fullText, backgroundImage: bgRel, style: { id: body.id, name: styleName } });
           return;
         }
         if (method === 'GET' && sub === '/fixate-status') {
@@ -2355,13 +2388,15 @@ let defineTool = null;
         if (!st.spec) return { ok: false, dir: "", style: {}, text: "", note: "风格文件读取失败：" + hit.id };
         const dir = String((args && args.dir) || (lastOpened && lastOpened.dir) || "");
         const full = composeStylePrompt(st, dir);
+        const bgRel = deliverStyleBackground(st, dir);
+        const fullText = bgRel ? (full + '\n\n（已自动把「原生背景图」复制到项目：' + bgRel + '，背景 CSS 的 url() 直接引用即可）') : full;
         let briefFile = '';
         if (dir && fsExists(dir)) {
           try {
             const outDir = path.join(dir, ".ve-data");
             fs.mkdirSync(outDir, { recursive: true });
             briefFile = path.join(outDir, "style-brief.md");
-            fs.writeFileSync(briefFile, full, "utf8");
+            fs.writeFileSync(briefFile, fullText, "utf8");
           } catch (e) { /* ignore */ }
         }
         lastContext = Object.assign({}, lastContext, { dir: dir || lastContext.dir, style: { id: hit.id, name: hit.name } });
@@ -2369,7 +2404,7 @@ let defineTool = null;
           ok: true,
           dir,
           style: { id: hit.id, name: hit.name, source: hit.source },
-          text: buildShortStylePrompt(hit.name, dir, briefFile),
+          text: buildShortStylePrompt(hit.name, dir, briefFile) + (bgRel ? "\n\n背景：这套风格的原生背景图已复制到项目 " + bgRel + "，应用样式时一起引用。" : ""),
           briefFile,
           note: "规范已写入 " + (briefFile || "（项目目录不可写）") + "；请先读取该文件，再用 web_editor_apply_ops 逐项应用（颜色/字体/圆角/间距），保存前提醒用户",
         };
