@@ -31,3 +31,5 @@ deliverables/video/_tts2/
 
 # 私有风格包（外部提取，不公开）
 deliverables/private-styles/
+# 私有 pro 规范，只保留本地，不发布
+style-template/**/PRO-SPEC.md

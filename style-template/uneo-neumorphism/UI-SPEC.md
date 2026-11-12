@@ -1,6 +1,8 @@
 # UNEO 暖石拟物 · Warm-Stone Neumorphism
 
 > 自有拟物组件页 `uneo.html` 的视觉系统。暖石纸面、双光源浮雕、深咖啡与古铜，强调“可按的实体感”。
+>
+> 完整组件、交互状态机与触感声音见 [`PRO-SPEC.md`](./PRO-SPEC.md)。
 
 ## 01 设计原则
 - 暖石纸面：画布 `#F3EFE9`，表面 `#F6F3EE`，凹陷 `#EDE8E0`；不使用纯白大底。
@@ -52,13 +54,15 @@
 - 760px 以下单列；图片 16:9，正文与按钮完整可见，`overflow-x: clip`。
 - 任何宽度 `scrollWidth <= innerWidth + 1`。
 
-## 08 导航栏
+## 08 导航栏（凹凸）
 
-- 高度 `56px`；表面 `rgba(243,239,233,.88)`，底部 1px `rgba(51,40,30,.10)`，无硬投影。
+- 高度 `56px`；外壳是「凸起面」：`linear-gradient(145deg,#F8F6F2,#F3EFE9)`，底部 1px `rgba(226,221,212,.72)`，外加 `0 6px 16px rgba(226,221,212,.55)` + 顶部内高光 `inset 0 1px 0 rgba(255,255,255,.82)`。
 - 左侧品牌：24px 抬起方块（`3px 3px 8px #E2DDD4` + `-3px -3px 8px #FFFFFF`）+ `Inter 10px / 600 / .15em`。
-- 中间链接：`Inter 11px / 500`，默认 `--textSecondary`，当前项 `--espresso`；绝对居中。
-- 右侧 CTA：深咖啡渐变 pill，白字，`5px 6px 12px rgba(51,40,30,.24)` + 左上高光；hover 上浮 1px 并加深阴影。
-- 导航只使用「抬起」阴影，不使用平面描边；窄于 900px 时链接回到右侧，640px 以下只保留当前项。
+- 中间链接：`Inter 11px / 500`，默认 `--textSecondary`，绝对居中。
+- **当前项是「凹下」**：`background:linear-gradient(145deg,#EDE8E0,#F8F6F2)`，`inset 3px 3px 6px #E2DDD4` + `inset -3px -3px 6px #FFFFFF`，文字 `--espresso`；圆角 pill，左右 10px。
+- 右侧 CTA：深咖啡渐变 pill，白字，`5px 6px 12px rgba(51,40,30,.24)` + 左上高光；hover 上浮 1px、阴影加深；active 转 inset。
+- 原则：**外壳凸、当前项凹、CTA 凸、brand mark 凸**；不允许整条导航是平面色块。
+- 窄于 900px 时链接回到右侧，640px 以下只保留当前项。
 
 ## 09 · 组件材质与旋钮
 

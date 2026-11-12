@@ -208,8 +208,9 @@
     },
     "nav": {
       "height": "56px",
-      "surface": "rgba(243,239,233,0.88)",
-      "bottomLine": "1px rgba(51,40,30,0.10)",
+      "shell": "linear-gradient(145deg,#F8F6F2,#F3EFE9), box-shadow 0 6px 16px rgba(226,221,212,.55), inset 0 1px 0 rgba(255,255,255,.82)",
+      "activeItem": "background linear-gradient(145deg,#EDE8E0,#F8F6F2), inset 3px 3px 6px #E2DDD4, inset -3px -3px 6px #FFFFFF",
+      "cta": "linear-gradient(145deg,#3D3024,#2B2118), 5px 6px 12px rgba(51,40,30,.24), -3px -3px 8px #FFFFFF",
       "links": "11px / 500",
       "active": "#33281E"
     }
