@@ -1,5 +1,11 @@
 # 更新日志
 
+## 1.1.92（应用到源码：真实 CSS）
+- 静态项目「应用到源码」不再生成 ve-applied.js / 注入 script，而是把保存的覆写直接写成 HTML 内 `<style id="ve-applied-style">` 的真实 CSS。
+- 自动备份到 `.ve-data/backups/fixate-*`；旧 ve-applied.js 会自动移除并备份。
+- 固化状态检测兼容真实 CSS 写法。
+
+
 ## 1.1.91（封面贴合 / 去描边）
 - 风格胶囊右图改为 `object-fit: cover`，直接铺满容器。
 - 去掉外层风格行边框和右图内层 1px 描边。

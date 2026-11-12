@@ -688,7 +688,7 @@ export function apply(ctx) {
     let injected = false;
     try {
       const htmls = ['index.html', 'public/index.html'].map((h) => path.join(projectDir, h)).filter((p) => fsExists(p));
-      for (const h of htmls) { if ((readTextSafe(h, 4000000) || '').includes('ve-applied')) injected = true; }
+      for (const h of htmls) { const t = readTextSafe(h, 4000000) || ''; if (t.includes('ve-applied-style') || t.includes('ve-applied')) { injected = true; fixedAt = Math.max(fixedAt, statMtime(h)); } }
       if (!injected) {
         for (const js of ['src/main.tsx', 'src/main.jsx', 'src/main.ts', 'src/main.js', 'src/index.tsx', 'src/index.jsx', 'src/index.ts', 'src/index.js']) {
           const p = path.join(projectDir, js);
@@ -725,6 +725,44 @@ export function apply(ctx) {
       }
       writeMeta(path.join(dir, 'index.html'), path.join(dataDir, 'source-meta.json'));
     } catch (e) { /* ignore */ }
+  }
+
+
+  /** 把覆写条目生成真实 CSS：不依赖 ve-applied.js，源码直接生效 */
+  function appliedCssSelector(key) {
+    const k = String(key || "");
+    if (k.indexOf("sel:") === 0) return k.slice(4).trim();
+    if (k.indexOf("id:") === 0) return "#" + k.slice(3).replace(/([^a-zA-Z0-9_-])/g, "\\$1");
+    return "";
+  }
+  function appliedCssProp(name) {
+    return String(name || "").replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
+  }
+  function buildAppliedCss(entries) {
+    const lines = [];
+    for (const key of Object.keys(entries || {})) {
+      const e = entries[key];
+      if (!e || typeof e !== "object" || e.__overlay) continue;
+      const sel = appliedCssSelector(key);
+      if (!sel) continue;
+      const props = [];
+      if (e.hidden) props.push("display:none !important");
+      if (e.style && typeof e.style === "object") {
+        for (const p of Object.keys(e.style)) {
+          const v = e.style[p];
+          if (v == null || v === "") continue;
+          props.push(appliedCssProp(p) + ":" + String(v) + " !important");
+        }
+      }
+      if (props.length) lines.push(sel + "{" + props.join(";") + ";}");
+    }
+    return lines.join("\n");
+  }
+  function htmlSlugOf(rel) {
+    let p = "/" + String(rel || "").replace(/\\/g, "/").replace(/^\/+/, "");
+    try { p = decodeURIComponent(p); } catch (e) { /* keep */ }
+    if (p === "/" || /\/index\.html?$/i.test(p)) return "";
+    return p.replace(/^\/+/, "").replace(/[^\p{L}\p{N}._-]+/gu, "_").replace(/^\.+|\.+$/g, "");
   }
 
   function fixateProject(dir, opts = {}) {
@@ -859,14 +897,14 @@ export function apply(ctx) {
       };
     }
 
-    // 静态站
+    // 静态站：把覆写直接写成 HTML 内的真实 CSS（不再依赖 ve-applied.js）
     const htmlRel = findEntryHtml();
     if (!htmlRel) return { ok: false, error: '找不到入口 HTML（index.html）' };
-    const outName = 've-applied.js';
-    const outPath = path.join(projectDir, outName);
-    fs.writeFileSync(outPath, script, 'utf8');
-    written.push(outName);
-    // 注入到项目内所有 html（多页面站点每页都能生效）
+    const oldScript = path.join(projectDir, 've-applied.js');
+    if (fsExists(oldScript)) {
+      backupFile(oldScript);
+      try { fs.unlinkSync(oldScript); written.push('移除旧 ve-applied.js'); } catch (e) { /* ignore */ }
+    }
     const htmlFiles = [];
     const walkHtml = (abs, depth) => {
       if (depth > 3 || htmlFiles.length > 60) return;
@@ -884,17 +922,24 @@ export function apply(ctx) {
     if (!htmlFiles.includes(path.join(projectDir, htmlRel))) htmlFiles.unshift(path.join(projectDir, htmlRel));
     let injectedCount = 0;
     for (const htmlPath of htmlFiles) {
+      const rel = path.relative(projectDir, htmlPath).split(path.sep).join('/');
+      const slug = htmlSlugOf(rel);
+      const merged = Object.assign({}, baseOverrides, pageOverrides[slug] || {});
+      const css = buildAppliedCss(merged);
+      if (!css) continue;
       let html = readTextSafe(htmlPath, 8000000) || '';
-      if (html.includes(outName)) continue;
       backupFile(htmlPath);
-      const relJs = path.relative(path.dirname(htmlPath), outPath).split(path.sep).join('/');
-      const tag = '\n<script defer src="' + relJs + '" data-ve-applied="1"><\/script>\n';
-      if (/<\/body>/i.test(html)) html = html.replace(/<\/body>/i, tag + '</body>');
-      else html = html + tag;
+      // 去掉历史 script 注入
+      html = html.replace(/\s*<script[^>]*ve-applied[^>]*><\/script>/gi, '');
+      const styleTag = '\n<style id="ve-applied-style" data-ve-applied-style="1">\n/* dsh-ui-editor: 应用改动到源码（真实 CSS） */\n' + css + '\n</style>\n';
+      const styleRe = /<style[^>]*id=["']ve-applied-style["'][^>]*>[\s\S]*?<\/style>/i;
+      if (styleRe.test(html)) html = html.replace(styleRe, styleTag);
+      else if (/<\/body>/i.test(html)) html = html.replace(/<\/body>/i, styleTag + '</body>');
+      else html = html + styleTag;
       fs.writeFileSync(htmlPath, html, 'utf8');
       injectedCount += 1;
     }
-    if (injectedCount) written.push(injectedCount + ' 个 HTML 已注入 script');
+    if (injectedCount) written.push(injectedCount + ' 个 HTML 已写入真实 CSS');
     const synced = syncWorkbenchToPlugin(projectDir);
     return {
       ok: true,

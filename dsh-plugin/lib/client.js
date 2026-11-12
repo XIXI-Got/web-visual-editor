@@ -3278,10 +3278,10 @@ const API_PATH = "/ve/plugin";
         setMenuOpen(false);
         setStyleBarOpen(false);
         setConfirmAsk({
-          title: "应用改动到源码（相对样式，不覆盖原 CSS 文件）",
+          title: "应用改动到源码（写入真实 CSS，自动备份）",
           name: "把保存过的修改写进项目真实文件",
           dir: (preview && preview.dir) || "",
-          note: "会生成 ve-applied.js 并在入口 HTML 注入 script（Vite 项目写入 src/ve-applied.js 并加 import）；写入前自动备份到 .ve-data/backups/。固化后不带编辑器的真实页面也会显示这些改动。",
+          note: "会把保存过的改动写成 HTML 里的真实 <style id=\"ve-applied-style\">，不再依赖 ve-applied.js；写入前自动备份到 .ve-data/backups/。固化后不带编辑器的真实页面也会显示这些改动。",
           onOk: async () => {
             setConfirmAsk(null);
             setMsg("正在应用改动到源码…");
@@ -3604,7 +3604,7 @@ const API_PATH = "/ve/plugin";
             },
           }, "⟳ 刷新"),
           h("button", { className: "wpe-btn", title: "保存（Ctrl+S）", onClick: () => { send("save"); setMsg("保存中…"); } }, "保存"),
-          h("button", { className: "wpe-btn", title: "应用改动到源码：写相对/响应式样式（不覆盖原 CSS 文件，可删除 ve-applied.js 还原）", onClick: askFixate }, "应用到源码"),
+          h("button", { className: "wpe-btn", title: "应用改动到源码：把保存的改动写进 HTML 的真实 CSS（自动备份）", onClick: askFixate }, "应用到源码"),
           h("span", {
             className: "wpe-fixchip " + (fixState ? fixState.state : ""),
             title: fixState
