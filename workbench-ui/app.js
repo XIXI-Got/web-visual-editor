@@ -795,8 +795,9 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
         : (s.cardStyle === 'glass' ? ['玻璃', '层次'] : ['纯色', '干净']);
       var desc = String(s.description || '').replace(/\s+/g, ' ').trim();
       if (desc.length > 90) desc = desc.slice(0, 88).trim() + '…';
+      var rowVars = '--sr-title-font:' + esc(s.fontStack || 'var(--font-display)') + ';--sr-body-font:' + esc(s.smallFontStack || 'var(--font-sans)') + ';--sr-ink:' + esc(s.titleColor || 'var(--ink)') + ';--sr-accent:' + esc(s.titleColor || 'var(--ink)') + ';--sr-canvas:' + esc(s.bgColor || 'var(--paper-raised)') + ';';
       return (
-        '<div class="style-row' + (st.selectedId === s.id ? ' is-selected' : '') + '" data-act="style-apply" data-id="' + esc(s.id) + '" data-name="' + esc(s.name) + '" title="点击应用这个风格">' +
+        '<div class="style-row' + (st.selectedId === s.id ? ' is-selected' : '') + '" style="' + rowVars + '" data-act="style-apply" data-id="' + esc(s.id) + '" data-name="' + esc(s.name) + '" title="点击应用这个风格">' +
           '<div class="style-row-copy">' +
             '<div class="style-row-kicker">STYLE / 0' + (idx + 1) + '</div>' +
             '<h3 class="style-row-name"><b>' + esc(main) + '</b>' + (sub ? '<em>' + esc(sub) + '</em>' : '') + '</h3>' +

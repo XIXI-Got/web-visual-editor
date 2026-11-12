@@ -26,7 +26,7 @@
 | `--hairline` | `rgba(255,255,255,.78)` | 亮侧发丝边 |
 
 ## 03 字体
-- `--font-display`: Playfair Display / Lora / Georgia，衬线标题，字重 600。
+- `--font-display`: 思源宋体（Source Han Serif SC）/ Noto Serif SC / Songti SC，衬线标题，字重 600。
 - `--font-sans`: Inter / 系统无衬线，正文 400–500。
 - 中文标题使用同气质宋体回退（Noto Serif SC / 思源宋体 / Songti SC），字重 ≥ 600。
 

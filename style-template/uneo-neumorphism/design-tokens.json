@@ -81,7 +81,7 @@
   },
   "typography": {
     "families": {
-      "display": "Playfair Display, Lora, Georgia, serif",
+      "display": "\"Source Han Serif SC\",\"Noto Serif SC\",\"Songti SC\",STSong,Georgia,serif",
       "sans": "Inter, -apple-system, BlinkMacSystemFont, sans-serif"
     },
     "roles": {
