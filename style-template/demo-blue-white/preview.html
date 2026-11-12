@@ -57,14 +57,14 @@
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
   .tpl-nav{position:relative;z-index:5;background:rgba(255,255,255,.86);border-bottom:1px solid var(--line)}
-  .tpl-nav-inner{width:min(1120px,calc(100% - 40px));height:56px;margin:0 auto;display:flex;align-items:center;gap:26px}
+  .tpl-nav-inner{position:relative;width:min(1120px,calc(100% - 40px));height:56px;margin:0 auto;display:flex;align-items:center;gap:26px}
   .tpl-nav-brand{display:flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none;font:600 10px/1 var(--font-sans);letter-spacing:.15em;white-space:nowrap}
   .tpl-nav-mark{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--blue);color:#fff;font:700 11px/1 var(--font-sans);letter-spacing:0}
-  .tpl-nav-links{display:flex;align-items:center;gap:22px;margin-left:auto}
+  .tpl-nav-links{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:22px;margin-left:0}
   .tpl-nav-links a{color:var(--muted);text-decoration:none;font:500 11px/1 var(--font-sans);padding:6px 0;white-space:nowrap}
   .tpl-nav-links a.is-active{color:var(--ink)}
-  .tpl-nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 16px;border-radius:var(--radius-pill);background:var(--blue);color:#fff;text-decoration:none;font:600 10.5px/1 var(--font-sans);white-space:nowrap}
-  @media (max-width:640px){.tpl-nav-links a:not(.is-active){display:none}.tpl-nav-inner{gap:14px}.tpl-nav-brand span:last-child{display:none}.tpl-nav-cta{padding:0 12px}}
+  .tpl-nav-cta{margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 16px;border-radius:var(--radius-pill);background:var(--blue);color:#fff;text-decoration:none;font:600 10.5px/1 var(--font-sans);white-space:nowrap}
+  @media (max-width:900px){.tpl-nav-links{position:static;transform:none;margin-left:auto}} @media (max-width:640px){.tpl-nav-links a:not(.is-active){display:none}.tpl-nav-inner{gap:14px}.tpl-nav-brand span:last-child{display:none}.tpl-nav-cta{padding:0 12px}}
 </style>
 </head>
 <body>

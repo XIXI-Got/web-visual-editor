@@ -51,3 +51,11 @@
 ## 07 响应式
 - 760px 以下单列；图片 16:9，正文与按钮完整可见，`overflow-x: clip`。
 - 任何宽度 `scrollWidth <= innerWidth + 1`。
+
+## 08 导航栏
+
+- 高度 `56px`；表面 `rgba(243,239,233,.88)`，底部 1px `rgba(51,40,30,.10)`，无硬投影。
+- 左侧品牌：24px 抬起方块（`3px 3px 8px #E2DDD4` + `-3px -3px 8px #FFFFFF`）+ `Inter 10px / 600 / .15em`。
+- 中间链接：`Inter 11px / 500`，默认 `--textSecondary`，当前项 `--espresso`；绝对居中。
+- 右侧 CTA：深咖啡渐变 pill，白字，`5px 6px 12px rgba(51,40,30,.24)` + 左上高光；hover 上浮 1px 并加深阴影。
+- 导航只使用「抬起」阴影，不使用平面描边；窄于 900px 时链接回到右侧，640px 以下只保留当前项。

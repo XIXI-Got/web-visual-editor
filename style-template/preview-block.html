@@ -57,14 +57,14 @@
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
   .preview-nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-  .preview-nav-inner{width:min(1120px,calc(100% - 40px));height:64px;margin:0 auto;display:flex;align-items:center;gap:32px}
+  .preview-nav-inner{position:relative;width:min(1120px,calc(100% - 40px));height:64px;margin:0 auto;display:flex;align-items:center;gap:32px}
   .preview-brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font:600 11px/1 var(--font-sans);letter-spacing:.16em;white-space:nowrap}
   .preview-brand-mark{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;font:700 12px/1 var(--font-sans);letter-spacing:0}
-  .preview-nav-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+  .preview-nav-links{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:24px;margin-left:0}
   .preview-nav-links a{color:var(--muted);text-decoration:none;font:500 12px/1 var(--font-sans);padding:8px 0;white-space:nowrap}
   .preview-nav-links a.is-active{color:var(--ink)}
-  .preview-nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 18px;border-radius:var(--radius-pill);background:var(--ink);color:#fff;text-decoration:none;font:600 11px/1 var(--font-sans);white-space:nowrap}
-  @media (max-width:640px){.preview-nav-links a:not(.is-active){display:none}.preview-nav-inner{gap:16px}.preview-brand{font-size:10px}.preview-nav-cta{padding:0 14px}}
+  .preview-nav-cta{margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 18px;border-radius:var(--radius-pill);background:var(--ink);color:#fff;text-decoration:none;font:600 11px/1 var(--font-sans);white-space:nowrap}
+  @media (max-width:900px){.preview-nav-links{position:static;transform:none;margin-left:auto}} @media (max-width:640px){.preview-nav-links a:not(.is-active){display:none}.preview-nav-inner{gap:16px}.preview-brand{font-size:10px}.preview-nav-cta{padding:0 14px}}
 </style>
 </head>
 <body>
