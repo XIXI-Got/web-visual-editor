@@ -1333,7 +1333,7 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
 .style-row-name{font-family:var(--sr-title-font,var(--font-display));color:var(--sr-ink,var(--ink));font-size:clamp(22px,2.45vw,34px);line-height:1.02}
 .style-row-name em{font-family:var(--sr-body-font,var(--font-sans));font-size:.46em;line-height:1.15;margin-top:3px;color:currentColor;opacity:.76}
 .style-row-tags{margin-top:2px}
-.style-row-tags span{padding:6px 12px;font-size:10px;background:var(--sr-accent,#373435);color:#FEFEFE}
+.style-row-tags span{padding:6px 12px;font-size:10px;background:var(--ink);color:#FEFEFE}
 .style-row-desc{font-family:var(--sr-body-font,var(--font-sans));font-size:11px;line-height:1.5;color:var(--ink55);-webkit-line-clamp:1;margin-top:1px}
 .style-row-visual{background:transparent;border-left:0;aspect-ratio:3 / 1;align-self:stretch}
 .style-row-image{position:absolute;inset:13% 8% 0;border-radius:16px 16px 0 0;background:#fff;overflow:hidden;box-shadow:0 10px 22px rgba(17,17,17,.10),0 1px 3px rgba(17,17,17,.05);transition:transform .28s var(--ease-out),box-shadow .28s var(--ease-out)}

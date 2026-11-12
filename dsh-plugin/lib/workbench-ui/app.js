@@ -846,8 +846,17 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       var canvasHex = String(s.bgColor || '').trim();
       var canvasLum = hexLum(canvasHex);
       var darkCanvas = canvasLum != null && canvasLum < 0.42;
+      // 彩色画布（比如复古像素的青绿桌面）不染色，直接用普通底色，跟「极简白点」一样
+      var hexChroma = function (hex) {
+        var m = /^#([0-9a-f]{6})$/i.exec(String(hex || '').trim());
+        if (!m) return 0;
+        var n = parseInt(m[1], 16);
+        var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+        return (Math.max(r, g, b) - Math.min(r, g, b)) / 255;
+      };
+      var coloredCanvas = hexChroma(canvasHex) > 0.22;
       var inkLum = hexLum(s.titleColor);
-      var rowCanvas = darkCanvas ? 'color-mix(in srgb,' + canvasHex + ' 15%,#fff)' : (s.bgColor || 'var(--paper-raised)');
+      var rowCanvas = coloredCanvas ? 'var(--paper-raised)' : (darkCanvas ? 'color-mix(in srgb,' + canvasHex + ' 15%,#fff)' : (s.bgColor || 'var(--paper-raised)'));
       var rowInk = darkCanvas ? 'var(--ink)' : (s.titleColor || 'var(--ink)');
       var rowAccent = (inkLum != null && inkLum > 0.66) ? '#373435' : (s.titleColor || 'var(--ink)');
       var rowVars = '--sr-title-font:' + esc(s.fontStack || 'var(--font-display)') + ';--sr-body-font:' + esc(s.smallFontStack || 'var(--font-sans)') + ';--sr-ink:' + esc(rowInk) + ';--sr-accent:' + esc(rowAccent) + ';--sr-canvas:' + esc(rowCanvas) + ';';
