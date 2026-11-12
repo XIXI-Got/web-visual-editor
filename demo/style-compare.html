@@ -50,6 +50,14 @@
   body.split .tag-after{display:block}
   body.single.show-after .tag-before{display:none}
   body.single.show-after .tag-after{display:block;left:12px;right:auto;bottom:12px}
+
+  /* 预览实例端口变了 / 服务已关闭：不再显示浏览器的「拒绝连接」白屏，给一个可操作的重连提示 */
+  .offline{position:absolute;inset:0;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--paper);color:var(--ink);text-align:center;padding:24px}
+  .offline[hidden]{display:none}
+  .offline-title{font:700 15px/1.3 "Inter Tight","PingFang SC",sans-serif;letter-spacing:-.01em}
+  .offline-text{font:400 12.5px/1.7 "Inter Tight","PingFang SC",sans-serif;color:rgba(0,0,0,.55);max-width:52ch}
+  .offline button{border:0;background:#111;color:#fff;font:600 12px/1 inherit;padding:10px 16px;border-radius:999px;cursor:pointer}
+  .offline button:hover{opacity:.86}
   @media(max-width:620px){.brand span{display:none}.hint{display:none}.bar{gap:6px;padding:0 10px}.seg button{padding:7px 9px;font-size:11px}}
 </style>
 </head>
@@ -72,7 +80,12 @@
       <div class="pending-dots"><i></i><i></i><i></i></div>
       <div class="pending-text">风格生成中…</div>
     </div>
-    <div class="tag tag-before">原版 · BEFORE</div>
+    <div class="offline" id="offline" hidden>
+    <div class="offline-title">预览服务已关闭</div>
+    <div class="offline-text" id="offlineText">项目预览实例被重新打开了（端口变了），正在尝试重新连接…</div>
+    <button type="button" id="offlineRetry">重新连接</button>
+  </div>
+  <div class="tag tag-before">原版 · BEFORE</div>
     <div class="tag tag-after">新版 · AFTER</div>
   </div>
 <script>
@@ -169,6 +182,46 @@
     };
     setTimeout(check, 1200);
   }
+
+  // ── 自愈：项目预览实例被重新打开（端口变了 / DSH 重启）时，对比页的 iframe 会 ERR_CONNECTION_REFUSED。
+  // 这里通过工作台传进来的 api + dir 找到当前端口，整页跳到新的对比地址；找不到就显示可操作的提示。
+  const apiBase = (params.get('api') || '').replace(/\/+$/, '');
+  const projDir = params.get('dir') || '';
+  const offlineEl = document.getElementById('offline');
+  const offlineText = document.getElementById('offlineText');
+  let recovering = 0;
+  const frameOk = (f) => { try { return Boolean(f.contentDocument && f.contentDocument.location); } catch { return false; } };
+  function showOffline(msg) { if (!offlineEl) return; offlineEl.hidden = false; if (offlineText && msg) offlineText.textContent = msg; }
+  async function recoverFromDeadPort() {
+    if (!apiBase || !projDir || recovering >= 2) {
+      showOffline('预览服务已关闭：回到工作台「应用并打开风格对比」重新打开这个页面。');
+      return;
+    }
+    recovering += 1;
+    showOffline('预览服务端口变了，正在重新连接…');
+    try {
+      const res = await fetch(apiBase + '/ve/plugin/projects', { cache: 'no-store' });
+      const data = await res.json();
+      const hit = (data.projects || []).find((x) => String(x.dir || '').toLowerCase() === projDir.toLowerCase());
+      if (!hit || !hit.url) { showOffline('找不到项目预览实例：回到工作台重新打开「风格对比」。'); return; }
+      const next = new URL('style-compare.html', hit.url);
+      params.forEach((v, k) => { if (k !== 't') next.searchParams.set(k, v); });
+      if (next.host === location.host) { showOffline('预览服务还没起来：点「重新连接」再试一次。'); return; }
+      location.replace(next.toString());
+    } catch (e) {
+      showOffline('重新连接失败：' + String((e && e.message) || e));
+    }
+  }
+  function checkFrames() { if (!frameOk(before) || !frameOk(after)) recoverFromDeadPort(); }
+  const retryBtn = document.getElementById('offlineRetry');
+  if (retryBtn) retryBtn.addEventListener('click', () => {
+    recovering = 0;
+    if (offlineEl) offlineEl.hidden = true;
+    before.src = beforeSrc; after.src = afterSrc;
+    setTimeout(checkFrames, 4500);
+  });
+  setTimeout(checkFrames, 5000);
+  window.addEventListener('load', () => setTimeout(checkFrames, 1200));
 
   setMode('split');
   setSplit(50);

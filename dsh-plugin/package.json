@@ -1,6 +1,6 @@
 {
   "name": "dsh-ui-editor",
-  "version": "1.1.108",
+  "version": "1.1.109",
   "description": "DSH 组合包：原生右栏可视化编辑本地网页项目（文字/样式/图片/组件，撤销/自动备份/AI 改稿），并带独立网页工作台、UI 风格库与固化导出",
   "type": "module",
   "main": "lib/index.js",

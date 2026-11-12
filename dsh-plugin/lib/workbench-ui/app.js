@@ -548,7 +548,12 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       if (!base) return '';
       var u = new URL(base, location.href);
       u.pathname = u.pathname.replace(/[^/]*$/, 'style-compare.html');
-      u.search = pending ? '?pending=1' : '';
+      var q = new URLSearchParams();
+      if (pending) q.set('pending', '1');
+      var api = String(S.apiBase || '').replace(/\/+$/, '') || location.origin;
+      q.set('api', api);
+      if (dir) q.set('dir', dir);
+      u.search = '?' + q.toString();
       u.hash = '';
       return u.toString();
     } catch (e) { return ''; }
