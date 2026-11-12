@@ -1335,7 +1335,7 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
 .style-row-tags{margin-top:2px}
 .style-row-tags span{padding:6px 12px;font-size:10px;background:var(--ink);color:#FEFEFE}
 .style-row-desc{font-family:var(--sr-body-font,var(--font-sans));font-size:11px;line-height:1.5;color:var(--ink55);-webkit-line-clamp:1;margin-top:1px}
-.style-row-visual{background:transparent;border-left:0;aspect-ratio:3 / 1;align-self:stretch}
+.style-row-visual{background:transparent;border-left:0;aspect-ratio:2.4 / 1;align-self:stretch}
 .style-row-image{position:absolute;inset:13% 8% 0;border-radius:16px 16px 0 0;background:#fff;overflow:hidden;box-shadow:0 10px 22px rgba(17,17,17,.10),0 1px 3px rgba(17,17,17,.05);transition:transform .28s var(--ease-out),box-shadow .28s var(--ease-out)}
 .style-row:hover .style-row-image{transform:translateY(-2px);box-shadow:0 16px 30px rgba(17,17,17,.14),0 2px 4px rgba(17,17,17,.06)}
 @media (max-width:760px){
@@ -1353,3 +1353,10 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
 .style-row-image img{width:100%;height:100%;object-fit:cover;object-position:50% 0%;display:block;border-radius:0}
 
 .style-row-image::after{display:none}
+
+
+/* 窄屏兜底：编辑器固化下来的 `.stylelib-sub{width:424px!important}` 在 360px 会撑出横向滚动，
+   这里在 ≤760px 时让它回到可换行宽度（桌面保持原样） */
+@media (max-width:760px){
+  .stylelib .stylelib-sub{width:auto!important;max-width:100%!important;height:auto!important;min-height:0!important;flex:1 1 100%!important;transform:none!important;white-space:normal!important}
+}
