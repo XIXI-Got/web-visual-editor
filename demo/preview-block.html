@@ -16,10 +16,10 @@
     --display:"Noto Serif SC","Source Han Serif SC","Songti SC",Georgia,serif;
   }
   *{box-sizing:border-box}
-  body{min-height:calc(100vh + 50px);padding-bottom:50px}
+  body{min-height:0;padding-bottom:0;overflow:hidden}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);overflow-x:clip}
-  .preview-wrap{width:min(1120px,calc(100% - 40px));margin:clamp(28px,6vw,72px) auto}
-  .preview-block{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,5vw,64px);align-items:center}
+  .preview-wrap{width:min(1120px,calc(100% - 40px));height:400px;margin:0 auto;display:flex;align-items:center;overflow:visible}
+  .preview-block{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,5vw,64px);align-items:center}
   .preview-copy{min-width:0;max-width:520px}
   .preview-eyebrow{margin:0 0 14px;font:500 10px/1.4 var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
   .preview-title{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(30px,4.8vw,60px);line-height:1.06;letter-spacing:-.035em}
