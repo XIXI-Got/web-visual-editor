@@ -1,0 +1,53 @@
+/* Spatial Glass 拟态玻璃 · 原生背景（推荐背景）
+   暖炭夜色 + 琥珀室内光 + 冷色补光 + 三段暗角 + 1px 窗格线 + 颗粒
+   用法：整块加到页面的 html/body 上，替换页面原有背景；不要叠加到 section 内部，也不要在旧背景上再叠一层。 */
+
+html { background: #07060a; color-scheme: dark; }
+
+body {
+  background-color: #0d0a07; /* 照片未加载时的暖炭兜底 */
+  background-image:
+    /* 左上压暗，让正文区保持可读 */
+    linear-gradient(100deg, rgba(5, 4, 7, .62) 0%, rgba(5, 4, 7, .32) 24%, rgba(5, 4, 7, .08) 40%, rgba(5, 4, 7, 0) 54%),
+    /* 四周暗角 */
+    radial-gradient(130% 100% at 50% 42%, rgba(4, 3, 6, 0) 34%, rgba(4, 3, 6, .46) 100%),
+    linear-gradient(180deg, rgba(4, 3, 6, .44) 0%, rgba(4, 3, 6, 0) 16%, rgba(4, 3, 6, 0) 78%, rgba(4, 3, 6, .55) 100%),
+    /* 右上琥珀室内光（唯一暖光源） */
+    radial-gradient(52% 38% at 84% -6%, rgba(232, 196, 150, .24) 0%, rgba(232, 196, 150, .07) 40%, rgba(232, 196, 150, 0) 70%),
+    /* 左上冷色补光，给玻璃留一点冷反射 */
+    radial-gradient(46% 34% at 4% 0%, rgba(169, 199, 222, .10) 0%, rgba(169, 199, 222, 0) 62%),
+    /* 底色渐变 */
+    linear-gradient(158deg, #161110 0%, #0c0908 46%, #07060a 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* 竖向窗格线：1px / 84px，opacity .14 —— 玻璃面板背后的“空间网格” */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .14;
+  background-image: repeating-linear-gradient(90deg, rgba(255, 255, 255, .9) 0 1px, rgba(255, 255, 255, 0) 1px 84px);
+}
+
+/* 颗粒：feTurbulence 170px tile，opacity .11，mix-blend-mode: overlay —— 压住渐变的塑料感 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .11;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23g)' opacity='.5'/%3E%3C/svg%3E");
+  background-size: 170px 170px;
+}
+
+::selection { background: rgba(232, 196, 150, .30); color: #fffcfa; }
+
+/* 若页面已经用 body::before / body::after 做装饰：
+   把这两段换成页面自己的容器（如 .page::before / .page::after），或直接省略纹理，只保留 body 背景渐变。 */

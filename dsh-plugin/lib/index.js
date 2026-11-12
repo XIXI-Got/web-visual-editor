@@ -1254,12 +1254,20 @@ export function apply(ctx) {
       lines.push('（未能写入项目目录，规范见风格库 ' + (styleName || '') + '）');
     }
     lines.push('不要引入新的主色或第三种字体，不要重写整页结构；改完保存并说明用了哪些 token。');
-    lines.push('中文排版注意：规范里的展示字体多是拉丁字体（如 Bodoni / Inter），中文需用同气质替代（标题可用思源宋体/宋体，正文用系统无衬线），并保证标题字重不低于 600，避免中文衬线在 500 字重下显得过细。');
+    lines.push('中文排版注意：规范里的展示字体多是拉丁字体（如 Bodoni / Inter），中文需用同气质替代 —— 英文衬线字体 → 思源宋体 / 宋体，英文非衬线字体 → 思源黑体 / 黑体，等宽只给英文与数字；字重要与规范相近（中文标题 ≥600，小字 ≥400）。');
+    lines.push('背景：规范里若带「推荐背景（原生背景）」，必须和前景区一起应用 —— 替换页面原有背景，不要只在旧背景上叠一层。');
     return lines.join('\n');
   }
 
   function composeStylePrompt(style, dir) {
-    const brief = String(style.brief || '').slice(0, 6000);
+    let brief = String(style.brief || '').slice(0, 16000);
+    // 兼容旧风格：规范里带了推荐背景、但历史 style-brief.md 里没有这一段时补上
+    try {
+      const bg = style && style.spec && style.spec.background ? String(style.spec.background).trim() : '';
+      if (bg && brief.indexOf('推荐背景') < 0) {
+        brief += '\n\n## 推荐背景（原生背景，必须一起应用）\n- 把下面这段背景一起应用到页面 body（替换原有背景，不叠加）：\n\n```css\n' + bg + '\n```\n';
+      }
+    } catch (e) { /* ignore */ }
     return [
       '请按这套 UI 风格优化项目：' + (dir || ''),
       '',
@@ -1292,6 +1300,7 @@ export function apply(ctx) {
       html: pickFile(['ui-spec.html', 'style-guide.html', 'index.html']),
       fonts: pickFile(['fonts.css', 'font.css', 'typography.css']),
       cover: pickFile(['cover.png', 'cover.jpg', 'cover.webp', 'preview.png', 'preview.jpg', 'preview.webp', 'thumb.png', 'thumb.jpg', 'screenshot.png']),
+      background: pickFile(['background.css', 'bg.css', 'backdrop.css']),
     };
     const sources = [];
     let tokens = [];
@@ -1319,7 +1328,7 @@ export function apply(ctx) {
     if (fsExists(cand.md)) { mdText = readTextSafe(cand.md, 60000); sources.push(cand.md); }
     if (!tokens.length && !mdText) return { ok: false, error: '没找到 token 文件或规范文件（支持 design-tokens.json / tokens.json / theme.json / *.css / UI-SPEC.md / README.md）' };
     const found = [];
-    for (const k of ['json', 'css', 'md', 'html', 'fonts', 'cover']) {
+    for (const k of ['json', 'css', 'md', 'html', 'fonts', 'cover', 'background']) {
       if (cand[k]) found.push({ kind: k, path: cand[k] });
     }
     const pick = (kind, n) => tokens.filter((x) => x.kind === kind).slice(0, n || 12);
@@ -1336,6 +1345,7 @@ export function apply(ctx) {
       motion: pick('motion', 8),
       other: pick('other', 20),
       notes: mdText ? mdText.slice(0, 6000) : '',
+      background: cand.background ? String(readTextSafe(cand.background, 80000) || '').trim() : '',
     };
     spec.found = found;
     return { ok: true, base: base, spec: spec, found: found, summary: { name: spec.name, colors: spec.colors.slice(0, 8), fonts: spec.fonts, radii: spec.radii.slice(0, 4), found: found.map((f) => path.basename(f.path)) } };
@@ -1360,6 +1370,16 @@ export function apply(ctx) {
     lines.push('- 规范名：' + spec.name + (spec.version ? ' v' + spec.version : ''));
     lines.push('- 来源文件：' + ((spec.sources || []).join(', ') || '（未知）'));
     lines.push('');
+    if (spec.background) {
+      lines.push('## 推荐背景（原生背景，必须一起应用）');
+      lines.push('- 这套风格的原生背景和前景是一体的（玻璃 / 发光 / 暗色都靠背景托底）：只改前景不换背景，效果会差很多。');
+      lines.push('- 应用样式时请把下面这段背景**一起应用**：替换页面原有的 body 背景（不要叠加在旧背景上），并保留 `background-attachment: fixed`。');
+      lines.push('- 如果页面已经用 `body::before / body::after` 做装饰，把这两段换成页面自己的容器，或省略纹理只保留 body 背景。');
+      lines.push('```css');
+      lines.push(String(spec.background).trim());
+      lines.push('```');
+      lines.push('');
+    }
     lines.push('## 抽象参数（硬约束）');
     lines.push('```json');
     lines.push(jsonBlock);
@@ -1395,7 +1415,8 @@ export function apply(ctx) {
     lines.push('1. 只允许使用上面的颜色、字体、圆角、间距体系，不要引入新的主色或第三种字体。');
     lines.push('2. 修改现有页面时优先调整现有元素的样式与排布，不重写整页结构。');
     lines.push('3. 保持可读性与对比度；强调色只用于按钮/高亮/数据等少量位置。');
-    lines.push('4. 改完后保存，并在总结里列出使用了哪些 token。');
+    lines.push('4. 严禁只改前景不改背景：规范给了「推荐背景」时，背景必须一起应用（替换原有背景，不叠加）。');
+    lines.push('5. 改完后保存，并在总结里列出使用了哪些 token。');
     return lines.join('\n');
   }
   const route = {
