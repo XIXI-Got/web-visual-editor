@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.1.93（应用到源码后自动刷新预览）
+- 固化成功后自动 reload 当前 iframe，立即看到真实 CSS 的效果。
+
+
 ## 1.1.92（应用到源码：真实 CSS）
 - 静态项目「应用到源码」不再生成 ve-applied.js / 注入 script，而是把保存的覆写直接写成 HTML 内 `<style id="ve-applied-style">` 的真实 CSS。
 - 自动备份到 `.ve-data/backups/fixate-*`；旧 ve-applied.js 会自动移除并备份。

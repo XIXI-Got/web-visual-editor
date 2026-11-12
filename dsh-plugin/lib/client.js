@@ -3290,6 +3290,7 @@ const API_PATH = "/ve/plugin";
               if (!r || !r.ok) { setMsg("固化失败：" + String((r && r.error) || "未知")); return; }
               setMsg("固化成功：" + String(r.message || (r.files || []).join(" / ")));
               try { loadFixStatus(); } catch (e) { /* ignore */ }
+              try { setTimeout(() => reloadPreview(), 80); } catch (e) { /* ignore */ }
             } catch (e) { setMsg("固化失败：" + String((e && e.message) || e)); }
           },
         });
