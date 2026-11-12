@@ -1339,7 +1339,7 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
 .style-row-tags span{padding:6px 12px;font-size:10px;background:var(--sr-accent,#373435);color:#FEFEFE}
 .style-row-desc{font-family:var(--sr-body-font,var(--font-sans));font-size:11px;line-height:1.5;color:var(--ink55);-webkit-line-clamp:1;margin-top:1px}
 .style-row-visual{background:transparent;border-left:0;aspect-ratio:3 / 1;align-self:stretch}
-.style-row-image{position:absolute;inset:8px 72px 8px 12px;border-radius:0;background:transparent;box-shadow:0 10px 24px rgba(17,17,17,.10);overflow:hidden}
+.style-row-image{position:absolute;inset:8px 72px 0 12px;border-radius:0;background:transparent;box-shadow:0 10px 24px rgba(17,17,17,.10);overflow:hidden}
 .style-row:hover .style-row-image{background:transparent}
 @media (max-width:760px){
   .style-row{grid-template-columns:1fr;border-radius:28px;aspect-ratio:auto;height:auto;min-height:0;border-radius:34px}
