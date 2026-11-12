@@ -159,7 +159,7 @@ UI 表面近似配比：**纸面 86% / 黑字与结构 10% / 点阵灰 3% / 描�
 | 项 | 值 / 规则 |
 | --- | --- |
 | 舞台 | `100vh × 100vw`，fixed 层，`overflow: hidden` |
-| 背景点网 | 以视口中心为圆心，34px 点阵按同心圆向外扩散；点径 `3.2px`，透明度 `.72 → .16` 随半径衰减，mask 成 `46vw` 圆形；滚动时 scale `1 → 9`，鼠标 340px 范围轻推；只作底层，不压字 |
+| 背景点网 | 以视口中心为圆心，34px 点阵按同心圆向外扩散；点径 `10px`，透明度 `.72 → .16` 随半径衰减，mask 成 `46vw` 圆形；滚动时 scale `1 → 9`，鼠标 340px 范围轻推；只作底层，不压字 |
 | 标题中心 | 视口中心上移 `200px`，实体再下移 `20px` |
 | 标题规格 | Meutas `300px` / 500 / 行高 1 / `.02em` / UPPERCASE |
 | 轮廓回声 | 同一文案下移 `50px`，透明填充 + `3px #111` 描边 |
@@ -349,7 +349,7 @@ UI 表面近似配比：**纸面 86% / 黑字与结构 10% / 点阵灰 3% / 描�
 ```css
 .hero-dot-net{
   position:absolute; inset:0; pointer-events:none; z-index:0;
-  background-image:radial-gradient(circle,#141414 3.2px,transparent 3.6px);
+  background-image:radial-gradient(circle,#141414 10px,transparent 10.5px);
   background-size:34px 34px; background-position:center;
   -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 0 24%,rgba(0,0,0,.9) 38%,transparent 70%);
   mask-image:radial-gradient(circle at 50% 50%,#000 0 24%,rgba(0,0,0,.9) 38%,transparent 70%);
