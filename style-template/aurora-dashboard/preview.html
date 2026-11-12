@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aurora 极光暗色仪表盘 · 内容块</title>
+<style>
+  /* ═══════════════════════════════════════════════════════════
+     Aurora 极光暗色仪表盘 — 样例页（严格按 design-tokens.json / UI-SPEC.md）
+     房子规则：深空底上的一束极光 —— 只用「光（发光/渐变）」与「线（1px 描边）」，
+     面板一律 145° 渐变底 + 1px 线 + 11px 圆角，几乎不用实心大色块。
+     ═══════════════════════════════════════════════════════════ */
+  :root{
+    --bg:#030910; --paper:#02070D; --panel:#080F18; --panel-2:#0B1420;
+    --surface:#09121D; --surface-raised:#0C1723;
+    --line:#1A2938; --line-soft:#1B2A38; --line-strong:#233242;
+    --ink:#EDF3FB; --ink-soft:#F3F6FB; --focus:#25D9C4;
+    --muted:#8493A8; --muted-2:#9BAABD; --dim:#8FA2B7;
+    --green:#11D8B7; --purple:#A75CF5; --blue:#477CFF;
+    --warn:#F5B45F; --danger:#FA7777; --info:#73A0FF;
+    --glow:#13D8C455; --aurora-teal:#19E3C477; --aurora-violet:#A64FF277;
+    --r-md:7px; --r-panel:11px; --pill:999px;
+    --ease-out:cubic-bezier(.2,.8,.2,1);
+    --font:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;overflow-x:clip;background:var(--bg);color:var(--ink);font-family:var(--font)}
+  body{
+    padding-top:20px;padding-bottom:30px;
+    background:
+      radial-gradient(60% 120% at 82% -30%, var(--aurora-teal), transparent 62%),
+      radial-gradient(46% 100% at 20% -34%, var(--aurora-violet), transparent 60%),
+      var(--bg);
+  }
+  /* 极光幕布：纯背景光效，不参与布局 */
+  .aurora{position:fixed;inset:-20% -10% auto -10%;height:80vh;pointer-events:none;z-index:0;filter:blur(22px);opacity:.9}
+  .aurora i{position:absolute;display:block;border-radius:50%;mix-blend-mode:screen}
+  .aurora i:nth-child(1){left:52%;top:2%;width:34%;height:58%;background:radial-gradient(closest-side,#19E3C466,transparent 72%);animation:drift 18s ease-in-out infinite alternate}
+  .aurora i:nth-child(2){left:66%;top:8%;width:26%;height:52%;background:radial-gradient(closest-side,#A64FF255,transparent 72%);animation:drift 13s ease-in-out infinite alternate-reverse}
+  .aurora i:nth-child(3){left:78%;top:16%;width:18%;height:42%;background:radial-gradient(closest-side,#477CFF44,transparent 72%);animation:drift 17s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:rotate(-11deg) translate3d(-2%,0,0)}to{transform:rotate(-5deg) translate3d(3%,-2%,0)}}
+  /* 点阵 + 顶栏网格线 */
+  .grid-dots{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.24;
+    background-image:radial-gradient(rgba(237,243,251,.5) .7px,transparent .7px);
+    background-size:38px 38px;
+    -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 72%);
+    mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 72%)}
+
+  /* ── 顶部导航 ── */
+  .tpl-nav{position:relative;z-index:5;border-bottom:1px solid var(--line-soft)}
+  .tpl-nav-inner{position:relative;width:min(1400px,calc(100% - 40px));height:56px;margin:0 auto;display:flex;align-items:center;gap:26px}
+  .tpl-nav-brand{display:flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none}
+  .tpl-nav-mark{display:grid;place-items:center;width:24px;height:24px;border-radius:var(--r-md);border:1px solid var(--line-strong);
+    background:linear-gradient(145deg,#0B1522,#050B13);color:var(--green);font:600 11px/1 var(--font);letter-spacing:.02em}
+  .tpl-nav-brand b{font:600 10px/1 var(--font);letter-spacing:.18em}
+  .tpl-nav-brand span{font:400 9px/1 var(--font);letter-spacing:.16em;color:var(--dim)}
+  .tpl-nav-links{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px}
+  .tpl-nav-links a{color:var(--muted);text-decoration:none;font:500 11px/1 var(--font);padding:7px 12px;border-radius:var(--pill);border:1px solid transparent;transition:color .18s var(--ease-out),background .18s var(--ease-out),border-color .18s var(--ease-out)}
+  .tpl-nav-links a:hover{color:var(--ink);background:#0B152299;border-color:var(--line)}
+  .tpl-nav-links a.is-active{color:var(--ink-soft);background:linear-gradient(145deg,#0D1826,#070E18);border-color:var(--line-strong)}
+  .tpl-nav-cta{margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 15px;border-radius:var(--r-md);
+    background:linear-gradient(105deg,var(--purple),var(--green));color:var(--ink-soft);text-decoration:none;
+    font:600 10.5px/1 var(--font);border:1px solid rgba(17,216,183,.55);box-shadow:0 0 20px #18BCA955,0 7px 24px #13D8B733;transition:transform .24s var(--ease-out),box-shadow .24s var(--ease-out)}
+  .tpl-nav-cta:hover{transform:translateY(-3px);box-shadow:0 0 26px #18BCA977,0 10px 28px #13D8B744}
+
+  /* ── hero 区 ── */
+  .preview-wrap{position:relative;z-index:2;width:min(1400px,calc(100% - 40px));margin:0 auto;padding:36px 0 0}
+  .preview-block{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);gap:clamp(24px,4.2vw,58px);align-items:center}
+  .preview-copy{min-width:0;max-width:560px}
+  .preview-eyebrow{margin:0 0 16px;font:500 10px/1.2 var(--font);letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+  .preview-eyebrow b{color:var(--green);font-weight:500}
+  .preview-title{margin:0;font-weight:350;font-size:clamp(30px,3.1vw,57px);line-height:1.06;letter-spacing:-.045em;color:var(--ink-soft)}
+  .preview-title em{font-style:normal;font-weight:500;background:linear-gradient(100deg,var(--green) 0%,var(--blue) 46%,var(--purple) 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .preview-lead{margin:18px 0 0;max-width:330px;color:var(--muted);font:400 12.5px/1.8 var(--font);letter-spacing:-.01em}
+  .preview-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:0 16px;border-radius:var(--r-md);
+    text-decoration:none;font:500 11px/1 var(--font);letter-spacing:.02em;transition:transform .24s var(--ease-out),box-shadow .24s var(--ease-out),border-color .24s var(--ease-out)}
+  .btn-primary{background:linear-gradient(105deg,var(--purple),var(--green));color:var(--ink-soft);border:1px solid var(--green);box-shadow:0 0 20px #18BCA955}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 26px #18BCA977,0 8px 22px #13D8B733}
+  .btn-ghost{background:#0B1522AA;color:var(--ink-soft);border:1px solid #28394B}
+  .btn-ghost:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 0 20px #13D8B733}
+  .preview-meta{margin-top:26px;display:flex;gap:22px;flex-wrap:wrap;color:var(--dim);font:400 9.5px/1.4 var(--font);letter-spacing:.1em;text-transform:uppercase}
+  .preview-meta b{display:block;margin-top:6px;color:var(--ink-soft);font:450 19px/1 var(--font);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .preview-meta i{font-style:normal;color:var(--green);font-size:9px;letter-spacing:.06em}
+
+  /* ── 右侧：仪表盘舞台（全部是「渐变底 + 1px 线 + 11px 圆角」） ── */
+  .stage{position:relative;min-width:0;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:var(--r-panel);
+    border:1px solid var(--line);background:linear-gradient(145deg,#08111B,#050B13 65%,#070E17);
+    box-shadow:0 18px 44px #0008,0 0 42px #12D6B51A;overflow:hidden}
+  .stage::after{content:"";position:absolute;right:-18%;top:-40%;width:56%;height:120%;pointer-events:none;
+    background:radial-gradient(closest-side,#19E3C433,transparent 70%);filter:blur(18px);mix-blend-mode:screen}
+  .stage-top{display:flex;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--line-soft)}
+  .stage-top b{font:500 10px/1 var(--font);letter-spacing:.16em;color:var(--ink-soft)}
+  .stage-top span{font:400 9px/1 var(--font);letter-spacing:.14em;color:var(--dim)}
+  .stage-top .badge{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:var(--pill);
+    border:1px solid #11D8B755;color:var(--green);font:500 7.5px/1 var(--font);letter-spacing:.14em}
+  .stage-top .badge::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+  .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .metric{padding:11px 12px;border-radius:var(--r-md);border:1px solid var(--line);background:linear-gradient(145deg,#0A131F,#070E17)}
+  .metric em{display:block;font-style:normal;font:400 8.5px/1.2 var(--font);letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+  .metric b{display:block;margin-top:8px;font:450 17px/1 var(--font);color:var(--ink-soft);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .metric i{display:block;margin-top:6px;font-style:normal;font:500 8.5px/1 var(--font);color:var(--green);letter-spacing:.04em}
+  .metric:nth-child(2) i{color:var(--blue)}
+  .metric:nth-child(3) i{color:var(--purple)}
+  .chart{padding:12px;border-radius:var(--r-md);border:1px solid var(--line);background:linear-gradient(145deg,#0A131F,#060C15)}
+  .chart-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .chart-head b{font:500 9.5px/1 var(--font);letter-spacing:.14em;color:var(--ink-soft)}
+  .chart-head span{margin-left:auto;font:400 8.5px/1 var(--font);letter-spacing:.1em;color:var(--dim)}
+  .chart svg{display:block;width:100%;height:auto}
+  .stage-foot{display:flex;align-items:center;gap:14px;padding-top:8px;border-top:1px solid var(--line-soft);color:var(--dim);font:400 8.5px/1.3 var(--font);letter-spacing:.1em}
+  .stage-foot b{color:var(--ink-soft);font-weight:500}
+
+  @media (max-width:1100px){
+    .preview-block{grid-template-columns:1fr;gap:30px}
+    .preview-copy{max-width:none}
+    .tpl-nav-links{display:none}
+  }
+  @media (max-width:760px){
+    .preview-wrap{width:calc(100% - 28px);padding-top:26px}
+    .tpl-nav-inner{width:calc(100% - 28px)}
+    .preview-lead{max-width:none}
+    .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .aurora{display:none}
+  }
+</style>
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="grid-dots" aria-hidden="true"></div>
+
+  <header class="tpl-nav">
+    <div class="tpl-nav-inner">
+      <a class="tpl-nav-brand" href="#"><span class="tpl-nav-mark">A</span><b>AURORA</b><span>NIGHT SYSTEM</span></a>
+      <nav class="tpl-nav-links" aria-label="主导航">
+        <a class="is-active" href="#preview">预览</a><a href="#dashboard">仪表盘</a><a href="#tokens">规范</a><a href="#about">关于</a>
+      </nav>
+      <a class="tpl-nav-cta" href="#start">进入控制台</a>
+    </div>
+  </header>
+
+  <main class="preview-wrap">
+    <section class="preview-block" aria-labelledby="preview-title">
+      <div class="preview-copy">
+        <p class="preview-eyebrow">AURORA / <b>NIGHT OPS</b></p>
+        <h1 class="preview-title" id="preview-title">让暗色界面<br><em>只留一束光</em></h1>
+        <p class="preview-lead">深空底上只留下光与线：1px 描边、145° 渐变面板，青绿做主信号，紫与蓝只在数据里出现。</p>
+        <div class="preview-actions">
+          <a class="btn btn-primary" href="#dashboard">查看仪表盘</a>
+          <a class="btn btn-ghost" href="#tokens">读取规范</a>
+        </div>
+        <div class="preview-meta">
+          <div><i>A1</i><b>24.6%</b>Revenue</div>
+          <div><i>A2</i><b>12ms</b>Latency</div>
+          <div><i>A3</i><b>99.98%</b>Uptime</div>
+        </div>
+      </div>
+
+      <figure class="stage" aria-label="Aurora 仪表盘样例">
+        <div class="stage-top"><b>ORBITAL OPS</b><span>· LIVE</span><span class="badge">STREAMING</span></div>
+        <div class="metrics">
+          <div class="metric"><em>Total Revenue</em><b>¥ 8.42M</b><i>↗ +24.6%</i></div>
+          <div class="metric"><em>Active Nodes</em><b>1,284</b><i>↗ +3.1%</i></div>
+          <div class="metric"><em>Incidents</em><b>2</b><i>↘ −58%</i></div>
+        </div>
+        <div class="chart">
+          <div class="chart-head"><b>THROUGHPUT</b><span>LAST 24H</span></div>
+          <svg viewBox="0 0 520 132" role="img" aria-label="吞吐量趋势">
+            <defs>
+              <linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#11D8B7" stop-opacity=".38"/>
+                <stop offset="1" stop-color="#11D8B7" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="al" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#477CFF"/><stop offset=".55" stop-color="#11D8B7"/><stop offset="1" stop-color="#A75CF5"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#1A2938" stroke-width="1">
+              <line x1="0" y1="34" x2="520" y2="34"/><line x1="0" y1="70" x2="520" y2="70"/><line x1="0" y1="106" x2="520" y2="106"/>
+            </g>
+            <path d="M0,96 C40,92 62,74 96,78 C128,82 146,58 182,56 C220,54 238,74 274,68 C310,62 326,38 366,40 C404,42 428,26 468,22 C492,19 508,24 520,20 L520,132 L0,132 Z" fill="url(#ag)"/>
+            <path d="M0,96 C40,92 62,74 96,78 C128,82 146,58 182,56 C220,54 238,74 274,68 C310,62 326,38 366,40 C404,42 428,26 468,22 C492,19 508,24 520,20" fill="none" stroke="url(#al)" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="468" cy="22" r="3.2" fill="#11D8B7"/>
+            <circle cx="468" cy="22" r="7" fill="none" stroke="#11D8B755"/>
+          </svg>
+        </div>
+        <div class="stage-foot"><span>PROCESSED <b>18.4M</b></span><span>·</span><span>WINDOW <b>24H</b></span><span>·</span><span>REGION <b>AP-EAST</b></span></div>
+      </figure>
+    </section>
+  </main>
+</body>
+</html>

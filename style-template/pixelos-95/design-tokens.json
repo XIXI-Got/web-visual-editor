@@ -1,0 +1,260 @@
+{
+  "_readme": "PixelOS 95 像素桌面风格 token。主皮肤为 Win95 经典灰；系统只提取 meta / color / typography.families / spacing / radius / shadow / motion，其余段落供 Agent 与人工阅读。",
+  "meta": {
+    "name": "PixelOS 95 像素桌面",
+    "version": "1.0",
+    "edition": "01",
+    "date": "2026-11",
+    "referenceViewport": "1440x900",
+    "phoneViewport": "390x844",
+    "source": "C:/Users/hehe/Downloads/pixelos_95.html（Win95 像素桌面单页，主皮肤 data-theme=win95）"
+  },
+  "color": {
+    "canvas": {
+      "value": "#008080",
+      "rgb": "0, 128, 128",
+      "role": "桌面底色：页面 / 桌面区域的唯一背景，标志性青绿"
+    },
+    "surface": {
+      "value": "#C0C0C0",
+      "rgb": "192, 192, 192",
+      "role": "窗口、任务栏、按钮的主体面"
+    },
+    "accent": {
+      "value": "#000080",
+      "rgb": "0, 0, 128",
+      "role": "标题栏渐变起点、选中态、开始菜单反白、强调块"
+    },
+    "accentBright": {
+      "value": "#1084D0",
+      "rgb": "16, 132, 208",
+      "role": "活动标题栏渐变终点、高亮"
+    },
+    "ink": {
+      "value": "#000000",
+      "rgb": "0, 0, 0",
+      "role": "主文字、菜单文字、立体边框最暗层"
+    },
+    "canvasDot": {
+      "value": "rgba(255, 255, 255, 0.14)",
+      "role": "桌面点阵：16px 网格上的 1.5px 白点，唯一允许的桌面纹理"
+    },
+    "surfaceAlt": {
+      "value": "#DFDFDF",
+      "rgb": "223, 223, 223",
+      "role": "凹陷面板 / 菜单 / 次级表面"
+    },
+    "inset": {
+      "value": "#FFFFFF",
+      "rgb": "255, 255, 255",
+      "role": "凹陷输入框、画布、进度条槽的底"
+    },
+    "bevelLight": {
+      "value": "#FFFFFF",
+      "rgb": "255, 255, 255",
+      "role": "立体边框亮边（上 / 左）"
+    },
+    "bevelMid": {
+      "value": "#DFDFDF",
+      "rgb": "223, 223, 223",
+      "role": "立体边框中间层（inset 1px 内衬）"
+    },
+    "bevelDark": {
+      "value": "#808080",
+      "rgb": "128, 128, 128",
+      "role": "立体边框暗边（下 / 右）、1px 分隔线"
+    },
+    "bevelBlack": {
+      "value": "#000000",
+      "rgb": "0, 0, 0",
+      "role": "立体边框最外层暗线"
+    },
+    "muted": {
+      "value": "#4A4A4A",
+      "rgb": "74, 74, 74",
+      "role": "次级文字、说明、元数据"
+    },
+    "accent2": {
+      "value": "#D12C2C",
+      "rgb": "209, 44, 44",
+      "role": "警示 / 错误 / 关闭按钮文字"
+    },
+    "hp": {
+      "value": "#D9383A",
+      "rgb": "217, 56, 58",
+      "role": "HP 生命条填充"
+    },
+    "mp": {
+      "value": "#2864D8",
+      "rgb": "40, 100, 216",
+      "role": "MP 灵感条填充"
+    },
+    "exp": {
+      "value": "#2E9E44",
+      "rgb": "46, 158, 68",
+      "role": "EXP 经验条填充"
+    },
+    "pixelRed": {
+      "value": "#EF4444",
+      "rgb": "239, 68, 68",
+      "role": "12 色复古调色盘：红"
+    },
+    "pixelYellow": {
+      "value": "#FACC15",
+      "rgb": "250, 204, 21",
+      "role": "12 色复古调色盘：黄"
+    },
+    "pixelGreen": {
+      "value": "#22C55E",
+      "rgb": "34, 197, 94",
+      "role": "12 色复古调色盘：绿"
+    },
+    "pixelBlue": {
+      "value": "#3B82F6",
+      "rgb": "59, 130, 246",
+      "role": "12 色复古调色盘：蓝"
+    }
+  },
+  "typography": {
+    "families": {
+      "pixel": "'Press Start 2P', 'Courier New', monospace",
+      "sans": "'Courier New', SimSun, 'Microsoft YaHei', monospace",
+      "vt": "'VT323', SimSun, monospace"
+    },
+    "roles": {
+      "display": {
+        "family": "pixel",
+        "size": "clamp(20px, 2.6vw, 34px)",
+        "weight": 400,
+        "leading": 1.35,
+        "tracking": "0.04em",
+        "case": "uppercase",
+        "color": "ink"
+      },
+      "windowTitle": {
+        "family": "sans",
+        "size": "clamp(12px, 0.95vw, 13px)",
+        "weight": 700,
+        "leading": 1.2,
+        "tracking": "0.01em",
+        "color": "titleText"
+      },
+      "body": {
+        "family": "sans",
+        "size": "clamp(12px, 0.9vw, 13.5px)",
+        "weight": 400,
+        "leading": 1.6,
+        "color": "ink"
+      },
+      "label": {
+        "family": "sans",
+        "size": "12px",
+        "weight": 700,
+        "leading": 1.2,
+        "color": "ink"
+      },
+      "meta": {
+        "family": "sans",
+        "size": "clamp(10.5px, 0.8vw, 11.5px)",
+        "weight": 400,
+        "leading": 1.4,
+        "color": "muted"
+      },
+      "pixelTag": {
+        "family": "pixel",
+        "size": "clamp(8px, 0.7vw, 10px)",
+        "weight": 400,
+        "leading": 1.4,
+        "tracking": "0.08em",
+        "case": "uppercase",
+        "color": "inset"
+      },
+      "hudNumber": {
+        "family": "pixel",
+        "size": "clamp(9px, 0.75vw, 11px)",
+        "weight": 400,
+        "leading": 1,
+        "tracking": "0.02em",
+        "color": "ink"
+      }
+    }
+  },
+  "spacing": {
+    "unit": "2px 边框 + 2/4px 节奏（控件最小步进 2px）",
+    "scale": [1, 2, 3, 4, 6, 8, 10, 12, 16, 20, 24, 28, 32, 40, 48, 56, 64]
+  },
+  "radius": {
+    "none": "0",
+    "sm": "0",
+    "md": "0",
+    "lg": "0",
+    "full": "0"
+  },
+  "shadow": {
+    "bevelOut": "inset 1px 1px 0 #DFDFDF, inset -1px -1px 0 #808080",
+    "bevelIn": "inset 1px 1px 0 #000000, inset -1px -1px 0 #DFDFDF",
+    "buttonOut": "inset -1px -1px 0 #808080",
+    "pressedIn": "inset 1px 1px 0 #808080",
+    "windowDrop": "2px 2px 0 rgba(0, 0, 0, 0.45)",
+    "dialogDrop": "4px 4px 0 rgba(0, 0, 0, 0.35)"
+  },
+  "motion": {
+    "easeOut": "cubic-bezier(0.2, 0, 0.2, 1)",
+    "steps4": "steps(4, end)",
+    "instant": "0ms",
+    "themeSwitch": "250ms",
+    "hover": "100ms",
+    "spin": "1400ms",
+    "reducedMotion": "true"
+  },
+  "layout": {
+    "_note": "以下不参与 token 提取，供 Agent 阅读",
+    "shell": "全屏桌面：桌面区 + 底部固定 40px 任务栏",
+    "windowWidth": "min(390px, 100% - 32px)",
+    "taskbarHeight": "40px",
+    "windowChrome": "2px 立体边框 + 24px 标题栏 + 20px 菜单栏",
+    "contentMaxWidth": "1120px",
+    "pageGutter": "clamp(16px, 4vw, 48px)"
+  },
+  "components": {
+    "_note": "不参与 token 提取",
+    "window": {
+      "border": "2px 亮/暗边框 + 1px inset 内衬",
+      "titlebar": "24px 高，linear-gradient(90deg,#000080,#1084D0)，白字 12px/700",
+      "controls": "最小化 / 关闭 20x20px 凸起按钮"
+    },
+    "button": {
+      "height": "24px（移动端 ≥ 36px）",
+      "padding": "0 12px",
+      "radius": "0",
+      "active": "边框反相 + 内容右移下移 1px"
+    },
+    "insetField": {
+      "background": "#FFFFFF",
+      "border": "上左 #808080、下右 #FFFFFF，外加 1px 内衬黑"
+    },
+    "progress": {
+      "track": "14px 高凹陷槽，内边距 2px",
+      "fill": "#D9383A / #2864D8 / #2E9E44"
+    },
+    "taskbar": {
+      "height": "40px",
+      "items": "开始按钮 + 窗口标签 + 系统托盘（时钟用像素字体）"
+    },
+    "crtOverlay": {
+      "scanline": "3px 周期，rgba(0,0,0,0.22) 半幅",
+      "rgbStripe": "6px 周期，红/绿/蓝各 4%/2%/4% 透明",
+      "pointerEvents": "none"
+    }
+  },
+  "imagery": {
+    "_note": "图标规则，不附截图",
+    "icon": "16x16 网格纯色矩形手绘 SVG，image-rendering: pixelated，禁止渐变/发光/圆角",
+    "emoji": "仅作 11-12px 小标签，不做大图标"
+  },
+  "breakpoints": {
+    "phoneMax": 600,
+    "narrowPhoneMax": 400,
+    "desktopMin": 1024
+  }
+}

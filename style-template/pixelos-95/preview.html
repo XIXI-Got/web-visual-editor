@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="win95">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PixelOS 95 · 像素桌面风格预览</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+<style>
+  /* ==========================================================================
+     PixelOS 95 · 风格预览板（单文件、无构建）
+     设计基准 1440×900；360–1920 自适应，无横向滚动
+     ========================================================================== */
+  :root {
+    --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+    --font-body: 'Courier New', SimSun, 'Microsoft YaHei', monospace;
+    --font-vt: 'VT323', SimSun, monospace;
+
+    /* 皮肤：Win95 经典灰（默认） */
+    --desktop-bg: #008080;
+    --desktop-dot: rgba(255, 255, 255, 0.14);
+    --win-bg: #C0C0C0;
+    --win-surface: #DFDFDF;
+    --win-inset: #FFFFFF;
+    --b-light: #FFFFFF;
+    --b-mid: #DFDFDF;
+    --b-dark: #808080;
+    --b-black: #000000;
+    --title-bg: linear-gradient(90deg, #000080, #1084D0);
+    --title-text: #FFFFFF;
+    --title-inactive: #808080;
+    --text-main: #000000;
+    --text-muted: #4A4A4A;
+    --accent: #000080;
+    --accent-2: #D12C2C;
+    --bar-hp: #D9383A;
+    --bar-mp: #2864D8;
+    --bar-exp: #2E9E44;
+
+    --u: clamp(0.8px, 100vw / 1440, 1.15px);
+    --bg-ink: #000000;
+    /* 压在桌面底色上的文字（各皮肤单独给，保证对比度） */
+    --desktop-text: #FFFFFF;
+    --desktop-shadow: 2px 2px 0 #000000;
+    --desktop-shadow-sm: 1px 1px 0 #000000;
+  }
+
+  [data-theme="gameboy"] {
+    --desktop-bg: #8BAC0F;
+    --desktop-dot: rgba(15, 56, 15, 0.16);
+    --win-bg: #9BBC0F;
+    --win-surface: #8BAC0F;
+    --win-inset: #9BBC0F;
+    --b-light: #B5D329;
+    --b-mid: #9BBC0F;
+    --b-dark: #306230;
+    --b-black: #0F380F;
+    --title-bg: linear-gradient(90deg, #0F380F, #306230);
+    --title-text: #9BBC0F;
+    --title-inactive: #306230;
+    --text-main: #0F380F;
+    --text-muted: #306230;
+    --accent: #0F380F;
+    --accent-2: #306230;
+    --bar-hp: #0F380F;
+    --bar-mp: #306230;
+    --bar-exp: #0F380F;
+    --desktop-text: #0F380F;
+    --desktop-shadow: none;
+    --desktop-shadow-sm: none;
+  }
+
+  [data-theme="neon"] {
+    --desktop-bg: #120B24;
+    --desktop-dot: rgba(0, 245, 212, 0.14);
+    --win-bg: #1E1538;
+    --win-surface: #281C49;
+    --win-inset: #130C26;
+    --b-light: #00F5D4;
+    --b-mid: #5C459C;
+    --b-dark: #0A0614;
+    --b-black: #FF2A85;
+    --title-bg: linear-gradient(90deg, #FF2A85, #7B2CBF);
+    --title-text: #FFFFFF;
+    --title-inactive: #362763;
+    --text-main: #F3EFFF;
+    --text-muted: #A99AD6;
+    --accent: #00F5D4;
+    --accent-2: #FF2A85;
+    --bar-hp: #FF2A85;
+    --bar-mp: #00F5D4;
+    --bar-exp: #FEE440;
+    --desktop-text: #F3EFFF;
+    --desktop-shadow: 2px 2px 0 #FF2A85;
+    --desktop-shadow-sm: 1px 1px 0 #FF2A85;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  html, body { overflow-x: clip; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding-bottom: calc(40px + clamp(16px, 3vw, 40px));
+    background-color: var(--desktop-bg);
+    background-image: radial-gradient(var(--desktop-dot) 1.5px, transparent 0);
+    background-size: 16px 16px;
+    color: var(--text-main);
+    font-family: var(--font-body);
+    font-size: clamp(12px, 0.9vw, 13.5px);
+    line-height: 1.6;
+    transition: background-color 250ms ease, color 100ms ease;
+  }
+
+  .wrap *, .taskbar * { min-width: 0; }
+
+  .font-pixel { font-family: var(--font-pixel); letter-spacing: .06em; }
+  .muted { color: var(--text-muted); }
+
+  /* ── 立体边框（风格核心） ───────────────────────────── */
+  .px-outset {
+    background-color: var(--win-bg);
+    border-top: 2px solid var(--b-light);
+    border-left: 2px solid var(--b-light);
+    border-right: 2px solid var(--b-black);
+    border-bottom: 2px solid var(--b-black);
+    box-shadow: inset 1px 1px 0 var(--b-mid), inset -1px -1px 0 var(--b-dark);
+  }
+  .px-inset {
+    background-color: var(--win-inset);
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-black), inset -1px -1px 0 var(--b-mid);
+  }
+  .px-inset-panel {
+    background-color: var(--win-surface);
+    border-top: 2px solid var(--b-dark);
+    border-left: 2px solid var(--b-dark);
+    border-right: 2px solid var(--b-light);
+    border-bottom: 2px solid var(--b-light);
+  }
+
+  .px-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 26px;
+    padding: 3px 10px;
+    font: inherit;
+    font-size: clamp(11px, 0.8vw, 12px);
+    font-weight: 700;
+    color: var(--text-main);
+    background-color: var(--win-bg);
+    border-top: 2px solid var(--b-light);
+    border-left: 2px solid var(--b-light);
+    border-right: 2px solid var(--b-black);
+    border-bottom: 2px solid var(--b-black);
+    box-shadow: inset -1px -1px 0 var(--b-dark);
+    border-radius: 0;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: none;
+  }
+  .px-btn:hover { filter: brightness(1.03); }
+  .px-btn:active,
+  .px-btn.is-active {
+    border-top-color: var(--b-black);
+    border-left-color: var(--b-black);
+    border-right-color: var(--b-light);
+    border-bottom-color: var(--b-light);
+    box-shadow: inset 1px 1px 0 var(--b-dark);
+    transform: translate(1px, 1px);
+  }
+  .px-btn:focus-visible {
+    outline: 1px dotted var(--text-main);
+    outline-offset: -4px;
+  }
+  .px-btn:disabled { color: var(--b-dark); cursor: not-allowed; }
+
+  /* ── 顶栏 ────────────────────────────────────────────── */
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: min(1120px, 100% - clamp(16px, 4vw, 48px));
+    margin: clamp(12px, 2vw, 20px) auto 0;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    min-height: 36px;
+  }
+  .brand-logo { display: grid; grid-template-columns: repeat(2, 5px); gap: 2px; flex: none; }
+  .brand-logo i { width: 5px; height: 5px; display: block; }
+  .brand-logo i:nth-child(1) { background: #EF4444; }
+  .brand-logo i:nth-child(2) { background: #22C55E; }
+  .brand-logo i:nth-child(3) { background: #3B82F6; }
+  .brand-logo i:nth-child(4) { background: #EAB308; }
+  .brand-name { font-size: clamp(9px, 0.75vw, 11px); line-height: 1.4; }
+  .brand-sub {
+    font-size: clamp(10px, 0.8vw, 11px);
+    color: var(--text-muted);
+    border-left: 1px solid var(--b-dark);
+    padding-left: 8px;
+    white-space: nowrap;
+  }
+  .skin-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 5px 6px; }
+
+  /* ── 通用容器 ────────────────────────────────────────── */
+  .wrap {
+    width: min(1120px, 100% - clamp(16px, 4vw, 48px));
+    margin-inline: auto;
+    display: grid;
+    gap: clamp(14px, 2vw, 22px);
+    padding-top: clamp(20px, 4vw, 44px);
+  }
+
+  .panel { padding: clamp(10px, 1.4vw, 16px); }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-weight: 700;
+    font-size: clamp(11px, 0.85vw, 12.5px);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--b-dark);
+  }
+  .panel-head .font-pixel { font-size: clamp(8px, 0.65vw, 9.5px); }
+
+  /* ── Hero ────────────────────────────────────────────── */
+  .hero { padding: clamp(4px, 1vw, 10px) 0 0; }
+  .eyebrow {
+    display: inline-block;
+    margin: 0 0 10px;
+    padding: 4px 8px;
+    font-size: clamp(8px, 0.66vw, 9.5px);
+    color: var(--win-inset);
+    background: var(--accent);
+  }
+  .hero-title {
+    margin: 0;
+    font-family: var(--font-pixel);
+    font-size: clamp(24px, 4vw, 52px);
+    line-height: 1.28;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--desktop-text);
+    text-shadow: var(--desktop-shadow);
+    overflow-wrap: anywhere;
+  }
+  .hero-cn {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--font-body);
+    font-size: clamp(15px, 1.6vw, 22px);
+    letter-spacing: 0.12em;
+    text-transform: none;
+    color: var(--desktop-text);
+    text-shadow: var(--desktop-shadow-sm);
+  }
+  .lede {
+    max-width: 60ch;
+    margin: 12px 0 0;
+    font-size: clamp(12px, 0.95vw, 13.5px);
+    color: var(--desktop-text);
+    text-shadow: var(--desktop-shadow-sm);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .chip {
+    padding: 3px 7px;
+    border: 2px solid var(--b-black);
+    background: var(--win-surface);
+    font-size: clamp(10px, 0.76vw, 11px);
+    box-shadow: inset 1px 1px 0 var(--b-light);
+  }
+
+  /* ── 窗口样本 ────────────────────────────────────────── */
+  .window { width: min(680px, 100%); margin-inline: auto; }
+
+  .titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 24px;
+    padding: 2px 3px 2px 4px;
+    background: var(--title-bg);
+    color: var(--title-text);
+  }
+  .titlebar-left { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1 1 auto; }
+  .title-dot { width: 10px; height: 10px; flex: none; background: #FACC15; border: 1px solid var(--b-black); }
+  .title-text {
+    font-size: clamp(11px, 0.85vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .titlebar-btns { display: flex; gap: 2px; flex: none; }
+  .titlebar-btns .px-btn {
+    width: 20px;
+    min-height: 20px;
+    height: 20px;
+    padding: 0;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .menubar {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 2px 6px;
+    border-bottom: 1px solid var(--b-dark);
+    font-size: clamp(11px, 0.8vw, 12px);
+  }
+  .menubar span { white-space: nowrap; }
+  .menubar .underline { text-decoration: underline; }
+
+  .win-body { padding: clamp(8px, 1.2vw, 12px); display: grid; gap: 10px; }
+
+  .profile-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+  .avatar { width: 64px; padding: 4px; flex: none; background: #1E293B; }
+  .avatar svg { display: block; width: 100%; height: auto; }
+  .profile-info { flex: 1 1 180px; display: grid; gap: 7px; }
+  .profile-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .profile-head strong { font-size: clamp(12px, 0.95vw, 13.5px); }
+  .badge {
+    padding: 3px 6px;
+    font-size: clamp(7px, 0.58vw, 8.5px);
+    background: var(--accent);
+    color: var(--win-inset);
+    white-space: nowrap;
+  }
+  .profile-info p { margin: 0; font-size: clamp(11px, 0.8vw, 12px); }
+
+  .bar-group { display: grid; gap: 6px; }
+  .bar-label { display: flex; justify-content: space-between; gap: 8px; font-size: clamp(10px, 0.74vw, 11px); font-weight: 700; }
+  .bar-label .font-pixel { font-size: clamp(8px, 0.6vw, 9px); }
+  .bar-track { height: 14px; padding: 2px; }
+  .bar-fill { display: block; height: 100%; }
+
+  .inset-panel { padding: clamp(8px, 1vw, 10px); display: grid; gap: 8px; }
+  .inset-title {
+    font-size: clamp(10.5px, 0.78vw, 11.5px);
+    font-weight: 700;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--b-dark);
+  }
+  .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 118px), 1fr)); gap: 5px; }
+  .skill {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 4px 6px;
+    font-size: clamp(10.5px, 0.78vw, 11.5px);
+  }
+  .skill b { white-space: nowrap; }
+  .quote { margin: 0; font-size: clamp(11px, 0.82vw, 12px); line-height: 1.7; }
+  .actions { display: flex; justify-content: flex-end; gap: 6px; flex-wrap: wrap; }
+
+  /* ── 双栏：色板 / 字阶 ───────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: clamp(14px, 2vw, 22px); }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 64px), 1fr)); gap: 6px; }
+  .swatch { display: grid; gap: 3px; }
+  .swatch i { display: block; height: 34px; border: 2px solid var(--b-black); }
+  .swatch b { font-size: clamp(9px, 0.68vw, 10px); font-weight: 400; color: var(--text-muted); overflow-wrap: anywhere; }
+  .note { margin: 10px 0 0; font-size: clamp(10px, 0.76vw, 11px); color: var(--text-muted); }
+
+  .type-list { display: grid; gap: 10px; }
+  .type-row { display: grid; gap: 3px; padding-bottom: 9px; border-bottom: 1px solid rgba(128, 128, 128, .45); }
+  .type-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .type-tag { font-size: clamp(9px, 0.66vw, 10px); color: var(--text-muted); letter-spacing: .04em; }
+  .type-sample-pixel { font-family: var(--font-pixel); font-size: clamp(10px, 0.9vw, 13px); letter-spacing: .06em; }
+  .type-sample-title { font-size: clamp(13px, 1.05vw, 15px); font-weight: 700; }
+  .type-sample-body { font-size: clamp(12px, 0.9vw, 13.5px); }
+  .type-sample-meta { font-size: clamp(10.5px, 0.78vw, 11.5px); color: var(--text-muted); }
+
+  /* ── 组件样本 ────────────────────────────────────────── */
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: clamp(10px, 1.4vw, 16px); }
+  .comp { display: grid; gap: 8px; align-content: start; }
+  .comp-label { font-size: clamp(9.5px, 0.7vw, 10.5px); color: var(--text-muted); letter-spacing: .04em; }
+  .comp-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .comp-field {
+    width: 100%;
+    min-height: 28px;
+    padding: 4px 8px;
+    font: inherit;
+    font-size: clamp(11px, 0.82vw, 12px);
+    color: var(--text-main);
+    background: var(--win-inset);
+    border-radius: 0;
+    outline: none;
+  }
+  .comp-field:focus-visible { outline: 1px dotted var(--text-main); outline-offset: -4px; }
+  .comp-bars { display: grid; gap: 6px; width: 100%; }
+
+  /* ── 禁则 ────────────────────────────────────────────── */
+  .rules-list { margin: 0; padding-left: 20px; display: grid; gap: 5px; font-size: clamp(11px, 0.82vw, 12px); }
+  .rules-list li::marker { font-family: var(--font-pixel); font-size: .8em; }
+
+  /* ── 任务栏 ──────────────────────────────────────────── */
+  .taskbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 900;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 6px;
+    background-color: var(--win-bg);
+  }
+  .start-btn { min-height: 30px; padding: 2px 10px; gap: 6px; }
+  .start-icon { display: grid; grid-template-columns: repeat(2, 5px); gap: 2px; flex: none; }
+  .start-icon i { width: 5px; height: 5px; display: block; }
+  .start-icon i:nth-child(1) { background: #EF4444; }
+  .start-icon i:nth-child(2) { background: #22C55E; }
+  .start-icon i:nth-child(3) { background: #3B82F6; }
+  .start-icon i:nth-child(4) { background: #EAB308; }
+  .task-divider { width: 2px; height: 22px; flex: none; border-left: 1px solid var(--b-dark); border-right: 1px solid var(--b-light); }
+  .task-tabs { display: flex; align-items: center; gap: 4px; flex: 1 1 auto; overflow-x: auto; scrollbar-width: thin; }
+  .task-tab {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 30px;
+    font-size: clamp(10px, 0.76vw, 11px);
+    font-weight: 700;
+    flex: 0 1 auto;
+  }
+  .tray { display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px; flex: none; font-size: clamp(11px, 0.8vw, 12px); font-weight: 700; }
+  .tray .clock { font-size: clamp(8px, 0.62vw, 9.5px); letter-spacing: .04em; white-space: nowrap; }
+
+  /* ── CRT 氛围层 ──────────────────────────────────────── */
+  .crt {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background:
+      repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0 1.5px, rgba(0, 0, 0, 0) 1.5px 3px),
+      repeating-linear-gradient(to right, rgba(255, 0, 0, 0.04) 0 2px, rgba(0, 255, 0, 0.02) 2px 4px, rgba(0, 0, 255, 0.04) 4px 6px);
+  }
+  .crt.is-off { display: none; }
+
+  @media (max-width: 600px) {
+    .brand-sub { display: none; }
+    .window { width: 100%; }
+    .titlebar-btns .px-btn { width: 22px; height: 20px; min-height: 20px; }
+    .actions { justify-content: stretch; }
+    .actions .px-btn { flex: 1 1 auto; }
+    .task-tab:nth-child(2), .task-tab:nth-child(3) { display: none; }
+    .tray { gap: 5px; padding: 0 6px; }
+    .tray [aria-hidden="true"] { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="crt" id="crt" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand px-outset">
+      <span class="brand-logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-name font-pixel">PIXELOS 95</span>
+      <span class="brand-sub">STYLE SPEC v1.0</span>
+    </div>
+    <div class="skin-switch px-outset" role="group" aria-label="切换皮肤">
+      <button type="button" class="px-btn is-active" data-skin="win95">经典灰</button>
+      <button type="button" class="px-btn" data-skin="gameboy">绿豆沙</button>
+      <button type="button" class="px-btn" data-skin="neon">8-Bit 霓虹</button>
+      <button type="button" class="px-btn is-active" id="crt-btn">📺 扫描线</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <p class="eyebrow font-pixel">STYLE SPEC · PIXEL DESKTOP</p>
+      <h1 class="hero-title">
+        PixelOS 95
+        <span class="hero-cn">像素桌面 · 复古操作系统风格</span>
+      </h1>
+      <p class="lede">
+        青绿桌面、2px 立体边框、零圆角、等宽正文与像素标签，外加一层 CRT 扫描线。整个页面像一台 1995 年的电脑，
+        但窗口与内容仍按现代屏幕自适应。
+      </p>
+      <ul class="chips">
+        <li class="chip">0 圆角</li>
+        <li class="chip">2px bevel 边框</li>
+        <li class="chip">Press Start 2P 标签</li>
+        <li class="chip">Courier New 正文</li>
+        <li class="chip">CRT 扫描线</li>
+      </ul>
+    </section>
+
+    <section class="window px-outset" aria-label="窗口组件样本">
+      <div class="titlebar">
+        <div class="titlebar-left">
+          <span class="title-dot" aria-hidden="true"></span>
+          <span class="title-text">SYSTEM.PROPERTIES // 风格样本</span>
+        </div>
+        <div class="titlebar-btns">
+          <button type="button" class="px-btn" aria-label="最小化">_</button>
+          <button type="button" class="px-btn" aria-label="关闭">×</button>
+        </div>
+      </div>
+      <div class="menubar">
+        <span class="underline"><u>档</u>案(F)</span>
+        <span class="underline"><u>装</u>备(E)</span>
+        <span>帮助(H)</span>
+      </div>
+      <div class="win-body">
+        <div class="profile-row">
+          <div class="avatar px-inset" aria-hidden="true">
+            <svg viewBox="0 0 16 16" width="64" height="64" role="img" aria-label="像素勇者头像">
+              <rect width="16" height="16" fill="#1E293B"/>
+              <rect x="2" y="2" width="1" height="1" fill="#FDE047"/>
+              <rect x="13" y="3" width="1" height="1" fill="#38BDF8"/>
+              <rect x="4" y="2" width="8" height="2" fill="#78350F"/>
+              <rect x="3" y="4" width="10" height="2" fill="#EF4444"/>
+              <rect x="12" y="5" width="2" height="2" fill="#EF4444"/>
+              <rect x="4" y="6" width="8" height="5" fill="#FDBA74"/>
+              <rect x="4" y="7" width="3" height="2" fill="#000000"/>
+              <rect x="9" y="7" width="3" height="2" fill="#000000"/>
+              <rect x="7" y="7" width="2" height="1" fill="#000000"/>
+              <rect x="5" y="7" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="10" y="7" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="6" y="10" width="4" height="1" fill="#9A3412"/>
+              <rect x="3" y="11" width="10" height="5" fill="#2563EB"/>
+              <rect x="6" y="11" width="4" height="5" fill="#FACC15"/>
+            </svg>
+          </div>
+          <div class="profile-info">
+            <div class="profile-head">
+              <strong>像素架构师 · LV.99</strong>
+              <span class="badge font-pixel">ONLINE</span>
+            </div>
+            <p class="muted">职业：全栈像素炼金术士 / 复古游戏收藏家</p>
+            <div class="bar-group">
+              <div>
+                <div class="bar-label"><span>HP 生命值</span><span class="font-pixel">980/999</span></div>
+                <div class="bar-track px-inset"><span class="bar-fill" style="width:96%;background:var(--bar-hp)"></span></div>
+              </div>
+              <div>
+                <div class="bar-label"><span>MP 灵感值</span><span class="font-pixel">850/999</span></div>
+                <div class="bar-track px-inset"><span class="bar-fill" style="width:85%;background:var(--bar-mp)"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="inset-panel px-inset-panel">
+          <div class="inset-title">★ 核心技能树 (SKILL_TREE.DAT)</div>
+          <div class="skill-grid">
+            <div class="skill px-outset"><span>8-Bit 像素绘</span><b>MAX</b></div>
+            <div class="skill px-outset"><span>前端架构</span><b>S+</b></div>
+            <div class="skill px-outset"><span>芯片音乐合成</span><b>LV.88</b></div>
+            <div class="skill px-outset"><span>怀旧情怀值</span><b>999%</b></div>
+          </div>
+        </div>
+
+        <p class="quote">“每一个像素都由手工雕琢，每一次点击都伴随清脆的 8-Bit 电子回响。”</p>
+
+        <div class="actions">
+          <button type="button" class="px-btn">打开画板</button>
+          <button type="button" class="px-btn is-active">播放音乐 ♫</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid-2">
+      <section class="panel px-outset">
+        <div class="panel-head"><span>调色板 · 12 色</span><span class="font-pixel">PALETTE.DAT</span></div>
+        <div class="swatches" id="swatches"></div>
+        <p class="note">桌面只有青绿 + 灰面；饱和色仅出现在图标、状态条与调色盘，占比 ≤ 5%。</p>
+      </section>
+
+      <section class="panel px-outset">
+        <div class="panel-head"><span>字阶</span><span class="font-pixel">TYPE.DAT</span></div>
+        <div class="type-list">
+          <div class="type-row">
+            <span class="type-tag">像素标签 · Press Start 2P / 9px / 大写字距</span>
+            <span class="type-sample-pixel">PIXEL 8-BIT 0123</span>
+          </div>
+          <div class="type-row">
+            <span class="type-tag">窗口标题 · Courier New / 12px / 700</span>
+            <span class="type-sample-title">SYSTEM.PROPERTIES // 风格样本</span>
+          </div>
+          <div class="type-row">
+            <span class="type-tag">正文 · Courier New / 12px / 1.6</span>
+            <span class="type-sample-body">欢迎来到 PixelOS 95！在这里，每一个像素都由手工雕琢。</span>
+          </div>
+          <div class="type-row">
+            <span class="type-tag">说明 · 11px / 弱化</span>
+            <span class="type-sample-meta">1995 · 640×480 · 256 COLOR · CRT ON</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel px-outset">
+      <div class="panel-head"><span>组件样本</span><span class="font-pixel">CONTROLS.DAT</span></div>
+      <div class="comp-grid">
+        <div class="comp">
+          <span class="comp-label">按钮：默认 / 按下 / 禁用</span>
+          <div class="comp-row">
+            <button type="button" class="px-btn">默认</button>
+            <button type="button" class="px-btn is-active">按下</button>
+            <button type="button" class="px-btn" disabled>禁用</button>
+          </div>
+        </div>
+        <div class="comp">
+          <span class="comp-label">凹陷输入框</span>
+          <input class="comp-field px-inset" type="text" value="PIXELOS_95.CFG" aria-label="输入框样本" />
+        </div>
+        <div class="comp">
+          <span class="comp-label">状态条（HP / MP / EXP）</span>
+          <div class="comp-bars">
+            <div class="bar-track px-inset"><span class="bar-fill" style="width:96%;background:var(--bar-hp)"></span></div>
+            <div class="bar-track px-inset"><span class="bar-fill" style="width:85%;background:var(--bar-mp)"></span></div>
+            <div class="bar-track px-inset"><span class="bar-fill" style="width:70%;background:var(--bar-exp)"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel px-outset">
+      <div class="panel-head"><span>禁则（出现即走样）</span><span class="font-pixel">RULES.TXT</span></div>
+      <ul class="rules-list">
+        <li>任何 border-radius（含 1px 微圆角），圆角一律为 0。</li>
+        <li>模糊 box-shadow、毛玻璃、半透明卡片与大面积渐变。</li>
+        <li>用 1px 细边框冒充 2px 立体边框的“现代扁平化”改法。</li>
+        <li>正文改用 Inter / 思源黑体等现代无衬线，必须保留等宽字体。</li>
+        <li>把纯色像素图标改成线性图标或渐变图标。</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="taskbar px-outset">
+    <button type="button" class="start-btn px-btn">
+      <span class="start-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>开始</span>
+    </button>
+    <span class="task-divider" aria-hidden="true"></span>
+    <div class="task-tabs">
+      <button type="button" class="px-btn task-tab is-active">PIXEL.EXE // 个人档案</button>
+      <button type="button" class="px-btn task-tab">像素画板 (16×16)</button>
+      <button type="button" class="px-btn task-tab">8-Bit 音乐</button>
+    </div>
+    <div class="tray px-inset">
+      <span aria-hidden="true">📺</span>
+      <span aria-hidden="true">🔊</span>
+      <span class="clock font-pixel" id="clock">12:00</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var crt = document.getElementById('crt');
+      var crtBtn = document.getElementById('crt-btn');
+      var skinBtns = Array.prototype.slice.call(document.querySelectorAll('[data-skin]'));
+      var swatches = document.getElementById('swatches');
+      var clock = document.getElementById('clock');
+      var colors = [
+        '#000000', '#FFFFFF', '#EF4444', '#F97316', '#FACC15', '#22C55E',
+        '#06B6D4', '#3B82F6', '#8B5CF6', '#EC4899', '#92400E', '#9CA3AF'
+      ];
+
+      colors.forEach(function (hex) {
+        var item = document.createElement('div');
+        item.className = 'swatch';
+        var block = document.createElement('i');
+        block.style.background = hex;
+        var label = document.createElement('b');
+        label.textContent = hex;
+        item.appendChild(block);
+        item.appendChild(label);
+        swatches.appendChild(item);
+      });
+
+      skinBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var skin = btn.getAttribute('data-skin');
+          document.documentElement.setAttribute('data-theme', skin);
+          skinBtns.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+        });
+      });
+
+      if (crtBtn) {
+        crtBtn.addEventListener('click', function () {
+          var off = crt.classList.toggle('is-off');
+          crtBtn.classList.toggle('is-active', !off);
+          crtBtn.textContent = off ? '📺 扫描线' : '📺 扫描线: 开';
+        });
+      }
+
+      function tick() {
+        var d = new Date();
+        var hh = String(d.getHours()).padStart(2, '0');
+        var mm = String(d.getMinutes()).padStart(2, '0');
+        if (clock) clock.textContent = hh + ':' + mm;
+      }
+      tick();
+      setInterval(tick, 10000);
+    })();
+  </script>
+</body>
+</html>

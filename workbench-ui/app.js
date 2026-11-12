@@ -795,7 +795,22 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
         : (s.cardStyle === 'glass' ? ['玻璃', '层次'] : ['纯色', '干净']);
       var desc = String(s.description || '').replace(/\s+/g, ' ').trim();
       if (desc.length > 90) desc = desc.slice(0, 88).trim() + '…';
-      var rowVars = '--sr-title-font:' + esc(s.fontStack || 'var(--font-display)') + ';--sr-body-font:' + esc(s.smallFontStack || 'var(--font-sans)') + ';--sr-ink:' + esc(s.titleColor || 'var(--ink)') + ';--sr-accent:' + esc(s.titleColor || 'var(--ink)') + ';--sr-canvas:' + esc(s.bgColor || 'var(--paper-raised)') + ';';
+      // 暗色风格的胶囊别跟着变暗：画布色只取一点点做底色，文字仍用主题墨色；
+      // 风格的主色太亮（如白色系）时，标签底色退回深墨，避免白字白底看不见。
+      var hexLum = function (hex) {
+        var m = /^#([0-9a-f]{6})$/i.exec(String(hex || '').trim());
+        if (!m) return null;
+        var n = parseInt(m[1], 16);
+        return (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
+      };
+      var canvasHex = String(s.bgColor || '').trim();
+      var canvasLum = hexLum(canvasHex);
+      var darkCanvas = canvasLum != null && canvasLum < 0.42;
+      var inkLum = hexLum(s.titleColor);
+      var rowCanvas = darkCanvas ? 'color-mix(in srgb,' + canvasHex + ' 15%,#fff)' : (s.bgColor || 'var(--paper-raised)');
+      var rowInk = darkCanvas ? 'var(--ink)' : (s.titleColor || 'var(--ink)');
+      var rowAccent = (inkLum != null && inkLum > 0.66) ? '#373435' : (s.titleColor || 'var(--ink)');
+      var rowVars = '--sr-title-font:' + esc(s.fontStack || 'var(--font-display)') + ';--sr-body-font:' + esc(s.smallFontStack || 'var(--font-sans)') + ';--sr-ink:' + esc(rowInk) + ';--sr-accent:' + esc(rowAccent) + ';--sr-canvas:' + esc(rowCanvas) + ';';
       return (
         '<div class="style-row' + (st.selectedId === s.id ? ' is-selected' : '') + '" style="' + rowVars + '" data-act="style-apply" data-id="' + esc(s.id) + '" data-name="' + esc(s.name) + '" title="点击应用这个风格">' +
           '<div class="style-row-copy">' +

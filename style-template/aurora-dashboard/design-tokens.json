@@ -1,0 +1,207 @@
+{
+  "meta": {
+    "name": "Aurora 极光暗色仪表盘",
+    "version": "1.0",
+    "referenceViewport": "1440 × 960 / 390 × 844",
+    "source": "C:\\Users\\hehe\\Downloads\\Aurora-Interactive-Dashboard-v2.html",
+    "extractedAt": "2026-11-13",
+    "houseRule": "深空底上的一束极光：只用光（发光/渐变）与线（1px 描边），几乎不用实心面。"
+  },
+  "color": {
+    "bg": {
+      "value": "#030910",
+      "role": "页面底色；body 实际再暗一档 #02070D"
+    },
+    "panel": {
+      "value": "#080F18",
+      "role": "外层面板底 / 输入框底"
+    },
+    "ink": {
+      "value": "#EDF3FB",
+      "role": "主文字、标题、数据值"
+    },
+    "green": {
+      "value": "#11D8B7",
+      "role": "主强调：数据正向、状态点、成功图标、主按钮渐变端（面积 < 8%）"
+    },
+    "purple": {
+      "value": "#A75CF5",
+      "role": "次强调：渐变另一端、链接、徽标、图表主线"
+    },
+    "blue": {
+      "value": "#477CFF",
+      "role": "第三强调：图表副线、信息徽标、进度末端"
+    },
+    "ink-soft": {
+      "value": "#F3F6FB",
+      "role": "Hero 大标题（比 ink 略亮）"
+    },
+    "panel-2": {
+      "value": "#0B1420",
+      "role": "次级表面：搜索框、按钮底、内嵌控件"
+    },
+    "surface": {
+      "value": "#09121D",
+      "role": "卡片 / widget 底"
+    },
+    "surface-raised": {
+      "value": "#0C1723",
+      "role": "hover 抬升后的卡片底"
+    },
+    "line": {
+      "value": "#1A2938",
+      "role": "1px 分隔线与外框（固定 1px，不加重）"
+    },
+    "line-soft": {
+      "value": "#1B2A38",
+      "role": "卡片细边 / 网格线"
+    },
+    "line-strong": {
+      "value": "#233242",
+      "role": "输入框、日期框等可交互容器边"
+    },
+    "muted": {
+      "value": "#8493A8",
+      "role": "正文次级文字（长阅读唯一允许的灰）"
+    },
+    "muted-2": {
+      "value": "#9BAABD",
+      "role": "说明文字 / 图例 / 时间戳"
+    },
+    "dim": {
+      "value": "#8FA2B7",
+      "role": "眉题（kicker）、表头、辅助标签"
+    },
+    "warn": {
+      "value": "#F5B45F",
+      "role": "警告徽标文字"
+    },
+    "danger": {
+      "value": "#FA7777",
+      "role": "错误徽标文字"
+    },
+    "info": {
+      "value": "#73A0FF",
+      "role": "进行中徽标文字"
+    },
+    "glow": {
+      "value": "#13D8C455",
+      "role": "极光光晕（阴影色，不单独作面）"
+    },
+    "aurora-teal": {
+      "value": "#19E3C477",
+      "role": "极光幕布青绿光带（仅背景光效）"
+    },
+    "aurora-violet": {
+      "value": "#A64FF277",
+      "role": "极光幕布紫光带（仅背景光效）"
+    },
+    "paper": {
+      "value": "#02070D",
+      "role": "最暗舞台底：hero / 湖面 / 页脚"
+    },
+    "focus": {
+      "value": "#25D9C4",
+      "role": "键盘焦点环 focus-visible（2px 实线，offset 3px；不可移除）"
+    }
+  },
+  "typography": {
+    "families": {
+      "sans": "Inter, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    "roles": {
+      "hero": "clamp(34px, 3.1vw, 57px) / 1.06 / 350 / -0.045em / ink-soft",
+      "statement": "22px / 1.2 / 400 / -0.04em / ink",
+      "section": "17px / 1.4 / 400 / ink",
+      "cardTitle": "16px / 1.3 / 450 / ink",
+      "metric": "15px / 1.2 / 450 / ink（metric 卡数值，tabular-nums）",
+      "stat": "19px / 1.2 / 450 / ink（stat 卡数值，tabular-nums）",
+      "body": "12px / 1.5 / 400 / -0.01em / muted",
+      "body-lg": "11px / 1.8 / 400 / muted-2",
+      "label": "10px / 1.2 / 500 / 0.1em / ink-soft",
+      "micro": "9px / 1.2 / 400 / 0.12em / dim（大写字母的眉题与导航）",
+      "tiny": "8px / 1.2 / 400 / 0.05em / muted-2（仅装饰性元数据）",
+      "caption": "6px / 1.2 / 400 / muted-2（色卡编号，装饰性）"
+    }
+  },
+  "spacing": {
+    "unit": "2px",
+    "2xs": "2px",
+    "xs": "4px",
+    "sm": "6px",
+    "md": "8px",
+    "base": "10px",
+    "lg": "12px",
+    "xl": "14px",
+    "2xl": "16px",
+    "3xl": "18px",
+    "4xl": "22px",
+    "5xl": "28px",
+    "6xl": "35px",
+    "page": "18px",
+    "gap": "12px"
+  },
+  "radius": {
+    "xs": "5px",
+    "sm": "6px",
+    "md": "7px",
+    "lg": "8px",
+    "xl": "9px",
+    "panel": "11px",
+    "pill": "999px",
+    "round": "50%"
+  },
+  "shadow": {
+    "button-hover": "0 7px 24px #13D8B733, 0 0 0 1px #27D8C21A",
+    "card-hover": "0 8px 20px #0006",
+    "widget-hover": "0 8px 24px #0005",
+    "stat-hover": "0 10px 28px #0008, 0 0 18px #13D8B51C",
+    "feature-hover": "0 12px 30px #0007, 0 0 20px #12D6B51A",
+    "primary-glow": "0 0 20px #18BCA955",
+    "float-glow": "0 9px 28px #02070D88, 0 0 18px #14D9C51A",
+    "focus-glow": "0 0 14px #18CDBB35"
+  },
+  "motion": {
+    "ease-out": "cubic-bezier(.2,.8,.2,1)",
+    "press": "80ms",
+    "quick": "200ms",
+    "base": "240ms",
+    "lift": "280ms",
+    "shine": "550ms",
+    "drift": "18s",
+    "edge": "4.8s",
+    "ease-glide": "cubic-bezier(.2,.7,.2,1)",
+    "ease-io": "ease-in-out",
+    "ribbon": "13s"
+  },
+  "layout": {
+    "shell": "grid-template-columns: 1.04fr 1fr 0.75fr",
+    "maxWidth": "2200px",
+    "pagePadding": "18px",
+    "columnGap": "12px",
+    "sidebarWidth": "134px",
+    "heroMinHeight": "590px",
+    "breakpoints": {
+      "desktop": ">= 1201px",
+      "tablet": "761px – 1200px",
+      "phone": "<= 760px"
+    }
+  },
+  "components": {
+    "button": "10px / 7px 12px / radius 7px / 1px #28394B / #0B1522AA 底；hover 上浮 3px + 极光扫光 550ms",
+    "panel": "radius 11px / 1px #1A2938 / linear-gradient(145deg,#08111B,#050B13 65%,#070E17)",
+    "metricCard": "radius 7px / 1px #1B2A38 / 12px 10px 内边距 / sparkline 22px 高",
+    "statCard": "radius 9px / #08111CDB + backdrop-blur 10px / 高 105px",
+    "badge": "radius 20px / 3px 7px / 7px 字 / 1px 同色系描边",
+    "input": "radius 5–6px / 1px #233242 / #080F18 底 / 8–10px 字",
+    "navItem": "radius 7px / 9px 字 / active #111D2B + 1px #1B2B3B + 右移 2px"
+  },
+  "effects": {
+    "aurora": "三层 radial-gradient 光带 + blur 22px + rotate(-9deg)，18s 漂移",
+    "ribbon": "linear-gradient 斜向光带 + blur 15/26px + mix-blend-mode:screen，13s/17s 反向漂移",
+    "edgeShimmer": "conic-gradient 描边（@property --aurora-spin）+ mask-composite:exclude，hover 4.8s 旋转",
+    "grain": "radial-gradient 点阵 .7px / 38px 网格，opacity .24",
+    "mountain": "clip-path polygon 山形 + 双层 linear-gradient",
+    "lake": "repeating-linear-gradient 极光倒影"
+  }
+}
