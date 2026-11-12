@@ -3,35 +3,54 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>标题 + 图片 + 按钮 · 左右布局模板块</title>
+<title>标题 + 图片 + 按钮 · DEMO 蓝白</title>
 <style>
-  /* 左右布局：左文案/按钮，右图片；只改 :root 四个变量即可换风格 */
+  /* ===== DEMO 蓝白 tokens（硬约束） ===== */
   :root{
-    --bg:#FBFBFB;
-    --ink:#111111;
-    --muted:rgba(17,17,17,.62);
-    --accent:#111111;
-    --radius:24px;
-    --font:"Inter","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
-    --display:"Noto Serif SC","Source Han Serif SC","Songti SC",Georgia,serif;
+    --paper:#FFFFFF;
+    --soft:#F5F8FD;
+    --sky:#EAF1FF;
+    --ink:#0B1220;
+    --muted:#5B667A;
+    --dim:#8B95A8;
+    --blue:#2563EB;
+    --blue2:#4D6BFE;
+    --line:#E6EBF4;
+    --font-sans:"Inter","Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+    --font-mono:Consolas,"SFMono-Regular",monospace;
+    --radius-sm:8px;
+    --radius-md:14px;
+    --radius-lg:20px;
+    --radius-pill:999px;
+    --shadow-card:0 24px 60px rgba(20,40,90,.12);
+    --shadow-float:0 10px 26px rgba(20,40,90,.14);
+    --motion-ease:cubic-bezier(.16,.84,.3,1);
+    --motion-fast:160ms;
+    --motion-base:280ms;
+    --design-w:1440;
+    --u:clamp(.45px,calc(100vw / var(--design-w)),1px);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);overflow-x:clip}
-  .preview-wrap{width:min(1120px,calc(100% - 40px));margin:clamp(28px,6vw,72px) auto}
-  .preview-block{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,5vw,64px);align-items:center}
-  .preview-copy{min-width:0;max-width:520px}
-  .preview-eyebrow{margin:0 0 14px;font:500 10px/1.4 var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-  .preview-title{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(30px,4.8vw,60px);line-height:1.06;letter-spacing:-.035em}
-  .preview-lead{margin:16px 0 0;max-width:46ch;color:var(--muted);font-size:clamp(13px,1.5vw,16px);line-height:1.75}
-  .preview-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:clamp(22px,3vw,34px)}
-  .preview-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:13px;transition:transform .2s ease,opacity .2s ease}
-  .preview-btn:hover{transform:translateY(-1px);opacity:.86}
-  .preview-meta{color:var(--muted);font-size:10px;font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em}
-  .preview-figure{position:relative;margin:0;width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;background:#F1EEE8;box-shadow:0 18px 45px rgba(17,17,17,.08)}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);overflow-x:clip}
+  body{background:linear-gradient(180deg,var(--paper) 0%,var(--soft) 100%)}
+  .preview-wrap{width:min(calc(1120 * var(--u)),calc(100% - calc(40 * var(--u))));margin:calc(72 * var(--u)) auto}
+  /* 左右布局：左文案/按钮，右图片 */
+  .preview-block{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:calc(64 * var(--u));align-items:center}
+  .preview-copy{min-width:0;max-width:calc(520 * var(--u))}
+  .preview-eyebrow{margin:0 0 calc(14 * var(--u));font:500 max(10px,calc(10 * var(--u)))/1.4 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
+  .preview-title{margin:0;font-family:var(--font-sans);font-weight:800;font-size:max(30px,calc(58 * var(--u)));line-height:1.06;letter-spacing:-.04em;color:var(--ink)}
+  .preview-lead{margin:calc(16 * var(--u)) 0 0;max-width:46ch;color:var(--muted);font-size:max(13px,calc(15 * var(--u)));line-height:1.75}
+  .preview-actions{display:flex;align-items:center;gap:calc(14 * var(--u));flex-wrap:wrap;margin-top:calc(30 * var(--u))}
+  .preview-btn{display:inline-flex;align-items:center;justify-content:center;min-height:calc(44 * var(--u));padding:0 calc(22 * var(--u));border-radius:var(--radius-pill);background:var(--blue);color:#fff;text-decoration:none;font-weight:600;font-size:max(12px,calc(13 * var(--u)));box-shadow:var(--shadow-float);transition:transform var(--motion-fast) var(--motion-ease),background var(--motion-fast) var(--motion-ease)}
+  .preview-btn:hover{transform:translateY(-1px);background:var(--blue2)}
+  .preview-meta{color:var(--dim);font-size:max(9px,calc(10 * var(--u)));font-family:var(--font-mono);letter-spacing:.08em}
+  .preview-figure{position:relative;margin:0;width:100%;aspect-ratio:16/9;border-radius:var(--radius-lg);overflow:hidden;background:var(--sky);border:1px solid var(--line);box-shadow:var(--shadow-card)}
   .preview-figure img{display:block;width:100%;height:100%;object-fit:cover}
   @media (max-width:760px){
-    .preview-block{grid-template-columns:1fr;gap:24px}
+    .preview-wrap{width:calc(100% - calc(28 * var(--u)));margin:calc(36 * var(--u)) auto}
+    .preview-block{grid-template-columns:1fr;gap:calc(24 * var(--u))}
     .preview-copy{max-width:none}
+    .preview-title{font-size:max(28px,calc(48 * var(--u)))}
     .preview-figure{aspect-ratio:16/9}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -44,7 +63,7 @@
       <div class="preview-copy">
         <p class="preview-eyebrow">FEATURE / 01</p>
         <h2 class="preview-title" id="preview-title">让内容更有秩序</h2>
-        <p class="preview-lead">左侧标题、说明和按钮，右侧一张完整图片；比例、圆角和强调色只用少数几个变量控制，换风格时不需要改结构。</p>
+        <p class="preview-lead">左侧标题、说明和按钮，右侧一张完整图片；白纸、浅灰蓝分区和唯一蓝色强调，组成干净的产品演示节奏。</p>
         <div class="preview-actions">
           <a class="preview-btn" href="#">了解详情</a>
           <span class="preview-meta">TITLE / IMAGE / BUTTON</span>
@@ -52,7 +71,7 @@
       </div>
 
       <figure class="preview-figure">
-        <img src="preview-placeholder.svg" alt="预览图片：抽象留白与点阵" loading="lazy">
+        <img src="preview-placeholder.svg" alt="预览图片：浅蓝留白与细线图形" loading="lazy">
       </figure>
     </section>
   </main>
