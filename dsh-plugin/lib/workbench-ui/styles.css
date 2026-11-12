@@ -1277,7 +1277,7 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
 /* 风格优化：大胶囊行卡 */
 .style-rows{display:flex;flex-direction:column;gap:22px;margin-top:26px}
 .style-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:clamp(190px,23vw,270px);border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper-raised);cursor:pointer;transition:border-color .2s var(--ease-out),transform .2s var(--ease-out)}
-.style-row:hover{border-color:var(--ink)}
+.style-row:hover{transform:translateY(-2px);box-shadow:0 20px 48px rgba(17,17,17,.10)}
 .style-row-copy{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:44px clamp(34px,5vw,72px);min-width:0}
 .style-row-kicker{font:500 10px/1.2 var(--font-mono);letter-spacing:.18em;color:var(--ink55)}
 .style-row-name{font-family:var(--font-display);font-weight:700;color:var(--ink);font-size:clamp(26px,3.15vw,46px);line-height:1.04;letter-spacing:-.035em;margin:0}
@@ -1330,7 +1330,7 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
 }
 
 /* 按 SVG 胶囊比例：左侧文字 / 右侧预留配图 */
-.style-row{grid-template-columns:42% 58%;aspect-ratio:auto;min-height:clamp(184px,15.8vw,232px);border-radius:999px}
+.style-row{grid-template-columns:42% 58%;aspect-ratio:auto;min-height:clamp(184px,15.8vw,232px);border:0;border-radius:999px;box-shadow:0 10px 30px rgba(17,17,17,.055);transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out),background .25s var(--ease-out)}
 .style-row-copy{padding:clamp(26px,3.8vw,44px) clamp(28px,4.8vw,58px);padding-left:calc(clamp(28px,4.8vw,58px) + 30px);gap:9px}
 .style-row-kicker{font-size:9px;letter-spacing:.2em}
 .style-row-name{font-size:clamp(24px,2.7vw,38px);line-height:1.02}
@@ -1347,3 +1347,8 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
   .style-row-visual{min-height:170px;border-top:1px solid var(--line)}
   .style-row-image{inset:10px;border-radius:20px}
 }
+
+.style-row:active{transform:translateY(0) scale(.995);box-shadow:0 8px 22px rgba(17,17,17,.08)}
+.style-row.is-selected{box-shadow:0 18px 46px rgba(17,17,17,.13),inset 0 0 0 2px rgba(17,17,17,.82)}
+.style-row.is-selected .style-row-image{background:#F1F1EE}
+.style-row:focus-visible{outline:2px solid var(--ink);outline-offset:3px}

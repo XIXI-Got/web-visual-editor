@@ -794,7 +794,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       var desc = String(s.description || '').replace(/\s+/g, ' ').trim();
       if (desc.length > 90) desc = desc.slice(0, 88).trim() + '…';
       return (
-        '<div class="style-row" data-act="style-apply" data-id="' + esc(s.id) + '" data-name="' + esc(s.name) + '" title="点击应用这个风格">' +
+        '<div class="style-row' + (st.selectedId === s.id ? ' is-selected' : '') + '" data-act="style-apply" data-id="' + esc(s.id) + '" data-name="' + esc(s.name) + '" title="点击应用这个风格">' +
           '<div class="style-row-copy">' +
             '<div class="style-row-kicker">STYLE / 0' + (idx + 1) + '</div>' +
             '<h3 class="style-row-name"><b>' + esc(main) + '</b>' + (sub ? '<em>' + esc(sub) + '</em>' : '') + '</h3>' +
