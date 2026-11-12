@@ -784,6 +784,9 @@ export function apply(ctx) {
       }
     } catch (e) { /* ignore */ }
     const overrides = baseOverrides;
+    // 固化 CSS 用原始 px/box（保留拖拽后的真实尺寸）；响应式转换只用于 Vite 的 JS 运行时
+    const rawBaseOverrides = JSON.parse(JSON.stringify(baseOverrides || {}));
+    const rawPageOverrides = JSON.parse(JSON.stringify(pageOverrides || {}));
     const keys = Object.keys(baseOverrides || {});
     const totalKeys = keys.length + Object.values(pageOverrides).reduce((n, o) => n + Object.keys(o).length, 0);
     if (!totalKeys) return { ok: false, error: '还没有保存过修改（先点一次「保存」再固化）' };
@@ -924,7 +927,7 @@ export function apply(ctx) {
     for (const htmlPath of htmlFiles) {
       const rel = path.relative(projectDir, htmlPath).split(path.sep).join('/');
       const slug = htmlSlugOf(rel);
-      const merged = Object.assign({}, baseOverrides, pageOverrides[slug] || {});
+      const merged = Object.assign({}, rawBaseOverrides, rawPageOverrides[slug] || {});
       const css = buildAppliedCss(merged);
       if (!css) continue;
       let html = readTextSafe(htmlPath, 8000000) || '';
