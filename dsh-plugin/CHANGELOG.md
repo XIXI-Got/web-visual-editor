@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.103（应用到源码：拖拽位移不再丢）
+- 修复：固化用的 `buildAppliedCss` 只写 `style`，漏了覆写里的 `box`（编辑器拖出来的 x/y）→ 真实页面少了 `transform: translate()`，拖过的位置全部回到原始布局，看起来就像「点了应用到源码却没更新」。
+- 现在会按编辑器内核同样的规则输出 `transform:translate(xpx,ypx)`（原有 transform 会拼在后面），固化后的真实页面和编辑器里看到的一致。
+- 注意：宿主端改动，需重启 DSH 生效；重启前不要再点「应用到源码」，否则会用旧逻辑覆盖掉带位移的 CSS。
+
 ## 1.1.102（固化状态能识别子页面）
 - 修复：`/fixate-status` 原来只检查 `index.html` / `public/index.html`，改了子页面（如 `uneo-neumorphism/preview.html`、`demo/muse.html`）再「应用到源码」，状态仍显示「未固化 / 没有可固化的修改」，看起来像没生效。
 - 现在扫描项目里所有 HTML（最多 120 个、深度 3，跳过 node_modules / .ve-data / dist / build / out），有 `ve-applied-style` 就取其中最新 mtime 作为固化时间；Vite 的 `ve-applied.js` 判断保留。

@@ -777,10 +777,21 @@ export function apply(ctx) {
           props.push(appliedCssProp(p) + ":" + String(v) + " !important");
         }
       }
+      // 拖拽位移必须一起写进真实 CSS：编辑器里是 box → transform: translate(x,y)；
+      // 不写的话「应用到源码」之后真实页面会丢掉拖过的位置，看起来像没更新。
+      if (e.box && typeof e.box === "object") {
+        const bx = Number(e.box.x) || 0;
+        const by = Number(e.box.y) || 0;
+        if (bx || by) {
+          const extra = e.style && e.style.transform != null && e.style.transform !== "" ? String(e.style.transform) : "";
+          props.push("transform:translate(" + bx + "px," + by + "px)" + (extra ? " " + extra : "") + " !important");
+        }
+      }
       if (props.length) lines.push(sel + "{" + props.join(";") + ";}");
     }
     return lines.join("\n");
   }
+
   function htmlSlugOf(rel) {
     let p = "/" + String(rel || "").replace(/\\/g, "/").replace(/^\/+/, "");
     try { p = decodeURIComponent(p); } catch (e) { /* keep */ }
