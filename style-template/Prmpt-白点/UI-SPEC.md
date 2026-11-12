@@ -159,6 +159,7 @@ UI 表面近似配比：**纸面 86% / 黑字与结构 10% / 点阵灰 3% / 描�
 | 项 | 值 / 规则 |
 | --- | --- |
 | 舞台 | `100vh × 100vw`，fixed 层，`overflow: hidden` |
+| 背景点网 | 以视口中心为圆心，34px 点阵按同心圆向外扩散；点径 `1.2–1.6px`，透明度 `.72 → .16` 随半径衰减，mask 成 `46vw` 圆形；滚动时 scale `1 → 9`，鼠标 340px 范围轻推；只作底层，不压字 |
 | 标题中心 | 视口中心上移 `200px`，实体再下移 `20px` |
 | 标题规格 | Meutas `300px` / 500 / 行高 1 / `.02em` / UPPERCASE |
 | 轮廓回声 | 同一文案下移 `50px`，透明填充 + `3px #111` 描边 |
@@ -337,10 +338,29 @@ UI 表面近似配比：**纸面 86% / 黑字与结构 10% / 点阵灰 3% / 描�
 | 文化墙 | `16:9` 条幅，高 `≤56vh` |
 | 头像 | `1:1` 圆形，72 / 96px，1px 黑边，`object-position: center 18%` |
 | 点阵纹理 | 34px 网格、点径 6.4px、`#141414`、透明度 `.20–.65`，全站固定底层 |
+| Hero / 主页背景点网 | 圆形扩散点网：同心圆点阵 + 径向 mask，中心密、外缘淡；只出现在 Hero/主页首屏背景，不叠在图片、文字或按钮上 |
 | 灯箱 | 品牌图最大 `70vw × 50vh`；海报图高 `82vh`、按 2:3 定宽 |
 | 禁用 | 圆角、滤镜、彩色渐变、投影常驻、装饰贴纸、图片边框 |
 
 - 作品图一律矩形满铺，靠裁切与留白建立秩序；悬停才允许出现阴影。
+
+### Hero / 主页背景点网
+
+```css
+.hero-dot-net{
+  position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:radial-gradient(circle,#141414 1.2px,transparent 1.5px);
+  background-size:34px 34px; background-position:center;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 0 24%,rgba(0,0,0,.9) 38%,transparent 70%);
+  mask-image:radial-gradient(circle at 50% 50%,#000 0 24%,rgba(0,0,0,.9) 38%,transparent 70%);
+  opacity:.72;
+}
+```
+
+- 点网只做 **Hero / 主页首屏背景**，位于 `z-0`，文字与 CTA 在其上。
+- 点阵中心密、外缘淡，形成从中心向外扩散的圆；不要做成铺满全屏的均匀方格。
+- 滚动推进时点网可随 Hero 点阵一起 `scale 1 → 9`，并保持 `prefers-reduced-motion` 下静态。
+- 不在点网上叠加噪点、彩色渐变或投影。
 - 内容图必须有描述性 alt；纯装饰点阵 `alt=""`。
 - 不叠加噪点/纹理图层——点阵本身就是纹理。
 
