@@ -3589,6 +3589,20 @@ const API_PATH = "/ve/plugin";
           h("button", { className: "wpe-btn" + (gridObjects ? " on" : ""), title: "吸附物体边缘 开/关", onClick: () => sendGrid({ objects: !gridObjects }) }, "吸附"),
           h("button", { className: "wpe-btn" + (autoSaveOn ? " on" : ""), title: "自动保存 开/关", onClick: () => { const next = !autoSaveOn; setAutoSaveOn(next); send("autosave", { on: next }); } }, "自动保存"),
           h("button", { className: "wpe-btn" + (themeDark ? " on" : ""), title: "编辑器外观：浅色 / 深色", onClick: () => { const next = !themeDark; setThemeDark(next); try { localStorage.setItem("dsh-ui-editor:theme", next ? "dark" : "light"); } catch { /* ignore */ } } }, themeDark ? "暗色" : "亮色"),
+          h("button", {
+            className: "wpe-btn",
+            title: "刷新预览：重新加载当前页面，立即看到源码 / 外部改动",
+            onClick: () => {
+              try {
+                const f = iframeRef.current;
+                if (!f || !f.src) { setMsg("预览还没准备好"); return; }
+                const u = new URL(f.src, location.href);
+                u.searchParams.set("_ve_refresh", String(Date.now()));
+                f.src = u.toString();
+                setMsg("已刷新预览");
+              } catch (e) { setMsg("刷新失败：" + String((e && e.message) || e)); }
+            },
+          }, "⟳ 刷新"),
           h("button", { className: "wpe-btn", title: "保存（Ctrl+S）", onClick: () => { send("save"); setMsg("保存中…"); } }, "保存"),
           h("button", { className: "wpe-btn", title: "应用改动到源码：写相对/响应式样式（不覆盖原 CSS 文件，可删除 ve-applied.js 还原）", onClick: askFixate }, "应用到源码"),
           h("span", {
