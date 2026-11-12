@@ -1353,6 +1353,6 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
 .style-row.is-selected .style-row-image{background:rgba(255,255,255,.52)}
 .style-row:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
-.style-row-image img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+.style-row-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:inherit}
 
 .style-row-image::after{content:"";position:absolute;inset:0;border:1px solid rgba(17,17,17,.34);border-radius:inherit;pointer-events:none;z-index:3}
