@@ -29,6 +29,22 @@
   .preview-meta{color:var(--textMuted);font-size:10px;font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em}
   .preview-figure{position:relative;margin:0;width:100%;aspect-ratio:16/9;max-height:calc(420 * var(--u));border-radius:var(--r-xl);overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.78);box-shadow:16px 16px 34px var(--shadowDark),-16px -16px 34px var(--shadowLight)}
   .preview-figure img{display:block;width:100%;height:100%;object-fit:cover}
+
+  /* UNEO 拟物组件：旋钮、凹槽、双光源 */
+  .neo-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 16px 14px;background:linear-gradient(145deg,#F8F6F2,#F3EFE9);border:1px solid rgba(255,255,255,.78);box-shadow:16px 16px 34px #E2DDD4,-16px -16px 34px #FFFFFF;border-radius:32px}
+  .neo-dial{position:relative;width:min(176px,58%);aspect-ratio:1;display:grid;place-items:center;flex:0 0 auto}
+  .neo-ring,.neo-arc{position:absolute;inset:0;border-radius:50%;pointer-events:none}
+  .neo-ring{background:repeating-conic-gradient(from 210deg,#D5CFC4 0deg 1.2deg,transparent 1.2deg 9deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));opacity:.9}
+  .neo-arc{background:conic-gradient(from 205deg,transparent 0 35deg,#8C6F52 35deg 148deg,transparent 148deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px))}
+  .neo-well{width:72%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#E8E2D9,#F5F2EC);border:1px solid rgba(255,255,255,.65);box-shadow:inset 10px 10px 22px #D5CFC4,inset -10px -10px 22px #FFFFFF,6px 6px 16px rgba(226,221,212,.6)}
+  .neo-cap{width:72%;aspect-ratio:1;border-radius:50%;position:relative;background:radial-gradient(circle at 30% 28%,#FCFBF9 0%,#F4F0E8 58%,#E7E1D6 100%);border:1px solid rgba(255,255,255,.85);box-shadow:12px 14px 26px rgba(182,173,160,.65),-8px -8px 18px rgba(255,255,255,.95),inset 1.5px 1.5px 3px rgba(255,255,255,.9),inset -2px -2px 5px rgba(213,207,196,.6);transform:rotate(35deg)}
+  .neo-notch{position:absolute;right:16%;top:50%;width:4px;height:16px;border-radius:999px;background:linear-gradient(90deg,#CFC8BC,#FAF8F5);box-shadow:inset 1px 1px 2px rgba(140,111,82,.45),1px 1px 2px rgba(255,255,255,.9);transform:translateY(-50%)}
+  .neo-readout{position:absolute;top:-8px;right:-2px;padding:4px 8px;border-radius:999px;background:#F6F3EE;border:1px solid rgba(226,221,212,.55);box-shadow:3px 3px 8px rgba(226,221,212,.75),-3px -3px 8px rgba(255,255,255,.9);color:#8C6F52;font:500 9px/1 var(--font-sans);white-space:nowrap}
+  .neo-modes{display:flex;align-items:center;gap:44px;margin-top:-6px;z-index:1}
+  .neo-mode{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:linear-gradient(145deg,#F9F7F4,#EFECE6);border:1px solid rgba(255,255,255,.78);box-shadow:6px 6px 14px #E2DDD4,-6px -6px 14px #FFFFFF;color:#756B61;font-size:14px}
+  .neo-mode.is-on{color:#33281E;box-shadow:inset 4px 4px 9px #E2DDD4,inset -4px -4px 9px #FFFFFF}
+  .neo-caption{font:500 8px/1 var(--font-sans);letter-spacing:.14em;color:#A39A90;white-space:nowrap}
+  .preview-figure.neo-stage img{display:none}
   @media (max-width:760px){.preview-wrap{width:calc(100% - 28px);height:auto;min-height:0;margin:28px auto;display:block;overflow:visible}.preview-block{grid-template-columns:1fr;gap:24px}.preview-copy{max-width:none}.preview-figure{max-height:none}}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
@@ -65,8 +81,20 @@
           <span class="preview-meta">TITLE / IMAGE / BUTTON</span>
         </div>
       </div>
-      <figure class="preview-figure">
-        <img src="preview-uneo.png" alt="UNEO 暖石拟物组件预览" loading="lazy">
+      <figure class="preview-figure neo-stage" aria-label="UNEO 拟物旋钮组件">
+        <div class="neo-dial">
+          <span class="neo-ring" aria-hidden="true"></span>
+          <span class="neo-arc" aria-hidden="true"></span>
+          <div class="neo-well">
+            <div class="neo-cap"><span class="neo-notch"></span></div>
+          </div>
+          <span class="neo-readout">Brightness · 64%</span>
+        </div>
+        <div class="neo-modes" aria-hidden="true">
+          <span class="neo-mode is-on">☼</span>
+          <span class="neo-mode">◉</span>
+        </div>
+        <figcaption class="neo-caption">TACTILE ROTARY / 触觉旋钮</figcaption>
       </figure>
     </section>
   </main>

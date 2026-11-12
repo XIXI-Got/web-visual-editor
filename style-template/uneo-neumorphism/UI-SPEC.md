@@ -59,3 +59,34 @@
 - 中间链接：`Inter 11px / 500`，默认 `--textSecondary`，当前项 `--espresso`；绝对居中。
 - 右侧 CTA：深咖啡渐变 pill，白字，`5px 6px 12px rgba(51,40,30,.24)` + 左上高光；hover 上浮 1px 并加深阴影。
 - 导航只使用「抬起」阴影，不使用平面描边；窄于 900px 时链接回到右侧，640px 以下只保留当前项。
+
+## 09 · 组件材质与旋钮
+
+### 材质（全部双光源）
+
+| 材质 | 背景 | 阴影 | 边框 |
+| --- | --- | --- | --- |
+| 主展板 `uneo-panel` | `linear-gradient(145deg,#F8F6F2,#F3EFE9)` | `16px 16px 34px #E2DDD4, -16px -16px 34px #FFFFFF` | 1px `rgba(255,255,255,.78)` |
+| 抬起 `uneo-raised` | `linear-gradient(145deg,#F9F7F4,#EFECE6)` | `6px 6px 14px #E2DDD4, -6px -6px 14px #FFFFFF` | 1px `rgba(255,255,255,.78)` |
+| 轻凸标签 `uneo-subtle-pill` | `#F6F3EE` | `3px 3px 8px rgba(226,221,212,.75), -3px -3px 8px rgba(255,255,255,.9)` | 1px `rgba(226,221,212,.55)` |
+| 内凹 `uneo-inset` | `#EDE8E0` | `inset 4px 4px 9px #E2DDD4, inset -4px -4px 9px #FFFFFF` | 1px `rgba(255,255,255,.45)` |
+| 浓缩咖啡 `uneo-espresso` | `linear-gradient(145deg,#3D3024,#2B2118)` | `7px 9px 18px rgba(51,40,30,.26), -4px -4px 10px #FFFFFF` | 1px `rgba(255,255,255,.08)` |
+
+- 抬起 hover：上移 1px，阴影增大到 `8px 8px 18px`；active：`scale(.975)` + inset 阴影。
+- 咖啡按钮 hover 渐变到 `#47382A → #33281E`；active `scale(.975)` + 深色 inset。
+- 咖啡按钮文字 `11px / 500`，高 34–38px，pill。
+
+### 旋钮（Hero 右侧核心视觉）
+
+- 外圈 `228px`，短刻度沿圆周分布；活动弧用古铜 `#8C6F52`，底弧 `#E2DDD4`。
+- 凹槽 `166px`：`linear-gradient(145deg,#E8E2D9,#F5F2EC)`，`inset 10px 10px 22px #D5CFC4` + `inset -10px -10px 22px #FFFFFF`。
+- 旋钮帽：`radial-gradient(circle at 30% 28%,#FCFBF9 0%,#F4F0E8 58%,#E7E1D6 100%)`，外侧 `12px 14px 26px rgba(182,173,160,.65)`，左上 `-8px -8px 18px rgba(255,255,255,.95)`，内嵌两层 inset。
+- 指示缺口：`3.5×15px`，right 16px，古铜到纸白渐变 + 内阴影。
+- 读数 pill：`Brightness · 64%`，9px、古铜色、`uneo-subtle-pill` 材质。
+- 下方两个 40px 圆形模式按钮，当前模式用 `is-depressed` 内凹。
+
+### 背景 / 版式
+
+- 画布 `#F3EFE9`，叠加 4px 极淡纸纹 `radial-gradient(rgba(51,40,30,.022) 1px, transparent 0)`。
+- Hero 主卡片圆角 `32px`、内边距 `24 / 36 / 40px`；标题 `44px / 600 / 1.12 / -.02em`（中文回退思源宋体），正文 `13px / 1.65 / #756B61`。
+- 所有核心组件必须同时有暗侧阴影与亮侧高光，不允许单侧投影。

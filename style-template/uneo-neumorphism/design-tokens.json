@@ -149,5 +149,69 @@
       "knob": "140ms"
     },
     "reducedMotion": true
+  },
+  "surfaces": {
+    "panel": {
+      "background": "linear-gradient(145deg, #F8F6F2, #F3EFE9)",
+      "border": "1px solid rgba(255,255,255,0.78)",
+      "shadow": "16px 16px 34px #E2DDD4, -16px -16px 34px #FFFFFF"
+    },
+    "raised": {
+      "background": "linear-gradient(145deg, #F9F7F4, #EFECE6)",
+      "border": "1px solid rgba(255,255,255,0.78)",
+      "shadow": "6px 6px 14px #E2DDD4, -6px -6px 14px #FFFFFF"
+    },
+    "subtlePill": {
+      "background": "#F6F3EE",
+      "border": "1px solid rgba(226,221,212,0.55)",
+      "shadow": "3px 3px 8px rgba(226,221,212,0.75), -3px -3px 8px rgba(255,255,255,0.9)"
+    },
+    "inset": {
+      "background": "#EDE8E0",
+      "border": "1px solid rgba(255,255,255,0.45)",
+      "shadow": "inset 4px 4px 9px #E2DDD4, inset -4px -4px 9px #FFFFFF"
+    },
+    "espresso": {
+      "background": "linear-gradient(145deg, #3D3024, #2B2118)",
+      "border": "1px solid rgba(255,255,255,0.08)",
+      "shadow": "7px 9px 18px rgba(51,40,30,0.26), -4px -4px 10px #FFFFFF",
+      "hover": "linear-gradient(145deg, #47382A, #33281E)",
+      "active": "scale(0.975) + inset 3px 3px 8px rgba(18,13,9,0.65)"
+    },
+    "grain": "radial-gradient(rgba(51,40,30,0.022) 1px, transparent 0)"
+  },
+  "components": {
+    "dial": {
+      "outerSize": "228px",
+      "ring": "repeating conic ticks + bronze active arc #8C6F52",
+      "wellSize": "166px",
+      "wellBackground": "linear-gradient(145deg,#E8E2D9,#F5F2EC)",
+      "wellShadow": "inset 10px 10px 22px #D5CFC4, inset -10px -10px 22px #FFFFFF, 6px 6px 16px rgba(226,221,212,0.6)",
+      "capBackground": "radial-gradient(circle at 30% 28%,#FCFBF9 0%,#F4F0E8 58%,#E7E1D6 100%)",
+      "capShadow": "12px 14px 26px rgba(182,173,160,0.65), -8px -8px 18px rgba(255,255,255,0.95), inset 1.5px 1.5px 3px rgba(255,255,255,0.9), inset -2px -2px 5px rgba(213,207,196,0.6)",
+      "notch": "3.5 x 15px, right 16px, bronze-to-paper gradient",
+      "readout": "9px sans, #8C6F52, subtle pill"
+    },
+    "buttonPrimary": {
+      "height": "34–38px",
+      "padding": "0 18–20px",
+      "radius": "999px",
+      "text": "11px / 500",
+      "color": "#FAF8F5"
+    },
+    "buttonSecondary": {
+      "height": "34–38px",
+      "padding": "0 18–20px",
+      "radius": "999px",
+      "text": "11px / 500",
+      "color": "#33281E"
+    },
+    "nav": {
+      "height": "56px",
+      "surface": "rgba(243,239,233,0.88)",
+      "bottomLine": "1px rgba(51,40,30,0.10)",
+      "links": "11px / 500",
+      "active": "#33281E"
+    }
   }
 }
