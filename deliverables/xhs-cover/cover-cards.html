@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>小红书封面 · 风格卡片横排（蓝白版）· 1080×1440</title>
+<style>
+  :root {
+    --ink: #0b1220;
+    --ink-2: #33415c;
+    --ink-3: #7b8aa6;
+    --blue: #2e5bff;
+    --blue-soft: rgba(46, 91, 255, .10);
+    --line: rgba(27, 58, 128, .16);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1440px; }
+  body {
+    background: #f5f9ff;
+    color: var(--ink);
+    font-family: "Inter Tight", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .cover {
+    position: relative;
+    width: 1080px; height: 1440px;
+    padding: 52px 64px 44px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    background:
+      radial-gradient(90% 56% at 50% -6%, rgba(124, 155, 255, .34), rgba(124, 155, 255, 0) 60%),
+      radial-gradient(70% 46% at 100% 102%, rgba(46, 91, 255, .12), rgba(46, 91, 255, 0) 60%),
+      linear-gradient(180deg, #f7faff 0%, #eef4ff 56%, #e9f1ff 100%);
+  }
+  .cover::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(46, 91, 255, .22) 1px, transparent 1.2px);
+    background-size: 28px 28px;
+    opacity: .36;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.1) 58%, rgba(0,0,0,.7));
+  }
+  /* 顶部 */
+  .top { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; height: 44px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo { width: 42px; height: 42px; border-radius: 11px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 21px; line-height: 1; transform: rotate(-6deg); box-shadow: 0 10px 22px rgba(46, 91, 255, .34); }
+  .brand b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -.01em; }
+  .brand span { display: block; margin-top: 4px; font: 600 10.5px/1 "Cascadia Mono", Consolas, monospace; letter-spacing: .18em; color: var(--ink-3); }
+  .pill { padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--ink); background: #fff; font: 700 13px/1 "Inter Tight", "Microsoft YaHei", sans-serif; box-shadow: 0 3px 0 rgba(11, 18, 32, .9); }
+  /* 大字 */
+  .kicker { position: relative; z-index: 3; margin-top: 24px; display: inline-flex; align-items: center; gap: 9px; font: 700 15px/1 "Cascadia Mono", Consolas, monospace; letter-spacing: .14em; color: var(--ink-2); text-transform: uppercase; }
+  .kicker i { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+  h1 { position: relative; z-index: 3; margin-top: 12px; font-size: 140px; line-height: .96; letter-spacing: -.05em; font-weight: 900; }
+  h1 .line { display: block; }
+  h1 .hl { position: relative; display: inline-block; color: #fff; padding: 0 .05em; }
+  h1 .hl::before { content: ""; position: absolute; left: 0; right: 0; top: .07em; bottom: .03em; background: var(--blue); z-index: -1; border-radius: 12px; }
+  .sub { position: relative; z-index: 3; margin-top: 14px; font-size: 24px; font-weight: 600; color: var(--ink-2); }
+  .sub b { font-weight: 800; color: var(--ink); }
+  /* 风格卡片横排 */
+  .lib-head { position: relative; z-index: 3; margin-top: 34px; display: flex; align-items: center; justify-content: space-between; font: 700 12.5px/1 "Cascadia Mono", Consolas, monospace; letter-spacing: .1em; color: var(--ink-3); text-transform: uppercase; }
+  .lib-head .r { color: var(--blue); }
+  .fan { flex: 1; position: relative; z-index: 2; margin-top: 16px; display: flex; align-items: center; justify-content: center; }
+  .fan-inner { position: relative; width: 100%; height: 400px; }
+  .sheet {
+    position: absolute; top: 0;
+    width: 140px;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 22px 34px -22px rgba(19, 44, 110, .55);
+    overflow: hidden;
+    transform-origin: 50% 92%;
+  }
+  .sheet .thumb { display: block; width: 100%; height: 196px; object-fit: cover; object-position: 50% 0; background: #eef2fa; }
+  .sheet .cap { padding: 9px 10px 10px; }
+  .sheet .cap b { display: block; font-size: 12px; font-weight: 800; letter-spacing: -.01em; white-space: nowrap; }
+    .mini-demo { padding: 14px; }
+  .mini-demo .mbar { height: 8px; width: 46%; border-radius: 4px; background: var(--blue); margin-bottom: 7px; }
+  .mini-demo .ml { height: 5px; border-radius: 3px; background: #dbe4f5; margin-bottom: 4px; }
+  .mini-demo .ml.w2 { width: 70%; }
+  .mini-demo .mblock { height: 44px; border-radius: 6px; background: linear-gradient(90deg, #eaf1ff, #dbe8ff); margin-top: 7px; }
+  .mini-dot { background: #fff; background-image: radial-gradient(rgba(0,0,0,.24) 1px, transparent 1.1px); background-size: 7px 7px; position: relative; }
+  .mini-dot::after { content: ""; position: absolute; inset: 28% 22% auto 22%; height: 8px; background: #111; border-radius: 2px; }
+  .mini-dot::before { content: ""; position: absolute; inset: 44% 30% auto 30%; height: 5px; background: rgba(0,0,0,.55); border-radius: 2px; }
+  .sheet .cap i { display: block; margin-top: 3px; font: 600 9.5px/1 "Cascadia Mono", Consolas, monospace; color: var(--ink-3); white-space: nowrap; }
+  .sheet.on { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46, 91, 255, .18), 0 26px 38px -22px rgba(19, 44, 110, .6); }
+  .sheet.on .cap b { color: var(--blue); }
+  .sheet.on::after {
+    content: "当前"; position: absolute; left: 8px; top: 8px;
+    background: var(--blue); color: #fff;
+    font: 700 9px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+    padding: 4px 6px; border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(46, 91, 255, .45);
+  }
+  /* 控制条 */
+  .apply-row {
+    position: relative; z-index: 4;
+    margin-top: 18px;
+    display: flex; align-items: center; gap: 12px;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 13px 16px;
+  }
+  .apply-row .target { flex: 1; font: 600 12.5px/1.4 "Cascadia Mono", Consolas, monospace; color: var(--ink-3); }
+  .apply-row .target b { color: var(--ink); font-weight: 700; }
+  .apply-row .btn {
+    padding: 12px 18px; border-radius: 999px; background: var(--blue); color: #fff;
+    font: 800 13px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+    box-shadow: 0 5px 0 rgba(20, 46, 130, .85);
+    white-space: nowrap;
+  }
+  /* chips */
+  .drop-hint {
+    position: relative; z-index: 3;
+    margin-top: 16px; height: 66px;
+    border: 2px dashed rgba(46, 91, 255, .38);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font: 700 13px/1.4 "Cascadia Mono", Consolas, monospace;
+    color: var(--ink-2); letter-spacing: .01em;
+    background: rgba(46, 91, 255, .04);
+  }
+  .drop-hint b { color: var(--blue); font-weight: 800; }
+  .chips { position: relative; z-index: 3; display: flex; gap: 12px; margin-top: 16px; }
+  .chip { flex: 1; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 13px; background: #fff; border: 1.5px solid var(--line); }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex: none; }
+  .chip b { display: block; font-size: 17px; font-weight: 800; white-space: nowrap; }
+  .chip span { display: block; margin-top: 2px; font-size: 12px; color: var(--ink-3); }
+  .foot { position: relative; z-index: 3; margin-top: auto; padding-top: 14px; border-top: 1.5px solid rgba(27,58,128,.16); display: flex; align-items: center; justify-content: space-between; font: 700 13px/1 "Cascadia Mono", Consolas, monospace; color: var(--ink-2); letter-spacing: .03em; }
+  .foot .right { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+  .foot .arrow { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="top">
+    <div class="brand">
+      <div class="logo">✎</div>
+      <div>
+        <b>网页可视化编辑器</b>
+        <span>DSH · VISUAL EDITOR</span>
+      </div>
+    </div>
+    <div class="pill">一键换风格</div>
+  </div>
+
+  <div class="kicker"><i></i><span>风格优化 · 一张一张挑，一键换上</span></div>
+  <h1>
+    <span class="line">风格，</span>
+    <span class="line"><span class="hl">一键换</span></span>
+  </h1>
+  <p class="sub">颜色、字体、圆角、间距、动效 <b>整套一起换</b> · 选好点应用，不满意随时对比回退</p>
+
+  <div class="lib-head">
+    <span>风格库 · 8 张随便挑</span>
+    <span class="r">STYLE LIBRARY / 已连接 demo</span>
+  </div>
+
+  <!-- 8 张单卡侧着排开 -->
+  <div class="fan" id="fan"><div class="fan-inner">
+    <div class="sheet" style="left:0;   top:78px;  transform:rotate(-9deg);  z-index:1;">
+      <img class="thumb" src="../../style-template/swiss-international/preview.png" alt="" />
+      <div class="cap"><b>瑞士国际主义</b><i>SWISS+</i></div>
+    </div>
+    <div class="sheet" style="left:116px; top:42px;  transform:rotate(-6deg);  z-index:2;">
+      <img class="thumb" src="../../style-template/aurora-dashboard/preview.png" alt="" />
+      <div class="cap"><b>Aurora 极光</b><i>NIGHT</i></div>
+    </div>
+    <div class="sheet" style="left:232px; top:14px;  transform:rotate(-3deg);  z-index:3;">
+      <img class="thumb" src="../../style-template/spatial-glass/preview.png" alt="" />
+      <div class="cap"><b>Spatial Glass</b><i>GLASS</i></div>
+    </div>
+    <div class="sheet on" style="left:348px; top:0;  transform:rotate(0deg);  z-index:5;">
+      <img class="thumb" src="../../style-template/glassmio-glassmorphism/preview.png" alt="" />
+      <div class="cap"><b>Glassmio 玻璃</b><i>GLASS · 当前</i></div>
+    </div>
+    <div class="sheet" style="left:464px; top:14px;  transform:rotate(3deg);  z-index:4;">
+      <img class="thumb" src="../../style-template/pixelos-95/preview.png" alt="" />
+      <div class="cap"><b>Pixel 像素</b><i>RETRO</i></div>
+    </div>
+    <div class="sheet" style="left:580px; top:42px;  transform:rotate(6deg);  z-index:3;">
+      <img class="thumb" src="../../style-template/uneo-neumorphism/preview.png" alt="" />
+      <div class="cap"><b>UNEO 暖石</b><i>CLAY</i></div>
+    </div>
+    <div class="sheet" style="left:696px; top:74px;  transform:rotate(8deg);  z-index:2;">
+      <div class="thumb mini-demo" style="height:196px;">
+        <div class="mbar"></div><div class="ml"></div><div class="ml w2"></div><div class="mblock"></div>
+      </div>
+      <div class="cap"><b>DEMO 蓝白</b><i>BLUE</i></div>
+    </div>
+    <div class="sheet" style="left:812px; top:104px; transform:rotate(11deg); z-index:1;">
+      <div class="thumb mini-dot" style="height:196px;"></div>
+      <div class="cap"><b>极简白点</b><i>WHITE DOT</i></div>
+    </div>
+  </div></div>
+
+  <div class="apply-row">
+    <div class="target">应用到 <b>demo</b> / <b>index.html</b> · 应用前自动备份</div>
+    <div class="btn">应用这个风格 →</div>
+  </div>
+
+  <div class="drop-hint"><span>＋</span><span>也能把自己的规范拖进来 —— <b>design-tokens.json / UI-SPEC.md</b> → 自动生成一张风格卡</span></div>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><div><b>整套换</b><span>颜色 / 字体 / 圆角一起</span></div></div>
+    <div class="chip"><span class="dot"></span><div><b>可对比</b><span>原版 / 新版并排看</span></div></div>
+    <div class="chip"><span class="dot"></span><div><b>自动备份</b><span>随时回退到上一版</span></div></div>
+  </div>
+
+  <div class="foot">
+    <span>本地运行 · 零依赖 · 支持 Vite / 静态站</span>
+    <span class="right">主页看安装<span class="arrow">→</span></span>
+  </div>
+</div>
+</body>
+</html>
