@@ -33,3 +33,17 @@ deliverables/video/_tts2/
 deliverables/private-styles/
 # 私有 pro 规范，只保留本地，不发布
 style-template/**/PRO-SPEC.md
+
+# 发布/构建产物：插件目录里的 tgz 副本不提交（正式包放 releases/）
+dsh-plugin/*.tgz
+
+# 临时 / 备份产物
+*-bak*.png
+*-bak*.jpg
+*.bak-*
+preview.2026*.png
+.ve-style-out/
+.final-*.png
+.cmp-*.png
+.ratio-*.png
+.six-*.png

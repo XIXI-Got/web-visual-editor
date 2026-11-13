@@ -525,35 +525,79 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     S.confirm = opts || null;
     render();
   }
+  var wbToastTimer = 0;
+  function wbToast(text, ms) {
+    try {
+      var el = document.getElementById('wb-toast');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'wb-toast';
+        document.body.appendChild(el);
+      }
+      el.textContent = String(text || '');
+      el.classList.add('on');
+      clearTimeout(wbToastTimer);
+      wbToastTimer = setTimeout(function () { el.classList.remove('on'); }, Number(ms) || 2800);
+    } catch (e) { /* ignore */ }
+  }
 
-  async function doApplyStyle(id, name, dir) {
+  function styleCompareUrl(pending, dir) {
+    try {
+      var proj = (S.proj && S.proj.dir === dir) ? S.proj : ((S.projects || []).filter(function (p) { return p.dir === dir; })[0] || {});
+      var base = proj.url || '';
+      if (!base) return '';
+      var u = new URL(base, location.href);
+      u.pathname = u.pathname.replace(/[^/]*$/, 'style-compare.html');
+      var q = new URLSearchParams();
+      if (pending) q.set('pending', '1');
+      var api = String(S.apiBase || '').replace(/\/+$/, '') || location.origin;
+      q.set('api', api);
+      if (dir) q.set('dir', dir);
+      u.search = '?' + q.toString();
+      u.hash = '';
+      return u.toString();
+    } catch (e) { return ''; }
+  }
+
+  async function doApplyStyle(id, name, dir, opts) {
+    opts = opts || {};
     var st = S.style;
-    st.msg = '正在生成风格规范并发送给 Agent…'; render();
+    st.msg = '正在生成风格规范并发送给 Agent…'; render(); try { wbToast('正在应用「' + (name || '') + '」风格…', 2300); } catch (e) {}
     try {
       var r = await hostCall('styles.apply', { id: id, dir: dir });
       if (!r || !r.ok) { st.msg = '失败：' + String((r && r.error) || '未知错误'); render(); return; }
+      if (opts.openCompare) {
+        var cu = styleCompareUrl(true, dir);
+        if (cu) { try { window.open(cu, '_blank'); } catch (e) { /* ignore */ } }
+      }
       var sent = await hostCall('agent.prompt', { text: r.text, sessionId: (S.session || QS.get("session") || "") });
-      st.msg = sent && (sent.ok || sent.via) ? '已把「' + (name || '') + '风格」发给 Agent，切回对话继续' : '发送失败：' + String((sent && (sent.reason || sent.error)) || '未知');
+      var ok = Boolean(sent && (sent.ok || sent.via));
+      try { wbToast(ok ? '已发送风格，Agent 开始改页面' : '风格发送失败', 3000); } catch (e) {}
+      st.msg = ok ? (opts.openCompare ? '已应用「' + (name || '') + '」风格，对比页已打开，等待新风格生成' : '已把「' + (name || '') + '」风格发给 Agent，切回对话继续') : '发送失败：' + String((sent && (sent.reason || sent.error)) || '未知');
       writeLS('ve-wb:lastStyle', id);
       st.selectedId = id;
     } catch (e) { st.msg = '失败：' + String(e.message || e); }
     render();
   }
 
-  function applyStyle(id, name) {
+  function applyStyle(id, name, opts) {
+    opts = opts || {};
     var st = S.style;
     var dir = st.target || (S.projects[0] && S.projects[0].dir) || '';
     if (!dir) { st.msg = '先打开一个项目'; render(); return; }
+    st.selectedId = id;
     askConfirm({
       title: '应用风格到项目',
       rows: [
         ['风格', String(name || '')],
         ['项目', dir],
       ],
-      note: '确定后会把风格规范写入项目并发送给 Agent，由它修改这个项目的页面样式。',
+      note: '应用前会自动备份当前版本。可以选择只应用，或应用后立刻打开原版/新版对比。',
       okText: '应用到该项目',
+      compareText: '应用并打开风格对比',
       cancelText: '取消',
-      onOk: function () { S.confirm = null; doApplyStyle(id, name, dir); },
+      onOk: function () { S.confirm = null; doApplyStyle(id, name, dir, {}); },
+      onCompare: function () { S.confirm = null; doApplyStyle(id, name, dir, { openCompare: true }); },
     });
   }
   function editorSend(type, payload) {
@@ -652,6 +696,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       (c.note ? '<p class="cd-note">' + esc(c.note) + '</p>' : '') +
       '<div class="cd-actions">' +
       '<button class="btn ghost" data-act="cd-cancel">' + esc(c.cancelText || '取消') + '</button>' +
+      (c.compareText ? '<button class="btn ghost" data-act="cd-compare">' + esc(c.compareText) + '</button>' : '') +
       '<button class="btn pri" data-act="cd-ok">' + esc(c.okText || '确定') + '</button>' +
       '</div>' +
       '</div>'
@@ -958,6 +1003,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
         ? '<div class="sm-actions"><span>记不住名字？直接选：</span>' +
           '<select data-field="styleSelect">' + options + '</select>' +
           '<button class="btn pri" data-act="style-apply-btn">应用这个风格</button>' +
+
           '</div>'
         : '<div class="note">还没有风格：点「＋ 添加风格」导入一份（目录里要有 design-tokens.json 或 UI-SPEC.md）</div>') +
       (st.addOpen
@@ -1124,8 +1170,10 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     if (act === "style-open") { S.style.open = true; S.style.addOpen = false; render(); return; }
     if (act === "style-modal-close") { S.style.open = false; render(); return; }
     if (act === "style-apply-btn") { var sel = $('[data-field="styleSelect"]'); if (sel) { var opt = sel.options[sel.selectedIndex]; applyStyle(sel.value, opt ? opt.text : ''); } return; }
+    if (act === "style-apply-open") { var sel2 = $('[data-field="styleSelect"]'); if (sel2) { var opt2 = sel2.options[sel2.selectedIndex]; applyStyle(sel2.value, opt2 ? opt2.text : '', { openCompare: true }); } return; }
     if (act === "cd-cancel") { S.confirm = null; render(); return; }
     if (act === "cd-ok") { var cb = S.confirm && S.confirm.onOk; S.confirm = null; render(); if (typeof cb === "function") cb(); return; }
+    if (act === "cd-compare") { var cb2 = S.confirm && S.confirm.onCompare; S.confirm = null; render(); if (typeof cb2 === "function") cb2(); return; }
     if (act === "reload-workbench") { location.reload(); return; }
     if (act === "style-add-open") { S.style.addOpen = true; render(); return; }
     if (act === "style-add-cancel") { S.style.addOpen = false; render(); return; }

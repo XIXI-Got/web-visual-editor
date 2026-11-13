@@ -1270,6 +1270,9 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
   padding:9px 16px;background:var(--ink);color:var(--paper);border-radius:var(--r-full);
   font:500 12px/1.2 var(--font-sans);letter-spacing:.02em;box-shadow:0 12px 30px rgba(0,0,0,.28);
   pointer-events:none;white-space:nowrap}
+
+#wb-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,12px);z-index:9999;max-width:min(520px,calc(100vw - 32px));padding:10px 16px;border-radius:999px;background:#111;color:#fff;font:500 12px/1.4 Inter,"PingFang SC",sans-serif;box-shadow:0 12px 28px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+#wb-toast.on{opacity:1;transform:translate(-50%,0)}
 
 /* 风格优化：大胶囊行卡 */
 .style-rows{display:flex;flex-direction:column;gap:22px;margin-top:26px}
