@@ -28,12 +28,12 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     showPick: false,
     path: "",
     pick: { path: "", data: null, busy: false, err: "", typed: null, for: "" },
-    stylePick: { open: false, path: "", data: null, busy: false, err: "", typed: null },
+    stylePick: { open: false, path: "", data: null, busy: false, err: "", typed: null, pages: null, pagesLoading: false },
     apiBase: "",
     token: "",
     styles: [],
     ai: { open: false, text: "", sel: null, busy: false, msg: "", marquee: false },
-    style: { target: "", busy: false, addOpen: false, addPath: "", msg: "", open: false, selectedId: "" },
+    style: { target: "", targetPage: "", busy: false, addOpen: false, addPath: "", msg: "", open: false, selectedId: "" },
     apply: null,
     confirm: null,
     pagesModal: { open: false, dir: "", list: null, loading: false },
@@ -247,6 +247,18 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     if (d && d.here && !d.here.mode) {
       S.msg = "这个目录不是前端项目（没有 package.json / index.html），进去子目录再试";
       render();
+      return;
+    }
+    // 选到项目目录后先列出可打开的 HTML 页面：同一个文件夹多个 html 时，由用户点具体页面再打开
+    var pages = [];
+    try {
+      var pr = await hostCall("pages.list", { dir: dir });
+      pages = ((pr && Array.isArray(pr.pages)) ? pr.pages : []).filter(function (x) { return !/(^|\/)_[^\/]*\.html?$/i.test(String(x && x.path || "")); });
+    } catch (e) { pages = []; }
+    if (pages.length) {
+      S.showPick = false;
+      S.pick.data = null;
+      openPages(dir);
       return;
     }
     var r = await openProject(dir);
@@ -608,7 +620,11 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
         var cu = styleCompareUrl(true, dir);
         if (cu) { try { window.open(cu, "_blank"); S.apply.compareUrl = cu; } catch (e) { /* ignore */ } }
       }
-      var sent = await hostCall("agent.prompt", { text: r.text, sessionId: (S.session || QS.get("session") || "") });
+      var applyText = r.text;
+      if (S.style.targetPage) {
+        applyText += "\n\n目标页面：" + S.style.targetPage + "（只优化这一页；同目录其它页面不要动）";
+      }
+      var sent = await hostCall("agent.prompt", { text: applyText, sessionId: (S.session || QS.get("session") || "") });
       var ok = Boolean(sent && (sent.ok || sent.via));
       S.apply.step = ok ? "started" : "error";
       S.apply.sent = sent || null;
@@ -641,7 +657,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       title: "应用风格到项目",
       rows: [
         ["风格", String(name || "")],
-        ["风格目标项目", dir + "（可与当前编辑项目不同）"]
+        ["风格目标项目", dir + (st.targetPage ? "  → 只优化 " + st.targetPage : "（整个目录）") + "（可与当前编辑项目不同）"]
       ],
       note: "点击后会：① 自动备份当前版本 ② 生成风格规范 ③ 把要求发到当前对话里的 Agent 让它改页面。工作台右下角会显示进度和回执，可以点「去对话查看」。",
       okText: "应用到该项目",
@@ -895,7 +911,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       '<span>风格目标项目</span>' +
       '<select data-field="styleTarget" title="选择要应用风格的项目">' + opts + '</select>' +
       '<button class="btn ghost stylelib-pickbtn" data-act="style-target-pick" title="选择任意本地项目目录（不必先在编辑器里打开）">选择目录…</button>' +
-      '<span class="stylelib-targetpath" title="' + esc(target) + '">' + (target ? esc(baseName(target)) + ' · ' + esc(target) : "未选择") + '</span>' +
+      '<span class="stylelib-targetpath" title="' + esc(target) + '">' + (target ? esc(baseName(target)) + (st.targetPage ? ' / ' + esc(st.targetPage) : '') + ' · ' + esc(target) : "未选择") + '</span>' +
       '<span class="stylelib-targetnote">与「打开项目」相互独立</span>' +
       '</div>';
   }
@@ -905,12 +921,23 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     sp.busy = true;
     sp.err = "";
     render();
+    sp.pages = null;
+    sp.pagesLoading = false;
     try {
       var d = await hostCall("browse", { path: dir || "" });
       sp.data = d || null;
       sp.path = (d && d.path) || "";
       sp.typed = sp.path;
       if (d && d.error) sp.err = d.error;
+      if (d && d.here && d.here.mode) {
+        sp.pagesLoading = true;
+        render();
+        try {
+          var pr = await hostCall("pages.list", { dir: sp.path });
+          sp.pages = ((pr && Array.isArray(pr.pages)) ? pr.pages : []).filter(function (x) { return !/(^|\/)_[^\/]*\.html?$/i.test(String(x && x.path || "")); });
+        } catch (e) { sp.pages = []; }
+        sp.pagesLoading = false;
+      }
     } catch (e) {
       sp.err = "打不开这个目录：" + String((e && e.message) || e);
     }
@@ -954,9 +981,20 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
         '</div>' +
         (sp.err ? '<div class="sp-err">' + esc(sp.err) + '</div>' : "") +
         '<div class="sp-list">' + dirs + '</div>' +
+        (sp.pagesLoading
+          ? '<div class="sp-pages"><div class="sp-empty">读取 HTML 页面中…</div></div>'
+          : (Array.isArray(sp.pages) && sp.pages.length
+            ? '<div class="sp-pages"><div class="sp-pages-title">可优化的页面（点一个 = 只优化这一页）</div>' +
+              sp.pages.map(function (pg) {
+                return '<button class="sp-page" data-act="style-pick-page" data-dir="' + esc(cur) + '" data-page="' + esc(pg.path) + '">' +
+                  '<b>' + esc(pg.title || pg.path) + '</b>' +
+                  '<small>' + esc(pg.path) + (pg.entry ? ' · 首页' : '') + '</small>' +
+                  '</button>';
+              }).join('') + '</div>'
+            : (Array.isArray(sp.pages) ? '<div class="sp-pages"><div class="sp-empty">没有识别到 HTML 页面（Vite/SPA 暂不支持页面级）</div></div>' : ''))) +
         '<div class="sp-foot">' +
           '<button class="btn ghost" data-act="style-pick-cancel">取消</button>' +
-          '<button class="btn pri" data-act="style-pick-ok"' + (sp.busy || !cur ? " disabled" : "") + '>用这个目录作为风格目标</button>' +
+          '<button class="btn pri" data-act="style-pick-ok"' + (sp.busy || !cur ? " disabled" : "") + '>用整个目录（不限页面）</button>' +
         '</div>' +
       '</div>';
   }
@@ -978,7 +1016,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       return '<div class="' + cls + '"><i></i><span>' + s[1] + '</span></div>';
     }).join('');
     var lines = '';
-    if (a.dir) lines += '<div class="apply-line"><span>项目</span><b title="' + esc(a.dir) + '">' + esc(baseName(a.dir)) + ' · ' + esc(a.dir) + '</b></div>';
+    if (a.dir) lines += '<div class="apply-line"><span>项目</span><b title="' + esc(a.dir) + '">' + esc(baseName(a.dir)) + (S.style.targetPage ? " / " + esc(S.style.targetPage) : "") + ' · ' + esc(a.dir) + '</b></div>';
     if (a.step === "started") {
       var sid = a.sessionId ? String(a.sessionId).slice(0, 8) + "…" : "当前对话";
       lines += '<div class="apply-line"><span>对话</span><b>' + esc(sid) + (a.sent && a.sent.via ? ' · ' + esc(a.sent.via) : '') + '</b></div>';
@@ -1131,7 +1169,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     S.pagesModal = { open: true, dir: dir || "", list: null, loading: true };
     render();
     hostCall("pages.list", { dir: dir || "" }).then(function (r) {
-      S.pagesModal.list = (r && Array.isArray(r.pages)) ? r.pages : [];
+      S.pagesModal.list = ((r && Array.isArray(r.pages)) ? r.pages : []).filter(function (x) { return !/(^|\/)_[^\/]*\.html?$/i.test(String(x && x.path || "")); });
       S.pagesModal.loading = false;
       render();
     }).catch(function () {
@@ -1303,11 +1341,27 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       var spDir = S.stylePick.path;
       if (!spDir) { try { wbToast("还没选目录", 1600); } catch (e) { /* ignore */ } return; }
       S.style.target = spDir;
+      S.style.targetPage = "";
       writeLS("ve-wb:styleTarget", spDir);
+      writeLS("ve-wb:styleTargetPage", "");
       S.stylePick.open = false;
       S.stylePick.data = null;
       render();
-      try { wbToast("风格目标项目已设为：" + spDir, 2600); } catch (e) { /* ignore */ }
+      try { wbToast("风格目标项目已设为：" + spDir + "（整个目录）", 2600); } catch (e) { /* ignore */ }
+      return;
+    }
+    if (act === "style-pick-page") {
+      var pgDir = t.getAttribute("data-dir") || "";
+      var pgPath = t.getAttribute("data-page") || "";
+      if (!pgDir || !pgPath) return;
+      S.style.target = pgDir;
+      S.style.targetPage = pgPath;
+      writeLS("ve-wb:styleTarget", pgDir);
+      writeLS("ve-wb:styleTargetPage", pgPath);
+      S.stylePick.open = false;
+      S.stylePick.data = null;
+      render();
+      try { wbToast("风格目标：只优化 " + pgPath, 2800); } catch (e) { /* ignore */ }
       return;
     }
     if (act === "style-target-pick-cancel") { S.showPick = false; S.pick.for = ""; render(); return; }
@@ -1456,7 +1510,12 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
   render();
   try { S.style.addPath = readLS("ve-wb:lastSpec", ""); } catch (e) { /* ignore */ }
   // 风格目标与「打开项目」独立：启动时不自动填充，只恢复用户上次显式选择
-  try { var savedStyleTarget = readLS("ve-wb:styleTarget", ""); if (savedStyleTarget) S.style.target = savedStyleTarget; } catch (e) { /* ignore */ }
+  try {
+    var savedStyleTarget = readLS("ve-wb:styleTarget", "");
+    if (savedStyleTarget) S.style.target = savedStyleTarget;
+    var savedStylePage = readLS("ve-wb:styleTargetPage", "");
+    if (savedStylePage) S.style.targetPage = savedStylePage;
+  } catch (e) { /* ignore */ }
   notifyHost("ready");
   if (!EMBEDDED) {
     // 独立模式：有接口地址就自动读项目；带 bootTarget 时直接打开该项目
