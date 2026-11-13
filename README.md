@@ -9,10 +9,6 @@
 > ① **DSH 插件**（推荐，开箱即用）：选一个源码文件夹 → 右侧抽屉里实时编辑 + 框选交给 AI，见 [`dsh-plugin/README.md`](dsh-plugin/README.md)
 > ② 独立工具（本文档）：装进任意 Vite 项目，或直接托管静态站
 
-![DSH 插件抽屉](shots/dsh-drawer-preview.png)
-
-![编辑器界面（原生右栏 + 网页工作台）](shots/dsh-editor-native.png)
-
 ![编辑器操作：选中元素、调整文字与布局](screenshots/demo-usage.gif)
 
 ---

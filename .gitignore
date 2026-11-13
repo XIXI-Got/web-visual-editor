@@ -56,3 +56,6 @@ releases/*.tgz
 demo/_diag.html
 demo/_diag2.html
 demo/_e2e.html
+
+# e2e 生成的截图（README 已不再引用，需要时本地会重新生成）
+shots/dsh-*.png

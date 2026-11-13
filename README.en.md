@@ -8,8 +8,6 @@ runs locally and offline.
 
 [中文说明](README.md) · [DSH plugin docs](dsh-plugin/README.md) · MIT License
 
-![DSH sidebar editor](shots/dsh-editor-native.png)
-
 ![Editor: select elements, adjust text and layout](screenshots/demo-usage.gif)
 
 Two ways to use it:
