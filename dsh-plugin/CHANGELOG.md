@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.120（无 index.html 的目录也能打开：页面列表按浅层 HTML 识别）
+- 之前只有「根目录有 index.html（或 dist/out/build/public/www/index.html）」或装了 vite 才会被识别成项目；像 `deliverables/xhs-cover/` 这种只有嵌套 HTML 的目录会被判成「无法识别的项目」，工作台里看不到、也打不开。
+- 现在：没有 index.html 时，只要目录里浅层（≤3 层）有 HTML，也按静态站打开，入口跟随第一个 HTML；工作台「打开项目」和「风格目标」都会列出这些具体页面（例如 `deliverables/xhs-cover/` 会列出 `cover.html / cover-bw.html / cover-folders.html`）。
+- 页面列表沿用浅层扫描（≤3 层、跳过 node_modules/.git/.ve-data/dist 等），单项目最多 80 个页面。
+
 ## 1.1.119（目录选择框：点外面空白处收起）
 - 「打开项目」的目录选择框打开后，点击框外任意空白处会自动收起；点框内保持打开，点「打开项目」按钮仍然正常切换。
 - Esc 也能收起目录选择框；风格目标弹窗同样支持点遮罩 / Esc 关闭。

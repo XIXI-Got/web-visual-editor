@@ -44,6 +44,41 @@ function exists(...p) {
 }
 
 /** 判断一个目录是什么项目 */
+/** 目录里没有 index.html 时，浅层找第一个 HTML 作为入口（depth ≤ maxDepth，跳过重目录） */
+export function findFirstHtml(dir, maxDepth = 3) {
+  if (!dir || !fs.existsSync(dir)) return "";
+  const seen = [];
+  const walk = (abs, rel, depth) => {
+    if (depth > maxDepth) return;
+    let entries = [];
+    try { entries = fs.readdirSync(abs, { withFileTypes: true }); } catch { return; }
+    for (const ent of entries) {
+      if (ent.name.startsWith(".")) continue;
+      const p = path.join(abs, ent.name);
+      if (ent.isDirectory()) {
+        if (SKIP_DIRS.has(ent.name)) continue;
+        walk(p, rel ? rel + "/" + ent.name : ent.name, depth + 1);
+      } else if (/\.html?$/i.test(ent.name)) {
+        const relPath = rel ? rel + "/" + ent.name : ent.name;
+        seen.push(relPath);
+        if (seen.length >= 40) return;
+      }
+    }
+  };
+  walk(dir, "", 0);
+  if (!seen.length) return "";
+  // 浅的优先，其次 index.html 优先，再按名字
+  seen.sort((a, b) => {
+    const da = a.split("/").length, db = b.split("/").length;
+    if (da !== db) return da - db;
+    const ia = /(^|\/)index\.html?$/i.test(a) ? 0 : 1;
+    const ib = /(^|\/)index\.html?$/i.test(b) ? 0 : 1;
+    if (ia !== ib) return ia - ib;
+    return a.localeCompare(b);
+  });
+  return seen[0];
+}
+
 export function detectProject(dir) {
   const info = { dir, mode: null, reasons: [], contentJson: "", publicDir: "", viteConfig: "" };
   if (!dir || !fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) {
@@ -90,6 +125,13 @@ export function detectProject(dir) {
     info.webRoot = entry.webRoot;
     info.entryPath = entry.entryPath;
     info.reasons.push("静态站托管 + 注入" + (entry.webRoot !== dir ? "（入口 " + path.basename(entry.webRoot) + "/）" : "") + (entry.entryPath ? "，跟随跳转到 " + entry.entryPath : ""));
+  } else if (findFirstHtml(dir, 3)) {
+    // 没有 index.html（比如工具/交付物目录）：只要浅层有 HTML，也按静态站打开，入口用第一个 HTML
+    const first = findFirstHtml(dir, 3);
+    info.mode = "static";
+    info.webRoot = dir;
+    info.entryPath = "/" + first;
+    info.reasons.push("静态站托管（无 index.html，入口跟随 " + info.entryPath + "）");
   } else if (cfg) {
     info.error = "有 Vite 配置，但项目里没装 vite（先在该目录执行一次 npm install）";
   } else {
