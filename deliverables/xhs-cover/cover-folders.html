@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>小红书封面 · 风格文件夹（蓝白版）· 1080×1440</title>
+<style>
+  :root {
+    --card: #ffffff;
+    --ink: #0b1220;
+    --ink-2: #33415c;
+    --ink-3: #7b8aa6;
+    --blue: #2e5bff;
+    --blue-2: #7c9bff;
+    --blue-soft: rgba(46, 91, 255, .10);
+    --line: rgba(27, 58, 128, .16);
+    --paper: #eef4ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1440px; }
+  body {
+    background: #f5f9ff;
+    color: var(--ink);
+    font-family: "Inter Tight", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .cover {
+    position: relative;
+    width: 1080px; height: 1440px;
+    padding: 52px 64px 44px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    background:
+      radial-gradient(90% 56% at 50% -6%, rgba(124, 155, 255, .34), rgba(124, 155, 255, 0) 60%),
+      radial-gradient(70% 46% at 100% 102%, rgba(46, 91, 255, .12), rgba(46, 91, 255, 0) 60%),
+      linear-gradient(180deg, #f7faff 0%, #eef4ff 56%, #e9f1ff 100%);
+  }
+  .cover::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(46, 91, 255, .22) 1px, transparent 1.2px);
+    background-size: 28px 28px;
+    opacity: .36;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.12) 58%, rgba(0,0,0,.7));
+  }
+  /* ── 顶部：品牌 ── */
+  .top { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; height: 44px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 42px; height: 42px; border-radius: 11px;
+    background: var(--blue); color: #fff;
+    display: grid; place-items: center; font-size: 21px; line-height: 1;
+    transform: rotate(-6deg);
+    box-shadow: 0 10px 22px rgba(46, 91, 255, .34);
+  }
+  .brand b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -.01em; }
+  .brand span { display: block; margin-top: 4px; font: 600 10.5px/1 "Cascadia Mono", Consolas, monospace; letter-spacing: .18em; color: var(--ink-3); }
+  .pill {
+    padding: 8px 14px; border-radius: 999px;
+    border: 1.5px solid var(--ink); background: #fff;
+    font: 700 13px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+    box-shadow: 0 3px 0 rgba(11, 18, 32, .9);
+  }
+  /* ── 大字（在上面） ── */
+  .kicker {
+    position: relative; z-index: 3;
+    margin-top: 24px;
+    display: inline-flex; align-items: center; gap: 9px;
+    font: 700 15px/1 "Cascadia Mono", Consolas, monospace;
+    letter-spacing: .14em; color: var(--ink-2); text-transform: uppercase;
+  }
+  .kicker i { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+  h1 {
+    position: relative; z-index: 3;
+    margin-top: 12px;
+    font-size: 134px; line-height: .96; letter-spacing: -.05em; font-weight: 900;
+  }
+  h1 .line { display: block; }
+  h1 .hl { position: relative; display: inline-block; color: #fff; padding: 0 .05em; }
+  h1 .hl::before {
+    content: ""; position: absolute; left: 0; right: 0; top: .07em; bottom: .03em;
+    background: var(--blue); z-index: -1; border-radius: 12px;
+  }
+  h1 .hl em { font-style: normal; position: relative; }
+  .sub { position: relative; z-index: 3; margin-top: 14px; font-size: 24px; font-weight: 600; color: var(--ink-2); }
+  .sub b { font-weight: 800; color: var(--ink); }
+
+  /* ── 风格文件夹 ── */
+  .lib-head {
+    position: relative; z-index: 3;
+    margin-top: 26px;
+    display: flex; align-items: center; justify-content: space-between;
+    font: 700 12.5px/1 "Cascadia Mono", Consolas, monospace;
+    letter-spacing: .1em; color: var(--ink-3);
+    text-transform: uppercase;
+  }
+  .lib-head .r { color: var(--blue); }
+  .folders {
+    position: relative; z-index: 3;
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px 18px;
+  }
+  .folder { position: relative; height: 246px; }
+  .folder .tab {
+    position: absolute; left: 4px; top: 0;
+    height: 24px; width: 46%;
+    border-radius: 11px 11px 0 0;
+    background: #bfd4ff;
+    border: 1.5px solid rgba(27, 58, 128, .22);
+    border-bottom: 0;
+    z-index: 3;
+  }
+  /* 文件夹里露出来的“页面/文件” */
+  .doc {
+    position: absolute; left: 12px; right: 12px; top: 24px;
+    height: 202px;
+    z-index: 1;
+    border-radius: 9px 9px 3px 3px;
+    background: #fff;
+    border: 1px solid rgba(27, 58, 128, .12);
+    box-shadow: 0 14px 24px -16px rgba(19, 44, 110, .6);
+    overflow: hidden;
+    transform: rotate(-1.4deg);
+  }
+  .doc img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; display: block; }
+  /* 文件夹前片：只盖住下半部分，露出文件上半截 */
+  .body {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 136px;
+    border-radius: 4px 14px 14px 14px;
+    background: linear-gradient(180deg, #e7f0ff 0%, #cfe0ff 100%);
+    border: 1.5px solid rgba(27, 58, 128, .22);
+    box-shadow: 0 18px 30px -20px rgba(19, 44, 110, .6), inset 0 9px 12px -10px rgba(19, 44, 110, .35);
+    z-index: 2;
+    overflow: hidden;
+  }
+  .flap { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 10px 11px; display: flex; align-items: flex-end; }
+  .flap .tags { display: flex; gap: 5px; }
+  .flap .tags i {
+    font-style: normal;
+    font: 700 9.5px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+    padding: 4px 6px; border-radius: 999px;
+    background: rgba(46, 91, 255, .12); color: var(--blue);
+  }
+  .folder .name { display: block; margin-top: 8px; font-size: 14.5px; font-weight: 800; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .folder.on .body { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46, 91, 255, .18), 0 18px 30px -20px rgba(19, 44, 110, .6); }
+  .folder.on .tab { background: var(--blue); border-color: var(--blue); }
+  .folder.on::after {
+    content: "当前"; position: absolute; left: auto; right: 8px; top: 12px;
+    background: var(--blue); color: #fff;
+    font: 700 10px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+    padding: 5px 9px; border-radius: 999px; z-index: 5;
+    box-shadow: 0 4px 10px rgba(46, 91, 255, .45);
+  }
+  /* 两套没有预览图的风格：用 CSS 画缩略 */
+  .doc.mini { padding: 0; }
+  .mini-demo { height: 100%; background: #fff; padding: 10px; }
+  .mini-demo .bar { height: 8px; width: 46px; border-radius: 4px; background: var(--blue); margin-bottom: 7px; }
+  .mini-demo .l { height: 6px; border-radius: 3px; background: #dbe4f5; margin-bottom: 5px; }
+  .mini-demo .l.w2 { width: 72%; } .mini-demo .l.w3 { width: 54%; }
+  .mini-demo .block { height: 34px; border-radius: 6px; background: linear-gradient(90deg, #eaf1ff, #dbe8ff); margin-top: 7px; }
+  .mini-dot { height: 100%; background: #fff; background-image: radial-gradient(rgba(0,0,0,.22) 1px, transparent 1.1px); background-size: 7px 7px; position: relative; }
+  .mini-dot::after { content: ""; position: absolute; inset: 26% 22% auto 22%; height: 8px; background: #111; border-radius: 2px; }
+  .mini-dot::before { content: ""; position: absolute; inset: 44% 30% auto 30%; height: 5px; background: rgba(0,0,0,.55); border-radius: 2px; }
+
+  .drop-hint {
+    position: relative; z-index: 3;
+    margin-top: 20px;
+    height: 84px;
+    border: 2px dashed rgba(46, 91, 255, .42);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    font: 700 14px/1.4 "Cascadia Mono", Consolas, monospace;
+    color: var(--ink-2); letter-spacing: .01em;
+    background: rgba(46, 91, 255, .045);
+  }
+  .drop-hint b { color: var(--blue); font-weight: 800; }
+  /* ── 底部 ── */
+  .chips { position: relative; z-index: 3; display: flex; gap: 12px; margin-top: 28px; }
+  .chip { flex: 1; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 13px; background: #fff; border: 1.5px solid var(--line); }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex: none; }
+  .chip b { display: block; font-size: 17px; font-weight: 800; white-space: nowrap; }
+  .chip span { display: block; margin-top: 2px; font-size: 12px; color: var(--ink-3); }
+  .foot {
+    position: relative; z-index: 3;
+    margin-top: auto; padding-top: 14px;
+    border-top: 1.5px solid rgba(27,58,128,.16);
+    display: flex; align-items: center; justify-content: space-between;
+    font: 700 13px/1 "Cascadia Mono", Consolas, monospace; color: var(--ink-2); letter-spacing: .03em;
+  }
+  .foot .right { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+  .foot .arrow { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="top">
+    <div class="brand">
+      <div class="logo">✎</div>
+      <div>
+        <b>网页可视化编辑器</b>
+        <span>DSH · VISUAL EDITOR</span>
+      </div>
+    </div>
+    <div class="pill">一键换风格</div>
+  </div>
+
+  <div class="kicker"><i></i><span>风格优化 · 像换文件夹一样换风格</span></div>
+  <h1>
+    <span class="line">风格，</span>
+    <span class="line"><span class="hl"><em>一键换</em></span></span>
+  </h1>
+  <p class="sub">颜色、字体、圆角、间距、动效 <b>整套一起换</b> · 选好点应用，不满意随时对比回退</p>
+
+  <div class="lib-head">
+    <span>风格文件夹 · 8 套内置</span>
+    <span class="r">STYLE LIBRARY / 已连接 demo</span>
+  </div>
+
+  <div class="folders">
+    <div class="folder on">
+      <div class="tab"></div>
+      <div class="doc"><img src="../../style-template/glassmio-glassmorphism/preview.png" alt="" /></div>
+      <div class="body"><div class="flap"><div class="tags"><i>玻璃</i><i>层次</i></div></div></div>
+      <span class="name">Glassmio 玻璃拟态</span>
+    </div>
+    <div class="folder">
+      <div class="tab"></div>
+      <div class="doc"><img src="../../style-template/swiss-international/preview.png" alt="" /></div>
+      <div class="body"><div class="flap"><div class="tags"><i>纯色</i><i>干净</i></div></div></div>
+      <span class="name">瑞士国际主义</span>
+    </div>
+    <div class="folder">
+      <div class="tab"></div>
+      <div class="doc"><img src="../../style-template/spatial-glass/preview.png" alt="" /></div>
+      <div class="body"><div class="flap"><div class="tags"><i>玻璃</i><i>层次</i></div></div></div>
+      <span class="name">Spatial Glass 拟态玻璃</span>
+    </div>
+    <div class="folder">
+      <div class="tab"></div>
+      <div class="doc"><img src="../../style-template/aurora-dashboard/preview.png" alt="" /></div>
+      <div class="body"><div class="flap"><div class="tags"><i>纯色</i><i>干净</i></div></div></div>
+      <span class="name">Aurora 极光黑夜</span>
+    </div>
+    <div class="folder">
+      <div class="tab"></div>
+      <div class="doc"><img src="../../style-template/pixelos-95/preview.png" alt="" /></div>
+      <div class="body"><div class="flap"><div class="tags"><i>纯色</i><i>干净</i></div></div></div>
+      <span class="name">Pixel 复古像素</span>
+    </div>
+    <div class="folder">
+      <div class="tab"></div>
+      <div class="doc"><img src="../../style-template/uneo-neumorphism/preview.png" alt="" /></div>
+      <div class="body"><div class="flap"><div class="tags"><i>纯色</i><i>干净</i></div></div></div>
+      <span class="name">UNEO 暖石拟物</span>
+    </div>
+    <div class="folder">
+      <div class="tab"></div>
+      <div class="doc mini"><div class="mini-demo"><div class="bar"></div><div class="l"></div><div class="l w2"></div><div class="block"></div></div></div>
+      <div class="body"><div class="flap"><div class="tags"><i>纯色</i><i>干净</i></div></div></div>
+      <span class="name">DEMO 蓝白</span>
+    </div>
+    <div class="folder">
+      <div class="tab"></div>
+      <div class="doc mini"><div class="mini-dot"></div></div>
+      <div class="body"><div class="flap"><div class="tags"><i>极简</i><i>编排</i></div></div></div>
+      <span class="name">极简白点风格</span>
+    </div>
+  </div>
+
+  <div class="drop-hint"><span>＋</span><span>把自己的设计规范拖进来 —— <b>design-tokens.json / UI-SPEC.md</b> → 自动变成一套风格文件夹</span></div>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><div><b>整套换</b><span>颜色 / 字体 / 圆角一起</span></div></div>
+    <div class="chip"><span class="dot"></span><div><b>可对比</b><span>原版 / 新版并排看</span></div></div>
+    <div class="chip"><span class="dot"></span><div><b>自动备份</b><span>随时回退到上一版</span></div></div>
+  </div>
+
+  <div class="foot">
+    <span>本地运行 · 零依赖 · 支持 Vite / 静态站</span>
+    <span class="right">主页看安装<span class="arrow">→</span></span>
+  </div>
+</div>
+</body>
+</html>
