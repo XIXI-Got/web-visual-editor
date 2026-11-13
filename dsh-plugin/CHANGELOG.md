@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.113（构建流程：自动同步工作台前端；发布包不入库）
+- `tools/build-release.mjs` 构建前自动把 `workbench-ui/`（源）同步到 `dsh-plugin/lib/workbench-ui/`（发布产物），避免两份副本再漂移。
+- 仓库不再入库发布包：`dsh-plugin/*.tgz`、`releases/*.tgz` 全部 ignore，tgz 只在本地生成（`node tools/build-release.mjs` 后本地两份都有）。
+- `demo/_diag*.html`、`_e2e.html` 等调试页不再入库（本地保留）；`style-template/**/PRO-*` 整个私有规范体系忽略。
+
 ## 1.1.112（风格原生背景图：随风格一起落地）
 - 风格可以带**原生背景图**：风格目录里放 `background.jpg`，导入时复制进风格库并记录 `style-spec.json` 的 `backgroundImage`；style-brief 的「推荐背景」段会写明「复制到项目 assets/、用 `url("assets/background.jpg")` 引用」。
 - `/styles/apply` 与 `web_editor_apply_style` 现在会**自动把原生背景图复制到项目 `assets/`**（目录不存在会创建），返回里带 `backgroundImage` 字段；背景 CSS 直接可用，不用 Agent 再找图。

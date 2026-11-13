@@ -19,6 +19,24 @@ const PLUGIN = path.join(ROOT, "dsh-plugin");
 const pkg = JSON.parse(fs.readFileSync(path.join(PLUGIN, "package.json"), "utf8").replace(/^\uFEFF/, ""));
 const outName = `dsh-ui-editor-${pkg.version}.tgz`;
 
+/* 0) 同步独立工作台前端：workbench-ui/（源）→ dsh-plugin/lib/workbench-ui/（发布产物）
+   两份副本曾经漂移过：以后只改根目录 workbench-ui/，构建时自动同步。 */
+try {
+  const wbSrc = path.join(ROOT, "workbench-ui");
+  const wbDst = path.join(PLUGIN, "lib", "workbench-ui");
+  if (fs.existsSync(wbSrc)) {
+    fs.rmSync(wbDst, { recursive: true, force: true });
+    fs.cpSync(wbSrc, wbDst, {
+      recursive: true,
+      filter: (s) => !/\.ve-data([\\/]|$)|node_modules/.test(s),
+    });
+    console.log("✓ 已同步工作台前端：workbench-ui → dsh-plugin/lib/workbench-ui");
+  }
+} catch (e) {
+  console.log("⚠ 工作台前端同步失败：" + String((e && e.message) || e));
+}
+
+
 const stage = fs.mkdtempSync(path.join(os.tmpdir(), "dsh-ue-release-"));
 const dest = path.join(stage, "pkg");
 fs.mkdirSync(dest, { recursive: true });
