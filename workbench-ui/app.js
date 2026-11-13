@@ -94,7 +94,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
         try { ensureAllStyleFonts(S.styles, String(d.data.apiBase || S.apiBase || '').replace(/\/+$/, '')); } catch (e) { /* ignore */ }
       }
       if (d.data && d.data.apiBase) S.apiBase = d.data.apiBase;
-      if (d.data && d.data.info && d.data.info.dir && !S.style.target) S.style.target = d.data.info.dir;
+      // 风格优化目标不再自动跟随“上一个打开/编辑的项目”，只从用户显式选择（localStorage）恢复
       if (d.data && d.data.theme) setTheme(d.data.theme, false);
       render();
       return;
@@ -157,7 +157,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     try {
       var r = await hostCall("projects.list");
       S.projects = (r && r.projects) || [];
-      try { if (!S.style.target && S.projects[0]) S.style.target = S.projects[0].dir; } catch (e) { /* ignore */ }
+      // 不再自动把「打开的项目」当风格目标：两者独立
       if (r && r.info) S.info = r.info;
       S.msg = "";
     } catch (e) {
@@ -633,14 +633,14 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
   function applyStyle(id, name, opts) {
     opts = opts || {};
     var st = S.style;
-    var dir = st.target || (S.projects[0] && S.projects[0].dir) || "";
-    if (!dir) { st.msg = "先选一个目标项目（或点「选择目录…」）"; render(); return; }
+    var dir = st.target || "";
+    if (!dir) { st.msg = "先选「风格目标项目」——它和「打开项目」是分开的，可以点「选择目录…」挑任意目录"; render(); return; }
     st.selectedId = id;
     askConfirm({
       title: "应用风格到项目",
       rows: [
         ["风格", String(name || "")],
-        ["目标项目", dir]
+        ["风格目标项目", dir + "（可与当前编辑项目不同）"]
       ],
       note: "点击后会：① 自动备份当前版本 ② 生成风格规范 ③ 把要求发到当前对话里的 Agent 让它改页面。工作台右下角会显示进度和回执，可以点「去对话查看」。",
       okText: "应用到该项目",
@@ -879,10 +879,10 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
   /* ── 应用风格：目标项目选择 + 进度/回执状态卡 ── */
   function styleTargetRow(cls) {
     var st = S.style;
-    var target = String(st.target || ((S.projects[0] && S.projects[0].dir) || ""));
-    if (target && !st.target) st.target = target;
+    var target = String(st.target || "");
     var opened = (S.projects || []).map(function (p) { return p.dir; });
-    var opts = opened.map(function (dir) {
+    var opts = '<option value=""' + (target ? '' : ' selected') + '>（选择目标项目…）</option>';
+    opts += opened.map(function (dir) {
       return '<option value="' + esc(dir) + '"' + (target === dir ? ' selected' : '') + '>' + esc(baseName(dir)) + ' — ' + esc(dir) + '</option>';
     }).join('');
     if (!opts) opts = '<option value="">（还没有打开的项目）</option>';
@@ -891,10 +891,11 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     }
     opts += '<option value="__browse__">选择其他目录…</option>';
     return '<div class="' + (cls || 'stylelib-target') + '">' +
-      '<span>目标项目</span>' +
+      '<span>风格目标项目</span>' +
       '<select data-field="styleTarget" title="选择要应用风格的项目">' + opts + '</select>' +
       '<button class="btn ghost stylelib-pickbtn" data-act="style-target-pick" title="选择任意本地项目目录（不必先在编辑器里打开）">选择目录…</button>' +
       '<span class="stylelib-targetpath" title="' + esc(target) + '">' + (target ? esc(baseName(target)) + ' · ' + esc(target) : "未选择") + '</span>' +
+      '<span class="stylelib-targetnote">与「打开项目」相互独立</span>' +
       '</div>';
   }
 
@@ -1377,7 +1378,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
   document.documentElement.setAttribute("data-theme", S.theme);
   render();
   try { S.style.addPath = readLS("ve-wb:lastSpec", ""); } catch (e) { /* ignore */ }
-  try { if (!S.style.target && S.projects[0]) S.style.target = S.projects[0].dir; } catch (e) { /* ignore */ }
+  // 风格目标与「打开项目」独立：启动时不自动填充，只恢复用户上次显式选择
   try { var savedStyleTarget = readLS("ve-wb:styleTarget", ""); if (savedStyleTarget) S.style.target = savedStyleTarget; } catch (e) { /* ignore */ }
   notifyHost("ready");
   if (!EMBEDDED) {
