@@ -1,0 +1,62 @@
+/* ==========================================================================
+   瑞士国际主义 SWISS+ · Design Tokens
+   International Typographic Style · version 1.0 · 2026.11
+   --------------------------------------------------------------------------
+   与 design-tokens.json / UI-SPEC.md 保持同步；页面中禁止写死色值、字号、间距。
+   ========================================================================== */
+
+:root {
+  /* 01 · Color —— 纸白 + 墨黑 + 一个红色信号 */
+  --paper: #F8F8F6;
+  --white: #FFFFFF;
+  --ink: #090909;
+  --ink-soft: #444444;
+  --muted: #6F6F6F;
+  --red: #E30613;
+  --red-deep: #C20511;
+  --line: #DEDEDE;
+  --line-strong: #BDBDBD;
+  --tint: #F8DADA;
+
+  /* 02 · Type —— 单字体，靠字重与字号分层 */
+  --font-display: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-sans: Arial, "Helvetica Neue", Helvetica, "PingFang SC", "Microsoft YaHei", sans-serif;
+
+  --fs-display: clamp(32px, 2.95vw, 62px);
+  --fs-year: clamp(30px, 2.3vw, 48px);
+  --fs-glyph: clamp(76px, 7vw, 140px);
+  --fs-quote: clamp(16px, 1.15vw, 22px);
+  --fs-stat: clamp(22px, 1.5vw, 32px);
+  --fs-section: clamp(12px, 0.9vw, 13px);
+  --fs-card: clamp(10.5px, 0.78vw, 11px);
+  --fs-body: clamp(11px, 0.82vw, 12px);
+  --fs-copy: clamp(10.5px, 0.76vw, 11px);
+  --fs-micro: clamp(8.5px, 0.6vw, 9px);
+
+  /* 03 · Space —— 单一设计单位，1440 视口下 1u = 1px */
+  --u: clamp(0.45px, calc(100vw / 1440), 1px);
+  --space-1: max(3px, calc(4 * var(--u)));
+  --space-2: max(6px, calc(8 * var(--u)));
+  --space-3: max(8px, calc(12 * var(--u)));
+  --space-4: max(12px, calc(16 * var(--u)));
+  --space-5: max(16px, calc(24 * var(--u)));
+  --space-6: max(22px, calc(32 * var(--u)));
+  --gutter: clamp(18px, calc(28 * var(--u)), 32px);
+  --panel-y: clamp(15px, calc(25 * var(--u)), 25px);
+
+  /* 04 · Layout */
+  --page-max: 1920px;
+  --hairline: 1px solid var(--line);
+  --top-cols: 1.48fr 0.95fr 0.88fr 0.72fr;
+  --bottom-cols: 1fr 1fr 0.95fr 1fr 0.85fr 1.55fr;
+
+  /* 05 · Radius / Shadow —— 瑞士国际主义不使用圆角与阴影 */
+  --radius: 0;
+  --shadow: none;
+
+  /* 06 · Motion */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.21, 1);
+  --dur-ui: 240ms;
+  --dur-image: 600ms;
+  --dur-hero: 1200ms;
+}

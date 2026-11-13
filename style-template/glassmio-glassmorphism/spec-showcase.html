@@ -1,0 +1,2558 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light" />
+<title>Glassmio · 玻璃拟态 / 流光冰蓝 — 规范展示页</title>
+<meta name="description" content="从 glassmio_glassmorphism_dashboard.html 提取的玻璃拟态风格规范展示页：24 个颜色 token、10 级字阶、3 种玻璃材质、组件样例、动效与令牌表。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ==========================================================================
+     Glassmio 玻璃拟态 · 流光冰蓝 — design system board
+     单文件展示页。所有颜色 / 字阶 / 间距 / 圆角 / 阴影 / 玻璃渐变 / 动效
+     均抄自同目录 design-tokens.css（内联于此，便于单文件直接打开）。
+     自适应：单一设计单位 --u（1440 视口时 1u = 1px）+ clamp/max 托底。
+     ========================================================================== */
+
+  /* ---------- 1. tokens（唯一 token 源，与 design-tokens.css 同值） ---------- */
+  :root {
+    /* 缩放基准 */
+    --design-w: 1440;
+    --u: clamp(.45px, calc(100vw / var(--design-w)), 1px);
+
+    /* 色彩 */
+    --paper: #DCE4FA;
+    --paper-deep: #CDD9F8;
+    --ink: #1E293B;
+    --accent: #5B7CFA;
+    --accent-deep: #4E6EF2;
+    --accent-bright: #6484FF;
+    --accent-soft: #93B4FF;
+    --accent-violet: #6B66F8;
+    --indigo: #4F46E5;
+    --beam-cream: #FFF9F4;
+    --beam-ice: #E8F5FF;
+    --lilac: #D4D7F5;
+    --ink-muted: #5C6C84;
+    --glass-tint: rgba(255, 255, 255, .38);
+    --glass-tint-mid: rgba(255, 255, 255, .16);
+    --glass-stroke: rgba(255, 255, 255, .48);
+    --hairline: rgba(255, 255, 255, .35);
+    --positive: #34D399;
+    --warning: #FBBF24;
+    --rose: #F43F5E;
+    --sky: #93C5FD;
+    --teal: #2DD4BF;
+    --violet: #A855F7;
+    --focus: #5B7CFA;
+
+    /* 字体（单一字族，中英同一栈） */
+    --font-display: "Plus Jakarta Sans", "Inter", "Source Han Sans SC", "Noto Sans SC",
+                    "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-sans: "Plus Jakarta Sans", "Inter", "Source Han Sans SC", "Noto Sans SC",
+                 "PingFang SC", "Microsoft YaHei", sans-serif;
+
+    /* 字阶 */
+    --fs-hero: clamp(26px, calc(16 * var(--u) + 14px), 34px);
+    --fs-h2: clamp(15px, calc(2 * var(--u) + 14px), 17px);
+    --fs-h3: clamp(13.5px, calc(2 * var(--u) + 12.5px), 15.5px);
+    --fs-metric: clamp(19px, calc(7 * var(--u) + 14px), 22px);
+    --fs-metric-big: clamp(28px, calc(20 * var(--u) + 14px), 36px);
+    --fs-body: clamp(13px, calc(1.5 * var(--u) + 12px), 14px);
+    --fs-nav: clamp(13.5px, calc(1 * var(--u) + 13px), 14.5px);
+    --fs-label: clamp(11px, calc(2 * var(--u) + 10.5px), 13px);
+    --fs-micro: clamp(10px, calc(1 * var(--u) + 10px), 11.5px);
+    --fs-badge: max(9.5px, calc(9.5 * var(--u) + .5px));
+    --tracking-tight: -.025em;
+    --tracking-h2: -.012em;
+
+    /* 间距（4px 基准） */
+    --space-2xs: calc(2 * var(--u));
+    --space-xs: calc(4 * var(--u));
+    --space-sm: calc(8 * var(--u));
+    --space-md: calc(10 * var(--u));
+    --space-lg: calc(12 * var(--u));
+    --space-xl: calc(14 * var(--u));
+    --space-2xl: calc(16 * var(--u));
+    --space-3xl: calc(20 * var(--u));
+    --space-4xl: calc(24 * var(--u));
+    --space-5xl: calc(32 * var(--u));
+    --space-gutter: max(12px, calc(18 * var(--u)));
+    --space-card-gap: clamp(14px, calc(14 * var(--u) + 2px), 20px);
+
+    /* 圆角 */
+    --radius-sm: calc(12 * var(--u));
+    --radius-md: calc(16 * var(--u));
+    --radius-lg: calc(22 * var(--u));
+    --radius-xl: calc(26 * var(--u));
+    --radius-2xl: calc(28 * var(--u));
+    --radius-pill: 999px;
+    --radius-round: 50%;
+
+    /* 玻璃材质 */
+    --glass-blur: calc(22 * var(--u));
+    --glass-blur-sub: calc(16 * var(--u));
+    --glass-sat: 160%;
+    --glass-grad: linear-gradient(135deg,
+        rgba(255, 255, 255, .38) 0%,
+        rgba(255, 255, 255, .16) 52%,
+        rgba(255, 255, 255, .06) 100%);
+    --glass-grad-hover: linear-gradient(135deg,
+        rgba(255, 255, 255, .44) 0%,
+        rgba(255, 255, 255, .20) 50%,
+        rgba(255, 255, 255, .09) 100%);
+    --glass-sub-grad: linear-gradient(135deg,
+        rgba(255, 255, 255, .34) 0%,
+        rgba(255, 255, 255, .10) 100%);
+    --glass-sub-grad-hover: linear-gradient(135deg,
+        rgba(255, 255, 255, .50) 0%,
+        rgba(255, 255, 255, .22) 100%);
+    --btn-grad: linear-gradient(135deg, #6484FF 0%, #4E6EF2 100%);
+    --heading-grad: linear-gradient(90deg, #5B7CFA 0%, #6B66F8 100%);
+
+    /* 阴影 */
+    --shadow-glass: 0 18px 42px -12px rgba(79, 108, 220, .14), 0 4px 16px -2px rgba(15, 23, 42, .04);
+    --shadow-glass-inset: inset 0 1px 1px rgba(255, 255, 255, .72), inset 0 -1px 1px rgba(255, 255, 255, .12);
+    --shadow-glass-hover: 0 24px 48px -10px rgba(79, 108, 220, .20), 0 8px 20px -4px rgba(15, 23, 42, .05);
+    --shadow-subcard: 0 8px 20px -6px rgba(91, 124, 250, .10), inset 0 1px 1px rgba(255, 255, 255, .65);
+    --shadow-subcard-hover: 0 12px 26px -6px rgba(91, 124, 250, .20), inset 0 1px 1px rgba(255, 255, 255, .85);
+    --shadow-accent: 0 10px 24px -5px rgba(84, 114, 245, .52), inset 0 1px 1px rgba(255, 255, 255, .50);
+    --shadow-accent-hover: 0 14px 28px -4px rgba(84, 114, 245, .65), inset 0 1px 1px rgba(255, 255, 255, .65);
+    --shadow-nav-active: 0 6px 16px -4px rgba(91, 124, 250, .22);
+
+    /* 动效 */
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --ease-soft: cubic-bezier(.4, 0, .2, 1);
+    --dur-card: 280ms;
+    --dur-sub: 220ms;
+    --dur-btn: 250ms;
+    --lens-float-top: 7000ms;
+    --lens-float-bottom: 8000ms;
+    --beam-breathe: 14000ms;
+    --equalizer: 650ms;
+    --theme-shift: 400ms;
+
+    /* ---- 本页版面脚手架（非风格 token） ---- */
+    --board: calc(1240 * var(--u));
+    --board-gutter: var(--space-gutter);
+    --sec-y: clamp(36px, 5vw, calc(68 * var(--u)));
+    --tap: max(38px, calc(40 * var(--u)));
+    --avatar: max(32px, calc(36 * var(--u)));
+    --icon-tile: max(28px, calc(32 * var(--u)));
+    --dot: max(6px, calc(8 * var(--u)));
+  }
+
+  /* 不支持 backdrop-filter 时：退化为更实的白玻璃，仍然可读 */
+  @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+    :root {
+      --glass-grad: linear-gradient(135deg, rgba(255, 255, 255, .72) 0%, rgba(238, 244, 255, .58) 100%);
+      --glass-sub-grad: linear-gradient(135deg, rgba(255, 255, 255, .66) 0%, rgba(238, 244, 255, .46) 100%);
+      --glass-blur: 0px;
+      --glass-blur-sub: 0px;
+    }
+  }
+
+  /* 动效可关闭：只保留 150ms 内的透明度变化，不位移、不缩放 */
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --dur-card: 150ms;
+      --dur-sub: 150ms;
+      --dur-btn: 150ms;
+    }
+  }
+
+  /* 高对比度 / 强制色模式：玻璃必须让位给实底，否则文字不可读 */
+  @media (forced-colors: active) {
+    :root {
+      --glass-grad: Canvas;
+      --glass-sub-grad: Canvas;
+      --glass-stroke: CanvasText;
+    }
+  }
+
+  /* ---------- 2. base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; overflow-x: clip; }
+  html, body { margin: 0; overflow-x: clip; }
+
+  body {
+    min-height: 100svh;
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    line-height: 1.62;
+    color: var(--ink);
+    background-color: var(--paper);
+    /* 环境光底：3 个椭圆径向渐变 + 125° 线性冰蓝（全部由 token 混出） */
+    background-image:
+      radial-gradient(ellipse 68% 58% at 62% 22%, color-mix(in srgb, var(--accent-soft) 46%, transparent) 0%, transparent 72%),
+      radial-gradient(ellipse 55% 65% at 12% 85%, color-mix(in srgb, var(--lilac) 82%, transparent) 0%, transparent 68%),
+      radial-gradient(ellipse 60% 55% at 88% 82%, color-mix(in srgb, var(--beam-ice) 72%, transparent) 0%, transparent 70%),
+      linear-gradient(125deg, var(--paper) 0%, var(--paper-deep) 46%, var(--paper) 100%);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-wrap: break-word;
+  }
+
+  h1, h2, h3, h4, p, figure, dl, dd { margin: 0; }
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; color: var(--ink); }
+  ul, ol { margin: 0; padding: 0; list-style: none; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  svg { display: block; max-width: 100%; }
+  /* 本风格明确不用等宽字体；token 名 / 数字用同一字族的 tabular-nums */
+  code, kbd, samp, pre { font-family: var(--font-sans); }
+  ::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--indigo); }
+
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ink-muted) 35%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--accent) 55%, transparent); }
+
+  /* ---------- 3. 环境光 fixed 层（caustic-backdrop.svg 原样内联） ---------- */
+  .caustic {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .caustic svg {
+    width: 100%;
+    height: 100%;
+    animation: beamBreath var(--beam-breathe) ease-in-out infinite alternate;
+    will-change: transform, opacity;
+  }
+  @keyframes beamBreath {
+    0%   { opacity: .86; transform: translate3d(0, 0, 0) scale(1); }
+    100% { opacity: 1;   transform: translate3d(calc(-12 * var(--u)), calc(10 * var(--u)), 0) scale(1.03); }
+  }
+
+  /* ---------- 4. 布局原语 ---------- */
+  .page { position: relative; z-index: 1; width: 100%; overflow-x: clip; }
+  .wrap {
+    width: min(var(--board), calc(100% - var(--board-gutter) - var(--board-gutter)));
+    margin-inline: auto;
+  }
+  .sec { position: relative; padding-block: var(--sec-y); }
+  .sec, #top { scroll-margin-block-start: clamp(100px, calc(96 * var(--u) + 24px), 140px); }
+
+  .sec-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-2xl) var(--space-4xl);
+    flex-wrap: wrap;
+    margin-block-end: clamp(14px, 2.4vw, calc(26 * var(--u)));
+  }
+  .sec-title { display: flex; flex-direction: column; gap: calc(6 * var(--u)); min-width: 0; }
+  .kicker {
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: .14em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .sec-title h2 {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    letter-spacing: var(--tracking-h2);
+    line-height: 1.3;
+  }
+  .sec-desc {
+    font-size: var(--fs-body);
+    color: var(--ink-muted);
+    line-height: 1.62;
+    max-inline-size: min(calc(640 * var(--u)), 100%);
+  }
+  .sec-count {
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    color: var(--ink-muted);
+    padding: calc(4 * var(--u)) calc(10 * var(--u));
+    border-radius: var(--radius-pill);
+    background: var(--glass-sub-grad);
+    border: 1px solid var(--glass-stroke);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* ---------- 5. 玻璃材质原语 ---------- */
+  .glass {
+    background: var(--glass-grad);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    box-shadow: var(--shadow-glass), var(--shadow-glass-inset);
+  }
+  .glass-sub {
+    background: var(--glass-sub-grad);
+    -webkit-backdrop-filter: blur(var(--glass-blur-sub)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur-sub)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-stroke);
+    border-inline-end-color: rgba(255, 255, 255, .16);
+    border-block-end-color: rgba(255, 255, 255, .14);
+    box-shadow: var(--shadow-subcard);
+  }
+  .card {
+    position: relative;
+    min-width: 0;
+    border-radius: var(--radius-xl);
+    padding: clamp(12px, 2.2vw, calc(24 * var(--u)));
+  }
+  .lift {
+    transition:
+      transform var(--dur-card) var(--ease),
+      background var(--dur-card) var(--ease-soft),
+      box-shadow var(--dur-card) var(--ease);
+  }
+  .lift:hover, .lift:focus-visible {
+    transform: translateY(calc(-2 * var(--u)));
+    background: var(--glass-grad-hover);
+    box-shadow: var(--shadow-glass-hover), var(--shadow-glass-inset);
+  }
+  .lift-sub {
+    transition:
+      transform var(--dur-sub) var(--ease),
+      background var(--dur-sub) var(--ease-soft),
+      box-shadow var(--dur-sub) var(--ease);
+  }
+  .lift-sub:hover, .lift-sub:focus-visible {
+    transform: translateY(calc(-2 * var(--u)));
+    background: var(--glass-sub-grad-hover);
+    box-shadow: var(--shadow-subcard-hover);
+  }
+
+  /* 所有 grid / flex 子项兜底：min-width:0，长 token / 长英文名不得撑破列 */
+  .hero-grid > *, .palette-grid > *, .materials-grid > *, .demo-grid > *,
+  .motion-grid > *, .motion-demos > *, .radius-grid > *, .shadow-grid > *,
+  .footer-grid > *, .type-row > *, .nav > *, .nav-links > *, .nav-links a,
+  .demo-row > *, .hero-actions > *, .chips > *, .chips > .chip,
+  .demo-stage > *, .chart-legend > *, .chart-frame > *, .kpi > *, .toast > *,
+  .search-pill > *, .ruler-row > *, .brand, .brand-text,
+  .panel > *, .footer-col > *, .mat-card > *, .sample-card > *, .act-row > *,
+  .hero-copy > *, .hero-meta > *, .type-sample-col > *, .meta-list > *,
+  .file-list > *, .spec-list > *, .motion-list > *, .chart-y > *, .chart-x > *,
+  .tok, .card, .panel { min-width: 0; }
+
+  /* ---------- 6. 顶部玻璃导航 ---------- */
+  .topbar {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 40;
+    padding-block: max(6px, calc(10 * var(--u)));
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-lg);
+    padding: max(7px, calc(8 * var(--u))) max(9px, calc(12 * var(--u)));
+    border-radius: var(--radius-lg);
+    min-width: 0;
+  }
+  .nav > * { min-width: 0; }
+  .brand { display: flex; align-items: center; gap: max(7px, calc(10 * var(--u))); min-width: 0; }
+  .brand-mark {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    inline-size: max(28px, calc(34 * var(--u)));
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    background: var(--btn-grad);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: max(13px, calc(15 * var(--u)));
+    font-weight: 800;
+    letter-spacing: -.02em;
+    box-shadow: var(--shadow-accent);
+  }
+  .brand-text { display: flex; flex-direction: column; gap: calc(2 * var(--u)); min-width: 0; }
+  .brand-name {
+    font-size: var(--fs-nav);
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.2;
+  }
+  .brand-sub {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    color: var(--ink-muted);
+    letter-spacing: .02em;
+    line-height: 1.2;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: calc(2 * var(--u));
+    margin-inline-start: auto;
+    min-width: 0;
+    font-size: var(--fs-nav);
+    font-weight: 500;
+    color: var(--ink-muted);
+  }
+  .nav-links a {
+    display: inline-flex;
+    align-items: center;
+    padding: max(5px, calc(6 * var(--u))) max(8px, calc(10 * var(--u)));
+    border-radius: var(--radius-pill);
+    transition: color var(--dur-sub) var(--ease-soft), background var(--dur-sub) var(--ease-soft);
+    white-space: nowrap;
+  }
+  .nav-links a:hover { color: var(--ink); background: var(--glass-tint-mid); }
+  .nav-links a:focus-visible { color: var(--ink); }
+
+  /* ---------- 7. Hero ---------- */
+  .hero {
+    position: relative;
+    padding-block: clamp(24px, 4.5vw, calc(52 * var(--u))) clamp(40px, 6vw, calc(78 * var(--u)));
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
+    gap: clamp(calc(22 * var(--u)), 4vw, calc(48 * var(--u)));
+    align-items: center;
+  }
+  .hero-grid > * { min-width: 0; }
+  .hero-copy { display: flex; flex-direction: column; gap: clamp(10px, 1.8vw, calc(16 * var(--u))); min-width: 0; }
+  .hero h1 {
+    font-size: var(--fs-hero);
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+  .hero h1 .line { display: block; }
+  .hero h1 .grad {
+    background: var(--heading-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-lead {
+    font-size: var(--fs-body);
+    line-height: 1.62;
+    color: var(--ink-muted);
+    max-inline-size: min(calc(470 * var(--u)), 100%);
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: max(8px, calc(10 * var(--u))); }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(6 * var(--u)) calc(16 * var(--u));
+    font-size: var(--fs-micro);
+    color: var(--ink-muted);
+    margin-block-start: calc(2 * var(--u));
+  }
+  .hero-meta span { display: inline-flex; align-items: center; gap: calc(6 * var(--u)); min-width: 0; }
+  .hero-meta i {
+    flex: 0 0 auto;
+    display: block;
+    inline-size: max(5px, calc(6 * var(--u)));
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    background: var(--accent);
+  }
+
+  /* 3D 玻璃透镜（CSS 渐变 + 浮动动画，参考原页 glass-lens-top / bottom） */
+  .hero-visual { position: relative; isolation: isolate; display: grid; place-items: center; min-width: 0; }
+  .hero-visual::before,
+  .hero-visual::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    border-radius: var(--radius-round);
+    filter: blur(calc(22 * var(--u)));
+    pointer-events: none;
+  }
+  .hero-visual::before {
+    inset-block-start: 2%;
+    inset-inline-end: 0;
+    inline-size: 46%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, color-mix(in srgb, var(--indigo) 26%, transparent), transparent 70%);
+  }
+  .hero-visual::after {
+    inset-block-end: 4%;
+    inset-inline-start: 2%;
+    inline-size: 40%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, color-mix(in srgb, var(--violet) 22%, transparent), transparent 70%);
+  }
+  .lens-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: 100%;
+    max-inline-size: max(220px, calc(360 * var(--u)));
+    margin-inline: auto;
+    aspect-ratio: 260 / 240;
+  }
+  .lens-slot {
+    position: relative;
+    grid-area: 1 / 1;
+    inline-size: 57%;
+    aspect-ratio: 148 / 92;
+    transform: translate(8%, -30%);
+  }
+  .lens-slot--bottom {
+    inline-size: 52%;
+    aspect-ratio: 136 / 80;
+    transform: translate(-10%, 30%);
+  }
+  .lens {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-round);
+    border: 1px solid rgba(255, 255, 255, .70);
+    background:
+      radial-gradient(ellipse at 30% 24%,
+        rgba(255, 255, 255, .98) 0%,
+        rgba(255, 255, 255, .35) 34%,
+        rgba(255, 255, 255, 0) 62%),
+      linear-gradient(135deg,
+        rgba(255, 255, 255, .72) 0%,
+        rgba(147, 180, 255, .50) 38%,
+        rgba(91, 124, 250, .55) 72%,
+        rgba(107, 102, 248, .50) 100%);
+    box-shadow:
+      0 calc(18 * var(--u)) calc(30 * var(--u)) calc(-8 * var(--u)) rgba(91, 124, 250, .28),
+      inset 0 1px 1px rgba(255, 255, 255, .90),
+      inset 0 -2px 4px rgba(79, 70, 229, .22);
+    -webkit-backdrop-filter: blur(calc(4 * var(--u)));
+    backdrop-filter: blur(calc(4 * var(--u)));
+    animation: lensFloatTop var(--lens-float-top) ease-in-out infinite;
+  }
+  .lens::before {
+    content: "";
+    position: absolute;
+    inset: 9%;
+    border-radius: var(--radius-round);
+    border: 1px solid rgba(255, 255, 255, .55);
+  }
+  .lens::after {
+    content: "";
+    position: absolute;
+    inset: 16% 48% 52% 16%;
+    border-radius: var(--radius-round);
+    background: radial-gradient(ellipse at 40% 40%, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0) 70%);
+    filter: blur(calc(2 * var(--u)));
+  }
+  .lens--bottom {
+    background:
+      radial-gradient(ellipse at 28% 22%,
+        rgba(255, 255, 255, .96) 0%,
+        rgba(255, 255, 255, .30) 38%,
+        rgba(255, 255, 255, 0) 64%),
+      linear-gradient(135deg,
+        rgba(255, 255, 255, .68) 0%,
+        rgba(147, 197, 253, .48) 40%,
+        rgba(79, 70, 229, .52) 76%,
+        rgba(168, 85, 247, .46) 100%);
+    animation: lensFloatBottom var(--lens-float-bottom) ease-in-out infinite;
+  }
+  @keyframes lensFloatTop {
+    0%, 100% { transform: translateY(0) rotate(-18deg); }
+    50% { transform: translateY(calc(-7 * var(--u))) rotate(-15deg); }
+  }
+  @keyframes lensFloatBottom {
+    0%, 100% { transform: translateY(0) rotate(14deg); }
+    50% { transform: translateY(calc(6 * var(--u))) rotate(17deg); }
+  }
+
+  /* ---------- 8. 按钮 / 图标按钮 ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(8 * var(--u));
+    min-block-size: var(--tap);
+    padding: calc(8 * var(--u)) calc(20 * var(--u));
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    font-family: var(--font-sans);
+    font-size: var(--fs-nav);
+    font-weight: 600;
+    line-height: 1.2;
+    min-width: 0;
+    transition:
+      transform var(--dur-btn) var(--ease),
+      box-shadow var(--dur-btn) var(--ease),
+      filter var(--dur-btn) var(--ease-soft),
+      background var(--dur-btn) var(--ease-soft);
+  }
+  .btn-primary { background: var(--btn-grad); color: #fff; box-shadow: var(--shadow-accent); }
+  .btn-primary:hover {
+    transform: translateY(calc(-1 * var(--u)));
+    filter: brightness(1.04);
+    box-shadow: var(--shadow-accent-hover);
+  }
+  .btn-ghost {
+    background: var(--glass-sub-grad);
+    border-color: var(--glass-stroke);
+    color: var(--ink);
+    -webkit-backdrop-filter: blur(var(--glass-blur-sub)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur-sub)) saturate(var(--glass-sat));
+    box-shadow: var(--shadow-subcard);
+  }
+  .btn-ghost:hover {
+    background: var(--glass-sub-grad-hover);
+    transform: translateY(calc(-1 * var(--u)));
+  }
+  .btn svg { flex: 0 0 auto; inline-size: max(15px, calc(16 * var(--u))); block-size: auto; }
+  .play {
+    display: grid;
+    place-items: center;
+    inline-size: max(16px, calc(20 * var(--u)));
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    background: color-mix(in srgb, var(--ink) 10%, transparent);
+    font-size: var(--fs-badge);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .icon-btn {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--tap);
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    color: var(--ink-muted);
+    transition: color var(--dur-sub) var(--ease-soft), transform var(--dur-sub) var(--ease);
+  }
+  .icon-btn:hover { color: var(--ink); transform: translateY(calc(-1 * var(--u))); }
+  .icon-btn svg { inline-size: max(16px, calc(18 * var(--u))); block-size: auto; }
+  .notif-dot {
+    position: absolute;
+    inset-block-start: max(4px, calc(6 * var(--u)));
+    inset-inline-end: max(4px, calc(6 * var(--u)));
+    inline-size: var(--dot);
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    background: var(--accent);
+    box-shadow: 0 0 0 calc(2 * var(--u)) rgba(255, 255, 255, .80);
+  }
+
+  /* ---------- 9. 色板 ---------- */
+  .palette-group { margin-block-end: clamp(16px, 2.6vw, calc(30 * var(--u))); }
+  .palette-group:last-child { margin-block-end: 0; }
+  .group-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: calc(4 * var(--u)) calc(10 * var(--u));
+    margin-block-end: max(8px, calc(10 * var(--u)));
+    padding-block-end: max(7px, calc(8 * var(--u)));
+    border-block-end: 1px solid var(--hairline);
+  }
+  .group-head h3 {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+  .group-head .en {
+    font-size: var(--fs-micro);
+    color: var(--ink-muted);
+    letter-spacing: .04em;
+  }
+  .group-head .count {
+    margin-inline-start: auto;
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-card-gap);
+  }
+  .palette-grid > * { min-width: 0; }
+  .tok {
+    display: flex;
+    flex-direction: column;
+    gap: calc(4 * var(--u));
+    min-width: 0;
+    padding: max(8px, calc(9 * var(--u)));
+    border-radius: var(--radius-md);
+    background: var(--glass-sub-grad);
+    border: 1px solid var(--glass-stroke);
+    border-inline-end-color: rgba(255, 255, 255, .16);
+    border-block-end-color: rgba(255, 255, 255, .14);
+    box-shadow: var(--shadow-subcard);
+  }
+  .tok-chip {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: 16 / 7;
+    min-block-size: max(30px, calc(42 * var(--u)));
+    border-radius: calc(9 * var(--u));
+    overflow: hidden;
+    border: 1px solid var(--glass-stroke);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, .70);
+    /* 透明 token（glass-*）叠在这层冰蓝底上，仍能看出白玻璃的层次 */
+    background-image: linear-gradient(120deg,
+      color-mix(in srgb, var(--accent-soft) 42%, var(--paper)) 0%,
+      color-mix(in srgb, var(--lilac) 66%, var(--paper)) 58%,
+      color-mix(in srgb, var(--beam-ice) 70%, var(--paper)) 100%);
+  }
+  .tok-chip i { position: absolute; inset: 0; display: block; background: var(--tok); }
+  .tok-name {
+    font-size: var(--fs-label);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  .tok-val {
+    font-size: max(10px, calc(10.5 * var(--u)));
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  .tok-role {
+    font-size: var(--fs-micro);
+    line-height: 1.45;
+    color: var(--ink-muted);
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  /* ---------- 10. 字体层级 ---------- */
+  .type-list { display: flex; flex-direction: column; }
+  .type-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: calc(10 * var(--u)) clamp(calc(16 * var(--u)), 3vw, calc(36 * var(--u)));
+    align-items: center;
+    padding-block: clamp(10px, 1.6vw, calc(16 * var(--u)));
+    border-block-end: 1px solid var(--hairline);
+    min-width: 0;
+  }
+  .type-row:last-child { border-block-end: 0; }
+  .type-row > * { min-width: 0; }
+  .type-sample-col { display: flex; flex-direction: column; gap: calc(3 * var(--u)); min-width: 0; }
+  .type-tag {
+    font-size: var(--fs-badge);
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .type-sample { margin: 0; min-width: 0; overflow-wrap: anywhere; color: var(--ink); }
+  .t-hero { font-size: var(--fs-hero); font-weight: 800; line-height: 1.16; letter-spacing: var(--tracking-tight); }
+  .t-section { font-size: var(--fs-h2); font-weight: 700; line-height: 1.3; letter-spacing: var(--tracking-h2); }
+  .t-card { font-size: var(--fs-h3); font-weight: 700; line-height: 1.3; letter-spacing: -.01em; }
+  .t-metric { font-size: var(--fs-metric); font-weight: 800; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .t-metric-big { font-size: var(--fs-metric-big); font-weight: 800; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .t-body { font-size: var(--fs-body); font-weight: 400; line-height: 1.62; letter-spacing: .002em; color: var(--ink-muted); }
+  .t-nav { font-size: var(--fs-nav); font-weight: 500; line-height: 1.3; letter-spacing: .005em; color: var(--ink-muted); }
+  .t-label { font-size: var(--fs-label); font-weight: 600; line-height: 1.35; letter-spacing: .01em; }
+  .t-micro { font-size: var(--fs-micro); font-weight: 500; line-height: 1.3; letter-spacing: .02em; color: var(--ink-muted); }
+  .t-badge { font-size: var(--fs-badge); font-weight: 600; line-height: 1.2; letter-spacing: .02em; color: var(--accent); }
+  .type-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(86px, calc(92 * var(--u)))), 1fr));
+    gap: calc(5 * var(--u)) calc(12 * var(--u));
+    min-width: 0;
+  }
+  .type-meta div { min-width: 0; }
+  .type-meta dt {
+    font-size: var(--fs-badge);
+    font-weight: 600;
+    color: var(--ink-muted);
+    letter-spacing: .02em;
+    line-height: 1.4;
+  }
+  .type-meta dd {
+    margin: 0;
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  /* ---------- 11. 玻璃材质对照 ---------- */
+  .materials-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-card-gap);
+  }
+  .materials-grid > * { min-width: 0; }
+  .mat-card { display: flex; flex-direction: column; gap: max(8px, calc(10 * var(--u))); }
+  .mat-card h3 { font-size: var(--fs-h3); font-weight: 700; letter-spacing: -.01em; }
+  .mat-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: max(140px, calc(170 * var(--u)));
+    padding: clamp(calc(10 * var(--u)), 2vw, calc(18 * var(--u)));
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(ellipse 62% 58% at 18% 18%, color-mix(in srgb, var(--beam-cream) 92%, transparent) 0%, transparent 72%),
+      radial-gradient(ellipse 58% 62% at 86% 28%, color-mix(in srgb, var(--beam-ice) 92%, transparent) 0%, transparent 70%),
+      linear-gradient(125deg, var(--paper) 0%, var(--paper-deep) 58%, var(--paper) 100%);
+    border: 1px solid var(--hairline);
+  }
+  .sample-card {
+    display: flex;
+    flex-direction: column;
+    gap: calc(5 * var(--u));
+    inline-size: 100%;
+    max-inline-size: max(160px, calc(220 * var(--u)));
+    padding: calc(12 * var(--u));
+    border-radius: var(--radius-xl);
+    background: var(--glass-grad);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    box-shadow: var(--shadow-glass), var(--shadow-glass-inset);
+    transition:
+      transform var(--dur-card) var(--ease),
+      background var(--dur-card) var(--ease-soft),
+      box-shadow var(--dur-card) var(--ease);
+  }
+  .sample-card:hover, .sample-card:focus-visible {
+    transform: translateY(calc(-2 * var(--u)));
+    background: var(--glass-grad-hover);
+    box-shadow: var(--shadow-glass-hover), var(--shadow-glass-inset);
+  }
+  .sample-card .sample-k { font-size: var(--fs-micro); color: var(--ink-muted); }
+  .sample-card .sample-v {
+    font-size: var(--fs-metric);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .sample-sub {
+    display: flex;
+    align-items: center;
+    gap: calc(8 * var(--u));
+    inline-size: 100%;
+    max-inline-size: max(160px, calc(240 * var(--u)));
+    padding: calc(9 * var(--u)) calc(12 * var(--u));
+    border-radius: var(--radius-md);
+    background: var(--glass-sub-grad);
+    -webkit-backdrop-filter: blur(var(--glass-blur-sub)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur-sub)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-stroke);
+    border-inline-end-color: rgba(255, 255, 255, .16);
+    border-block-end-color: rgba(255, 255, 255, .14);
+    box-shadow: var(--shadow-subcard);
+    transition:
+      transform var(--dur-sub) var(--ease),
+      background var(--dur-sub) var(--ease-soft),
+      box-shadow var(--dur-sub) var(--ease);
+  }
+  .sample-sub:hover, .sample-sub:focus-visible {
+    transform: translateY(calc(-2 * var(--u)));
+    background: var(--glass-sub-grad-hover);
+    box-shadow: var(--shadow-subcard-hover);
+  }
+  .sample-sub .status-dot { background: var(--positive); }
+  .sample-sub span { font-size: var(--fs-label); font-weight: 600; color: var(--ink); }
+  .sample-nav {
+    display: flex;
+    align-items: center;
+    gap: calc(8 * var(--u));
+    padding: calc(8 * var(--u)) calc(12 * var(--u));
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 22%, transparent) 0%,
+      rgba(255, 255, 255, .24) 100%);
+    border: 1px solid rgba(255, 255, 255, .62);
+    border-block-end-color: rgba(255, 255, 255, .22);
+    box-shadow: var(--shadow-nav-active);
+    color: #4364F7;
+    font-size: var(--fs-nav);
+    font-weight: 600;
+    transition: background var(--dur-sub) var(--ease-soft), transform var(--dur-sub) var(--ease);
+  }
+  .sample-nav:hover, .sample-nav:focus-visible {
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 28%, transparent) 0%,
+      rgba(255, 255, 255, .32) 100%);
+    transform: translateY(calc(-2 * var(--u)));
+  }
+  .sample-nav .nav-ico {
+    display: grid;
+    place-items: center;
+    inline-size: max(18px, calc(20 * var(--u)));
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    color: var(--accent);
+    flex: 0 0 auto;
+  }
+  .sample-nav svg { inline-size: max(12px, calc(14 * var(--u))); block-size: auto; }
+  .spec-list { display: flex; flex-direction: column; gap: calc(5 * var(--u)); }
+  .spec-list li {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: calc(8 * var(--u));
+    align-items: baseline;
+    font-size: var(--fs-micro);
+    line-height: 1.45;
+    min-width: 0;
+  }
+  .spec-k { color: var(--ink-muted); white-space: nowrap; }
+  .spec-v { color: var(--ink); font-weight: 600; overflow-wrap: anywhere; min-width: 0; }
+
+  /* ---------- 12. 组件样例 ---------- */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-card-gap);
+  }
+  .demo-grid > * { min-width: 0; }
+  .demo-span { grid-column: 1 / -1; }
+  .panel { display: flex; flex-direction: column; gap: max(8px, calc(10 * var(--u))); }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: calc(6 * var(--u)) var(--space-md);
+    min-width: 0;
+  }
+  .panel-head h3 { font-size: var(--fs-h3); font-weight: 700; letter-spacing: -.01em; min-width: 0; }
+  .panel-tag {
+    font-size: var(--fs-badge);
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    padding: calc(2 * var(--u)) calc(8 * var(--u));
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+  }
+  .panel-note {
+    margin-block-start: auto;
+    font-size: var(--fs-micro);
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+  .demo-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: max(8px, calc(10 * var(--u)));
+    min-width: 0;
+  }
+  .demo-row > * { min-width: 0; }
+
+  /* 搜索胶囊 */
+  .search-pill {
+    display: flex;
+    align-items: center;
+    gap: max(6px, calc(8 * var(--u)));
+    inline-size: 100%;
+    min-block-size: var(--tap);
+    padding: max(7px, calc(8 * var(--u))) max(9px, calc(12 * var(--u)));
+    border-radius: var(--radius-pill);
+    color: var(--ink-muted);
+    font-size: var(--fs-nav);
+    min-width: 0;
+  }
+  .search-pill > svg { flex: 0 0 auto; inline-size: max(15px, calc(16 * var(--u))); block-size: auto; }
+  .search-ph {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--ink-muted);
+  }
+  .keycap {
+    flex: 0 0 auto;
+    font-size: max(10px, calc(11 * var(--u)));
+    font-weight: 600;
+    color: var(--ink-muted);
+    background: rgba(255, 255, 255, .35);
+    border: 1px solid rgba(255, 255, 255, .60);
+    border-radius: max(6px, calc(8 * var(--u)));
+    padding: calc(2 * var(--u)) calc(6 * var(--u));
+    font-variant-numeric: tabular-nums;
+    line-height: 1.3;
+  }
+
+  /* 标签胶囊 */
+  .chips { display: flex; flex-wrap: wrap; gap: calc(6 * var(--u)); min-width: 0; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(4 * var(--u));
+    font-size: max(10px, calc(10 * var(--u)));
+    font-weight: 700;
+    letter-spacing: .02em;
+    line-height: 1.2;
+    padding: calc(2 * var(--u)) calc(8 * var(--u));
+    border-radius: var(--radius-pill);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    white-space: nowrap;
+  }
+  .chip--pos { color: var(--positive); background: color-mix(in srgb, var(--positive) 16%, transparent); }
+  .chip--warn { color: var(--warning); background: color-mix(in srgb, var(--warning) 20%, transparent); }
+  .chip--rose { color: var(--rose); background: color-mix(in srgb, var(--rose) 15%, transparent); }
+
+  /* KPI 卡 */
+  .kpi {
+    display: flex;
+    flex-direction: column;
+    gap: calc(7 * var(--u));
+    border-radius: var(--radius-lg);
+    padding: calc(14 * var(--u));
+    inline-size: 100%;
+    max-inline-size: max(240px, calc(320 * var(--u)));
+    min-width: 0;
+  }
+  .kpi-top { display: flex; align-items: center; gap: calc(8 * var(--u)); min-width: 0; }
+  .kpi-icon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    inline-size: var(--icon-tile);
+    aspect-ratio: 1;
+    border-radius: calc(12 * var(--u));
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    border: 1px solid rgba(255, 255, 255, .60);
+    color: var(--accent);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, .50);
+  }
+  .kpi-icon svg { inline-size: max(15px, calc(16 * var(--u))); block-size: auto; }
+  .kpi-name { font-size: var(--fs-label); font-weight: 600; color: var(--ink); min-width: 0; }
+  .kpi-value {
+    font-size: var(--fs-metric);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .kpi-foot { display: flex; align-items: center; justify-content: space-between; gap: calc(8 * var(--u)); flex-wrap: wrap; min-width: 0; }
+  .kpi-delta {
+    font-size: max(10px, calc(11 * var(--u)));
+    font-weight: 600;
+    color: var(--positive);
+    font-variant-numeric: tabular-nums;
+  }
+  .spark {
+    flex: 0 0 auto;
+    inline-size: max(44px, calc(56 * var(--u)));
+    block-size: auto;
+    aspect-ratio: 56 / 24;
+  }
+  .spark-line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .spark-fill { fill: var(--accent); opacity: .16; }
+
+  /* 活动行 */
+  .activity { display: flex; flex-direction: column; border-radius: var(--radius-md); overflow: hidden; }
+  .act-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: calc(10 * var(--u));
+    padding: calc(8 * var(--u)) 0;
+    border-block-end: 1px solid var(--hairline);
+    min-width: 0;
+  }
+  .act-row:last-child { border-block-end: 0; }
+  .act-row:first-child { padding-block-start: 0; }
+  .avatar {
+    display: grid;
+    place-items: center;
+    inline-size: var(--avatar);
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    color: #fff;
+    font-size: max(11px, calc(12 * var(--u)));
+    font-weight: 700;
+    line-height: 1;
+    border: 1px solid rgba(255, 255, 255, .80);
+    box-shadow: var(--shadow-nav-active);
+    flex: 0 0 auto;
+  }
+  .avatar--a { background: linear-gradient(135deg, var(--accent), var(--violet)); }
+  .avatar--b { background: linear-gradient(135deg, var(--teal), var(--sky)); }
+  .avatar--c { background: linear-gradient(135deg, var(--accent-violet), var(--indigo)); }
+  .act-main { display: flex; flex-direction: column; gap: calc(2 * var(--u)); min-width: 0; }
+  .act-name {
+    font-size: var(--fs-nav);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .act-time { font-size: var(--fs-micro); color: var(--ink-muted); line-height: 1.3; }
+  .status-dot {
+    flex: 0 0 auto;
+    display: block;
+    inline-size: var(--dot);
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    box-shadow: 0 0 0 calc(2 * var(--u)) rgba(255, 255, 255, .55);
+  }
+  .status-dot--pos { background: var(--positive); }
+  .status-dot--warn { background: var(--warning); }
+  .status-dot--rose { background: var(--rose); }
+
+  /* 双曲线图 */
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(6 * var(--u)) calc(14 * var(--u));
+    font-size: var(--fs-label);
+    color: var(--ink-muted);
+    min-width: 0;
+  }
+  .chart-legend span { display: inline-flex; align-items: center; gap: calc(5 * var(--u)); min-width: 0; }
+  .legend-dot { display: block; inline-size: max(6px, calc(9 * var(--u))); aspect-ratio: 1; border-radius: var(--radius-round); flex: 0 0 auto; }
+  .legend-dot--accent { background: var(--accent); }
+  .legend-dot--soft { background: var(--accent-soft); }
+  .chart-frame {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: max(6px, calc(8 * var(--u)));
+    row-gap: calc(4 * var(--u));
+    align-items: stretch;
+    min-width: 0;
+  }
+  .chart-y {
+    position: relative;
+    display: block;
+    inline-size: max(24px, calc(30 * var(--u)));
+    font-size: max(11px, calc(11 * var(--u)));
+    line-height: 1;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 0;
+  }
+  .chart-y span {
+    position: absolute;
+    inset-inline-end: 0;
+    transform: translateY(-50%);
+    white-space: nowrap;
+  }
+  .chart-y span:nth-child(1) { inset-block-start: 12.5%; }
+  .chart-y span:nth-child(2) { inset-block-start: 37.5%; }
+  .chart-y span:nth-child(3) { inset-block-start: 62.5%; }
+  .chart-y span:nth-child(4) { inset-block-start: 87.5%; }
+  .chart-plot { min-width: 0; color: var(--ink-muted); }
+  .chart-plot svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart-x {
+    grid-column: 2;
+    display: flex;
+    justify-content: space-between;
+    gap: calc(3 * var(--u));
+    font-size: max(11px, calc(11 * var(--u)));
+    color: var(--ink-muted);
+    min-width: 0;
+  }
+  .chart-x span { min-width: 0; white-space: nowrap; }
+  .line-visitors { fill: none; stroke: var(--accent); stroke-width: 2.6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .line-views { fill: none; stroke: var(--accent-soft); stroke-width: 2.2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .stop-accent { stop-color: var(--accent); }
+  .stop-soft { stop-color: var(--accent-soft); }
+  .grid-line { stroke: currentColor; stroke-opacity: .22; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
+  .axis-line { stroke: currentColor; stroke-opacity: .28; vector-effect: non-scaling-stroke; }
+
+  /* Toast */
+  .toast-demo { display: flex; justify-content: flex-end; min-width: 0; }
+  .toast {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: calc(8 * var(--u));
+    padding: calc(10 * var(--u)) calc(12 * var(--u));
+    border-radius: var(--radius-md);
+    max-inline-size: min(calc(430 * var(--u)), 100%);
+    min-width: 0;
+  }
+  .toast-dot {
+    flex: 0 0 auto;
+    inline-size: var(--dot);
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    background: var(--accent);
+    box-shadow: 0 0 0 calc(3 * var(--u)) color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  .toast p {
+    font-size: var(--fs-body);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--ink);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .toast-time {
+    font-size: var(--fs-micro);
+    color: var(--ink-muted);
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  /* ---------- 13. 动效 ---------- */
+  .motion-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-card-gap); }
+  .motion-grid > * { min-width: 0; }
+  .motion-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(220px, calc(250 * var(--u)))), 1fr));
+    gap: calc(2 * var(--u)) calc(16 * var(--u));
+    min-width: 0;
+  }
+  .motion-list li {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: calc(8 * var(--u));
+    align-items: baseline;
+    padding-block: calc(3 * var(--u));
+    border-block-end: 1px solid var(--hairline);
+    font-size: var(--fs-micro);
+    min-width: 0;
+  }
+  .motion-token { color: var(--ink-muted); white-space: nowrap; }
+  .motion-val { color: var(--ink); font-weight: 600; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; min-width: 0; }
+  .motion-demos {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-card-gap);
+    margin-block-start: var(--space-card-gap);
+  }
+  .motion-demos > * { min-width: 0; }
+  .demo-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-block-size: max(120px, calc(150 * var(--u)));
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(ellipse 60% 60% at 20% 20%, color-mix(in srgb, var(--beam-cream) 90%, transparent) 0%, transparent 70%),
+      radial-gradient(ellipse 55% 60% at 80% 30%, color-mix(in srgb, var(--beam-ice) 90%, transparent) 0%, transparent 70%),
+      linear-gradient(125deg, var(--paper) 0%, var(--paper-deep) 60%, var(--paper) 100%);
+    border: 1px solid var(--hairline);
+  }
+  .demo-caption {
+    font-size: var(--fs-micro);
+    color: var(--ink-muted);
+    line-height: 1.45;
+  }
+  .demo-caption b { color: var(--ink); font-weight: 600; }
+  .mini-lens {
+    inline-size: min(62%, calc(130 * var(--u)));
+    aspect-ratio: 148 / 92;
+    border-radius: var(--radius-round);
+    border: 1px solid rgba(255, 255, 255, .70);
+    background:
+      radial-gradient(ellipse at 30% 24%, rgba(255, 255, 255, .96) 0%, rgba(255, 255, 255, .30) 36%, rgba(255, 255, 255, 0) 64%),
+      linear-gradient(135deg,
+        rgba(255, 255, 255, .70) 0%,
+        rgba(147, 180, 255, .48) 40%,
+        rgba(91, 124, 250, .52) 74%,
+        rgba(107, 102, 248, .48) 100%);
+    box-shadow:
+      0 calc(16 * var(--u)) calc(24 * var(--u)) calc(-8 * var(--u)) rgba(91, 124, 250, .26),
+      inset 0 1px 1px rgba(255, 255, 255, .90);
+    animation: lensFloatTop var(--lens-float-top) ease-in-out infinite;
+  }
+  .beam-demo {
+    inline-size: 72%;
+    block-size: 62%;
+    background: linear-gradient(115deg,
+      transparent 12%,
+      color-mix(in srgb, var(--beam-ice) 92%, transparent) 38%,
+      rgba(255, 255, 255, .85) 52%,
+      transparent 82%);
+    filter: blur(calc(8 * var(--u)));
+    animation: beamBreath var(--beam-breathe) ease-in-out infinite alternate;
+  }
+  .lift-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(3 * var(--u));
+    padding: calc(12 * var(--u)) calc(16 * var(--u));
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-size: var(--fs-label);
+    font-weight: 600;
+    color: var(--ink);
+    cursor: default;
+    transition:
+      transform var(--dur-card) var(--ease),
+      background var(--dur-card) var(--ease-soft),
+      box-shadow var(--dur-card) var(--ease);
+  }
+  .lift-demo small { font-size: var(--fs-micro); font-weight: 500; color: var(--ink-muted); }
+  .lift-demo:hover, .lift-demo:focus-visible {
+    transform: translateY(calc(-4 * var(--u)));
+    background: var(--glass-sub-grad-hover);
+    box-shadow: var(--shadow-subcard-hover);
+  }
+  .motion-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: calc(4 * var(--u)) calc(10 * var(--u));
+    margin-block-start: var(--space-card-gap);
+    padding: calc(10 * var(--u)) calc(14 * var(--u));
+    border-radius: var(--radius-md);
+    font-size: var(--fs-micro);
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+  .motion-note b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- 14. 令牌表 ---------- */
+  .token-stack { display: flex; flex-direction: column; gap: var(--space-card-gap); }
+  .radius-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-card-gap);
+  }
+  .radius-grid > * { min-width: 0; }
+  .radius-item { display: flex; flex-direction: column; align-items: center; gap: calc(4 * var(--u)); text-align: center; min-width: 0; }
+  .radius-box {
+    display: block;
+    inline-size: min(100%, max(54px, calc(88 * var(--u))));
+    aspect-ratio: 1;
+    border-radius: var(--r);
+    background: var(--glass-sub-grad);
+    border: 1px solid var(--glass-stroke);
+    box-shadow: var(--shadow-subcard);
+  }
+  .radius-item b { font-size: var(--fs-micro); font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+  .radius-item span { font-size: var(--fs-badge); color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+  .shadow-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(160px, calc(190 * var(--u)))), 1fr));
+    gap: var(--space-card-gap);
+  }
+  .shadow-grid > * { min-width: 0; }
+  .shadow-item { display: flex; flex-direction: column; gap: calc(4 * var(--u)); min-width: 0; }
+  .shadow-sample {
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-md);
+    background: var(--glass-grad);
+    border: 1px solid var(--glass-stroke);
+    box-shadow: var(--sh);
+  }
+  .shadow-item b { font-size: var(--fs-micro); font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+  .ruler { display: flex; flex-direction: column; gap: calc(6 * var(--u)); min-width: 0; }
+  .ruler-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    align-items: center;
+    gap: calc(10 * var(--u));
+    min-width: 0;
+  }
+  .ruler-bar {
+    display: block;
+    inline-size: min(100%, var(--bar));
+    min-inline-size: 2px;
+    block-size: max(6px, calc(8 * var(--u)));
+    border-radius: var(--radius-pill);
+    background: linear-gradient(90deg, var(--accent), var(--accent-violet));
+  }
+  .ruler-label {
+    font-size: var(--fs-micro);
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .ruler-note { font-size: var(--fs-micro); color: var(--ink-muted); line-height: 1.5; }
+
+  /* ---------- 15. 页脚 ---------- */
+  .footer { padding-block: 0 var(--sec-y); }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(calc(18 * var(--u)), 3vw, calc(32 * var(--u)));
+  }
+  .footer-grid > * { min-width: 0; }
+  .footer-col { display: flex; flex-direction: column; gap: calc(8 * var(--u)); min-width: 0; }
+  .footer h2 { font-size: var(--fs-h2); font-weight: 700; letter-spacing: var(--tracking-h2); }
+  .meta-list { display: flex; flex-direction: column; min-width: 0; }
+  .meta-list li {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: calc(10 * var(--u));
+    padding-block: calc(4 * var(--u));
+    border-block-end: 1px solid var(--hairline);
+    font-size: var(--fs-micro);
+    min-width: 0;
+  }
+  .meta-list li:last-child { border-block-end: 0; }
+  .meta-list span { color: var(--ink-muted); white-space: nowrap; }
+  .meta-list b { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; min-width: 0; }
+  .file-list { display: flex; flex-direction: column; gap: calc(6 * var(--u)); min-width: 0; }
+  .file-list li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: calc(8 * var(--u));
+    align-items: baseline;
+    font-size: var(--fs-micro);
+    min-width: 0;
+  }
+  .file-dot {
+    display: block;
+    inline-size: max(4px, calc(5 * var(--u)));
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    background: var(--accent);
+    transform: translateY(calc(-1 * var(--u)));
+  }
+  .file-list b { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; grid-column: 2; }
+  .file-list li > span:last-child { grid-column: 2; color: var(--ink-muted); line-height: 1.45; }
+  .import-note {
+    margin-block-start: calc(4 * var(--u));
+    padding: calc(10 * var(--u)) calc(12 * var(--u));
+    border-radius: var(--radius-md);
+    font-size: var(--fs-micro);
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .import-note b { color: var(--accent); font-weight: 600; }
+  .footer-rule {
+    margin-block-start: clamp(calc(16 * var(--u)), 2.4vw, calc(26 * var(--u)));
+    padding-block-start: calc(10 * var(--u));
+    border-block-start: 1px solid var(--hairline);
+    font-size: var(--fs-micro);
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  /* ---------- 16. 右下角自检徽标 ---------- */
+  .selfcheck {
+    position: fixed;
+    z-index: 60;
+    inset-inline-end: max(10px, calc(14 * var(--u)));
+    inset-block-end: max(10px, calc(14 * var(--u)));
+    display: inline-flex;
+    align-items: center;
+    gap: max(5px, calc(7 * var(--u)));
+    max-inline-size: calc(100% - 2 * max(10px, calc(14 * var(--u))));
+    padding: max(6px, calc(7 * var(--u))) max(9px, calc(11 * var(--u)));
+    border-radius: max(10px, calc(12 * var(--u)));
+    background: var(--glass-sub-grad);
+    -webkit-backdrop-filter: blur(var(--glass-blur-sub)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur-sub)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-stroke);
+    box-shadow: var(--shadow-subcard);
+    color: var(--ink);
+    font-size: max(10px, calc(11 * var(--u)));
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  .selfcheck-dot {
+    flex: 0 0 auto;
+    inline-size: max(6px, calc(7 * var(--u)));
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    background: var(--positive);
+  }
+  .selfcheck-text { overflow: hidden; text-overflow: ellipsis; }
+  .selfcheck.is-overflow,
+  .selfcheck[data-overflow="1"] {
+    color: var(--rose);
+    border-color: color-mix(in srgb, var(--rose) 48%, transparent);
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--rose) 16%, transparent) 0%,
+      color-mix(in srgb, var(--rose) 6%, transparent) 100%);
+  }
+  .selfcheck.is-overflow .selfcheck-dot,
+  .selfcheck[data-overflow="1"] .selfcheck-dot { background: var(--rose); }
+
+  /* ---------- 17. 结构断点（只改列数 / 顺序） ---------- */
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: minmax(0, 1fr); }
+    .hero-visual { order: 2; }
+  }
+  @media (max-width: 760px) {
+    .nav-links { flex: 1 1 100%; margin-inline-start: 0; }
+    .type-row { grid-template-columns: minmax(0, 1fr); align-items: start; }
+    .type-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 640px) {
+    .palette-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 760px) {
+    .motion-demos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .radius-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  }
+  @media (min-width: 900px) {
+    .materials-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .demo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 860px) {
+    .footer-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
+  }
+  @media (min-width: 1024px) {
+    .palette-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  /* 减少动态：本页所有装饰动画停止，只保留颜色 / 透明度过渡 */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .caustic svg,
+    .lens,
+    .mini-lens,
+    .beam-demo {
+      animation: none !important;
+    }
+    .lift:hover, .lift:focus-visible,
+    .lift-sub:hover, .lift-sub:focus-visible,
+    .sample-card:hover, .sample-card:focus-visible,
+    .sample-sub:hover, .sample-sub:focus-visible,
+    .sample-nav:hover, .sample-nav:focus-visible,
+    .lift-demo:hover, .lift-demo:focus-visible {
+      transform: none;
+    }
+  }
+</style>
+</head>
+<body id="top">
+  <!-- 环境光：fixed 全屏 SVG（caustic-backdrop.svg 原样内联） -->
+  <div class="caustic" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      <!-- Glassmio 玻璃拟态 · 流光冰蓝 —— 环境光焦散层（原页内联 SVG 原样抽出）
+           素材：左下奶油 / 象牙光丝带 + 右上 45° 冰蓝光束 ×4 + 长春花紫阴影袋 ×2
+           模糊：feGaussianBlur 26（光束）/ 38（丝带）。 -->
+      <defs>
+        <linearGradient id="creamArc" x1="15%" y1="0%" x2="48%" y2="100%">
+          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.96"/>
+          <stop offset="48%" stop-color="#FFFDF9" stop-opacity="0.94"/>
+          <stop offset="82%" stop-color="#FAF3EE" stop-opacity="0.88"/>
+          <stop offset="100%" stop-color="#F5ECE9" stop-opacity="0.72"/>
+        </linearGradient>
+        <linearGradient id="warmSilk" x1="0%" y1="25%" x2="45%" y2="95%">
+          <stop offset="0%" stop-color="#FFF9F4" stop-opacity="0.82"/>
+          <stop offset="55%" stop-color="#F7ECE8" stop-opacity="0.65"/>
+          <stop offset="100%" stop-color="#E5E6FA" stop-opacity="0.1"/>
+        </linearGradient>
+        <linearGradient id="skyBright" x1="100%" y1="0%" x2="25%" y2="75%">
+          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.96"/>
+          <stop offset="35%" stop-color="#E8F5FF" stop-opacity="0.88"/>
+          <stop offset="72%" stop-color="#BCE0FF" stop-opacity="0.48"/>
+          <stop offset="100%" stop-color="#C8DCFF" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="skySoft" x1="95%" y1="0%" x2="20%" y2="85%">
+          <stop offset="0%" stop-color="#F2F9FF" stop-opacity="0.9"/>
+          <stop offset="45%" stop-color="#C4E3FF" stop-opacity="0.68"/>
+          <stop offset="85%" stop-color="#B9D5FF" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#D5E0FC" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="lavenderPocket" cx="16%" cy="84%" r="48%">
+          <stop offset="0%" stop-color="#D4D7F5" stop-opacity="0.92"/>
+          <stop offset="60%" stop-color="#DFE3F9" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#E9EDFC" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="upperFold" cx="46%" cy="22%" r="44%">
+          <stop offset="0%" stop-color="#C5D2FA" stop-opacity="0.88"/>
+          <stop offset="65%" stop-color="#D4DDFB" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#E4EAFC" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="blurLg" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="38"/>
+        </filter>
+        <filter id="blurMd" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="26"/>
+        </filter>
+      </defs>
+
+      <!-- 基础大气：长春花紫折角 + 左下紫色阴影袋 -->
+      <rect width="1440" height="900" fill="url(#upperFold)"/>
+      <rect width="1440" height="900" fill="url(#lavenderPocket)"/>
+
+      <!-- 右上 45° 平行冰蓝 / 冷白光束 -->
+      <g filter="url(#blurMd)">
+        <polygon points="860,-60 1050,-60 680,260 560,180" fill="url(#skyBright)"/>
+        <polygon points="1090,-60 1290,-60 760,390 630,300" fill="url(#skyBright)"/>
+        <polygon points="1330,-40 1510,60 850,590 710,490" fill="url(#skySoft)"/>
+        <polygon points="1480,190 1540,390 980,820 860,710" fill="url(#skySoft)" opacity="0.8"/>
+      </g>
+
+      <!-- 左上方扫向左下的奶油 / 象牙丝带 -->
+      <g filter="url(#blurLg)">
+        <path d="M -80,310 C 120,420 260,640 430,960 L 640,960 C 440,630 260,400 -80,220 Z" fill="url(#warmSilk)"/>
+        <path d="M 190,-60 C 235,280 330,610 560,960 L 810,960 C 530,610 385,280 340,-60 Z" fill="url(#creamArc)"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="page">
+    <!-- ================= 顶部玻璃导航 ================= -->
+    <header class="topbar">
+      <div class="wrap">
+        <nav class="nav glass" aria-label="规范页导航">
+          <a class="brand" href="#top" aria-label="Glassmio 规范页顶部">
+            <span class="brand-mark" aria-hidden="true">G</span>
+            <span class="brand-text">
+              <span class="brand-name">Glassmio</span>
+              <span class="brand-sub">玻璃拟态 · 流光冰蓝</span>
+            </span>
+          </a>
+          <div class="nav-links">
+            <a href="#palette">色板</a>
+            <a href="#type">字体</a>
+            <a href="#glass">材质</a>
+            <a href="#components">组件</a>
+            <a href="#motion">动效</a>
+            <a href="#tokens">令牌</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- ================= Hero ================= -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <p class="kicker">Design System Board · 01 / 2026.11</p>
+              <h1 id="hero-title">
+                <span class="line">用玻璃压住光。</span>
+                <span class="line grad">With clarity &amp; glass.</span>
+              </h1>
+              <p class="hero-lead">
+                从 Glassmio 仪表盘提取的一套玻璃拟态规范：24 个颜色 token、10 级字阶、3 种玻璃材质与 6 条动效曲线。
+                卡面只给 38% → 6% 的 135° 白渐变、1px 高光边和 22px 模糊，所有颜色都来自背后的奶油、天蓝与长春花光束。
+              </p>
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#palette">查看色板 <span aria-hidden="true">→</span></a>
+                <a class="btn btn-ghost" href="#components"><span class="play" aria-hidden="true">▶</span> 组件样例</a>
+              </div>
+              <p class="hero-meta">
+                <span><i aria-hidden="true"></i>24 color tokens</span>
+                <span><i aria-hidden="true"></i>10 type roles</span>
+                <span><i aria-hidden="true"></i>3 glass materials</span>
+                <span><i aria-hidden="true"></i>1u = 1px @ 1440</span>
+              </p>
+            </div>
+
+            <div class="hero-visual" aria-hidden="true">
+              <div class="lens-stage">
+                <div class="lens-slot lens-slot--bottom">
+                  <div class="lens lens--bottom"></div>
+                </div>
+                <div class="lens-slot">
+                  <div class="lens"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 01 色板 ================= -->
+      <section class="sec" id="palette" aria-labelledby="palette-title">
+        <div class="wrap">
+          <header class="sec-head">
+            <div class="sec-title">
+              <p class="kicker">01 · Color</p>
+              <h2 id="palette-title">色板 · 24 个颜色 token</h2>
+              <p class="sec-desc">底色与光 5 个、文字 2 个、强调 7 个、玻璃与线 4 个、语义 6 个。强调色面积始终小于 8%，玻璃自身不发彩色光。</p>
+            </div>
+            <span class="sec-count">24 tokens</span>
+          </header>
+
+          <!-- 底色与光 -->
+          <div class="palette-group">
+            <div class="group-head">
+              <h3>底色与光</h3>
+              <span class="en">Base &amp; Light</span>
+              <span class="count">5</span>
+            </div>
+            <div class="palette-grid">
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#DCE4FA"><i></i></span>
+                <h4 class="tok-name">paper</h4>
+                <span class="tok-val">#DCE4FA</span>
+                <p class="tok-role">页面底色：冰蓝雾面底，全站唯一底色</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#CDD9F8"><i></i></span>
+                <h4 class="tok-name">paper-deep</h4>
+                <span class="tok-val">#CDD9F8</span>
+                <p class="tok-role">底色深处：125° 渐变中段，给玻璃一个暗底托住</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#FFF9F4"><i></i></span>
+                <h4 class="tok-name">beam-cream</h4>
+                <span class="tok-val">#FFF9F4</span>
+                <p class="tok-role">暖奶油光束：左下卷曲光带，环境光里唯一暖色</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#E8F5FF"><i></i></span>
+                <h4 class="tok-name">beam-ice</h4>
+                <span class="tok-val">#E8F5FF</span>
+                <p class="tok-role">冷白冰光束：右上 45° 光带的高光段</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#D4D7F5"><i></i></span>
+                <h4 class="tok-name">lilac</h4>
+                <span class="tok-val">#D4D7F5</span>
+                <p class="tok-role">长春花紫阴影袋：玻璃的阴影色，不是灰</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- 文字 -->
+          <div class="palette-group">
+            <div class="group-head">
+              <h3>文字</h3>
+              <span class="en">Text</span>
+              <span class="count">2</span>
+            </div>
+            <div class="palette-grid">
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#1E293B"><i></i></span>
+                <h4 class="tok-name">ink</h4>
+                <span class="tok-val">#1E293B</span>
+                <p class="tok-role">主文字、标题、KPI 数值、导航常态；不用纯黑</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#5C6C84"><i></i></span>
+                <h4 class="tok-name">ink-muted</h4>
+                <span class="tok-val">#5C6C84</span>
+                <p class="tok-role">次级文字：说明、单位、时间、轴标签</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- 强调 -->
+          <div class="palette-group">
+            <div class="group-head">
+              <h3>强调</h3>
+              <span class="en">Accent</span>
+              <span class="count">7</span>
+            </div>
+            <div class="palette-grid">
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#5B7CFA"><i></i></span>
+                <h4 class="tok-name">accent</h4>
+                <span class="tok-val">#5B7CFA</span>
+                <p class="tok-role">唯一强调色 royal blue：按钮、激活导航、焦点环、图表主线</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#4E6EF2"><i></i></span>
+                <h4 class="tok-name">accent-deep</h4>
+                <span class="tok-val">#4E6EF2</span>
+                <p class="tok-role">强调色暗端：主按钮渐变终点</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#6484FF"><i></i></span>
+                <h4 class="tok-name">accent-bright</h4>
+                <span class="tok-val">#6484FF</span>
+                <p class="tok-role">强调色亮端：主按钮渐变起点</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#93B4FF"><i></i></span>
+                <h4 class="tok-name">accent-soft</h4>
+                <span class="tok-val">#93B4FF</span>
+                <p class="tok-role">弱强调：图表副线、面积填充、进度条过渡</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#6B66F8"><i></i></span>
+                <h4 class="tok-name">accent-violet</h4>
+                <span class="tok-val">#6B66F8</span>
+                <p class="tok-role">标题渐变紫端：Hero 第二行渐变字</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#4F46E5"><i></i></span>
+                <h4 class="tok-name">indigo</h4>
+                <span class="tok-val">#4F46E5</span>
+                <p class="tok-role">深靛：图标底色、渐变深端、hover 加深</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#5B7CFA"><i></i></span>
+                <h4 class="tok-name">focus</h4>
+                <span class="tok-val">#5B7CFA</span>
+                <p class="tok-role">键盘焦点：2px 实线 + 2px offset，永不移除</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- 玻璃与线 -->
+          <div class="palette-group">
+            <div class="group-head">
+              <h3>玻璃与线</h3>
+              <span class="en">Glass &amp; Line</span>
+              <span class="count">4</span>
+            </div>
+            <div class="palette-grid">
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:rgba(255,255,255,.38)"><i></i></span>
+                <h4 class="tok-name">glass-tint</h4>
+                <span class="tok-val">rgba(255,255,255,.38)</span>
+                <p class="tok-role">玻璃卡顶部白：135° 渐变起点 0%</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:rgba(255,255,255,.16)"><i></i></span>
+                <h4 class="tok-name">glass-tint-mid</h4>
+                <span class="tok-val">rgba(255,255,255,.16)</span>
+                <p class="tok-role">玻璃卡中段白：135° 渐变 52% 位置</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:rgba(255,255,255,.48)"><i></i></span>
+                <h4 class="tok-name">glass-stroke</h4>
+                <span class="tok-val">rgba(255,255,255,.48)</span>
+                <p class="tok-role">亚层玻璃 1px 边框：上 / 左亮，右 / 下 .14–.16</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:rgba(255,255,255,.35)"><i></i></span>
+                <h4 class="tok-name">hairline</h4>
+                <span class="tok-val">rgba(255,255,255,.35)</span>
+                <p class="tok-role">卡片内 1px 分隔线，固定 1px 不加重</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- 语义 -->
+          <div class="palette-group">
+            <div class="group-head">
+              <h3>语义</h3>
+              <span class="en">Semantic</span>
+              <span class="count">6</span>
+            </div>
+            <div class="palette-grid">
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#34D399"><i></i></span>
+                <h4 class="tok-name">positive</h4>
+                <span class="tok-val">#34D399</span>
+                <p class="tok-role">正向语义：↑ 增长、在线状态点、完成勾</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#FBBF24"><i></i></span>
+                <h4 class="tok-name">warning</h4>
+                <span class="tok-val">#FBBF24</span>
+                <p class="tok-role">警示语义：待办点、日程点（仅圆点 / 图标）</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#F43F5E"><i></i></span>
+                <h4 class="tok-name">rose</h4>
+                <span class="tok-val">#F43F5E</span>
+                <p class="tok-role">喜爱语义：收藏心形选中态（仅图标）</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#93C5FD"><i></i></span>
+                <h4 class="tok-name">sky</h4>
+                <span class="tok-val">#93C5FD</span>
+                <p class="tok-role">冷语义：第二数据线、面积渐变、天气图标底</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#2DD4BF"><i></i></span>
+                <h4 class="tok-name">teal</h4>
+                <span class="tok-val">#2DD4BF</span>
+                <p class="tok-role">第四语义：Sessions 类 KPI 的 sparkline</p>
+              </article>
+              <article class="tok lift-sub">
+                <span class="tok-chip" aria-hidden="true" style="--tok:#A855F7"><i></i></span>
+                <h4 class="tok-name">violet</h4>
+                <span class="tok-val">#A855F7</span>
+                <p class="tok-role">第三语义：Conversion 类 sparkline / 透镜高光</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 02 字体层级 ================= -->
+      <section class="sec" id="type" aria-labelledby="type-title">
+        <div class="wrap">
+          <header class="sec-head">
+            <div class="sec-title">
+              <p class="kicker">02 · Typography</p>
+              <h2 id="type-title">字体层级 · 10 级字阶</h2>
+              <p class="sec-desc">单一字族 Plus Jakarta Sans（Inter / 思源黑体兜底）。标题 700–800、正文 400–500、微标签 500–600，数字一律 tabular-nums，不用全大写微标签。</p>
+            </div>
+            <span class="sec-count">10 roles</span>
+          </header>
+
+          <div class="type-list">
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">hero</span>
+                <p class="type-sample t-hero">用玻璃压住光。</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-hero · clamp(26 → 34px)</dd></div>
+                <div><dt>字重</dt><dd>800</dd></div>
+                <div><dt>字距</dt><dd>-0.025em</dd></div>
+                <div><dt>行高</dt><dd>1.16</dd></div>
+                <div><dt>颜色</dt><dd>--ink / 第二行 --heading-grad</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">section</span>
+                <p class="type-sample t-section">组件样例 Components</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-h2 · clamp(15 → 17px)</dd></div>
+                <div><dt>字重</dt><dd>700</dd></div>
+                <div><dt>字距</dt><dd>-0.012em</dd></div>
+                <div><dt>行高</dt><dd>1.3</dd></div>
+                <div><dt>颜色</dt><dd>--ink</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">cardTitle</span>
+                <p class="type-sample t-card">Recent Activity · 最近动态</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-h3 · clamp(13.5 → 15.5px)</dd></div>
+                <div><dt>字重</dt><dd>700</dd></div>
+                <div><dt>字距</dt><dd>-0.01em</dd></div>
+                <div><dt>行高</dt><dd>1.3</dd></div>
+                <div><dt>颜色</dt><dd>--ink</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">metric</span>
+                <p class="type-sample t-metric">18,420</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-metric · clamp(19 → 22px)</dd></div>
+                <div><dt>字重</dt><dd>800</dd></div>
+                <div><dt>字距</dt><dd>-0.02em</dd></div>
+                <div><dt>行高</dt><dd>1.1</dd></div>
+                <div><dt>数字</dt><dd>tabular-nums · --ink</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">metricBig</span>
+                <p class="type-sample t-metric-big">24°</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-metric-big · clamp(28 → 36px)</dd></div>
+                <div><dt>字重</dt><dd>800</dd></div>
+                <div><dt>字距</dt><dd>-0.02em</dd></div>
+                <div><dt>行高</dt><dd>1.05</dd></div>
+                <div><dt>数字</dt><dd>tabular-nums · --ink</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">body</span>
+                <p class="type-sample t-body">玻璃不是一块灰卡片，而是一片压着光的冰。</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-body · clamp(13 → 14px)</dd></div>
+                <div><dt>字重</dt><dd>400</dd></div>
+                <div><dt>字距</dt><dd>0.002em</dd></div>
+                <div><dt>行高</dt><dd>1.62</dd></div>
+                <div><dt>颜色</dt><dd>--ink-muted</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">navItem</span>
+                <p class="type-sample t-nav">Analytics · 分析</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-nav · clamp(13.5 → 14.5px)</dd></div>
+                <div><dt>字重</dt><dd>500 → 600（激活）</dd></div>
+                <div><dt>字距</dt><dd>0.005em</dd></div>
+                <div><dt>行高</dt><dd>1.3</dd></div>
+                <div><dt>颜色</dt><dd>--ink-muted → --ink</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">label</span>
+                <p class="type-sample t-label">月度活跃用户</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-label · clamp(11 → 13px)</dd></div>
+                <div><dt>字重</dt><dd>600</dd></div>
+                <div><dt>字距</dt><dd>0.01em</dd></div>
+                <div><dt>行高</dt><dd>1.35</dd></div>
+                <div><dt>颜色</dt><dd>--ink</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">micro</span>
+                <p class="type-sample t-micro">更新于 09:41</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-micro · clamp(10 → 11.5px)</dd></div>
+                <div><dt>字重</dt><dd>500–600</dd></div>
+                <div><dt>字距</dt><dd>0.02em</dd></div>
+                <div><dt>行高</dt><dd>1.3</dd></div>
+                <div><dt>颜色</dt><dd>--ink-muted</dd></div>
+              </dl>
+            </div>
+
+            <div class="type-row">
+              <div class="type-sample-col">
+                <span class="type-tag">badge</span>
+                <p class="type-sample t-badge">LIVE FEED</p>
+              </div>
+              <dl class="type-meta">
+                <div><dt>字号</dt><dd>--fs-badge · max(9.5, 9.5u + .5)</dd></div>
+                <div><dt>字重</dt><dd>600</dd></div>
+                <div><dt>字距</dt><dd>0.02em</dd></div>
+                <div><dt>行高</dt><dd>1.2</dd></div>
+                <div><dt>颜色</dt><dd>--accent</dd></div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 03 玻璃材质 ================= -->
+      <section class="sec" id="glass" aria-labelledby="material-title">
+        <div class="wrap">
+          <header class="sec-head">
+            <div class="sec-title">
+              <p class="kicker">03 · Material</p>
+              <h2 id="material-title">玻璃材质 · 三层对照</h2>
+              <p class="sec-desc">主卡只给 135° 白渐变 + 22px 模糊；亚层更薄、带 1px 高光边；激活导航用 accent 渐变 pill。hover 只在卡面提亮并上移 2px，不换色、不加彩色 glow。</p>
+            </div>
+            <span class="sec-count">3 materials</span>
+          </header>
+
+          <div class="materials-grid">
+            <article class="mat-card card glass lift">
+              <div class="mat-preview">
+                <div class="sample-card">
+                  <span class="sample-k">月度活跃用户</span>
+                  <span class="sample-v">18,420</span>
+                </div>
+              </div>
+              <h3>glass-card</h3>
+              <ul class="spec-list">
+                <li><span class="spec-k">radius</span><span class="spec-v">--radius-xl · 26px</span></li>
+                <li><span class="spec-k">背景</span><span class="spec-v">135° 白渐变 .38 → .16 (52%) → .06</span></li>
+                <li><span class="spec-k">模糊</span><span class="spec-v">blur(22px) saturate(160%)</span></li>
+                <li><span class="spec-k">阴影</span><span class="spec-v">--shadow-glass + 双 inset 高光边</span></li>
+                <li><span class="spec-k">hover</span><span class="spec-v">.44 → .20 → .09 · translateY(-2px)</span></li>
+              </ul>
+            </article>
+
+            <article class="mat-card card glass lift">
+              <div class="mat-preview">
+                <div class="sample-sub">
+                  <span class="status-dot" aria-hidden="true"></span>
+                  <span>已完成 3 项评审</span>
+                </div>
+              </div>
+              <h3>glass-subcard</h3>
+              <ul class="spec-list">
+                <li><span class="spec-k">radius</span><span class="spec-v">--radius-md · 16px</span></li>
+                <li><span class="spec-k">背景</span><span class="spec-v">135° 白渐变 .34 → .10</span></li>
+                <li><span class="spec-k">边框</span><span class="spec-v">1px rgba(255,255,255,.48)，右 / 下 .14–.16</span></li>
+                <li><span class="spec-k">模糊</span><span class="spec-v">blur(16px) saturate(160%)</span></li>
+                <li><span class="spec-k">hover</span><span class="spec-v">.50 → .22 · translateY(-2px)</span></li>
+              </ul>
+            </article>
+
+            <article class="mat-card card glass lift">
+              <div class="mat-preview">
+                <div class="sample-nav">
+                  <span class="nav-ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 19V9"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M22 19H2"/>
+                    </svg>
+                  </span>
+                  <span>Overview</span>
+                </div>
+              </div>
+              <h3>nav-item-active</h3>
+              <ul class="spec-list">
+                <li><span class="spec-k">背景</span><span class="spec-v">accent 渐变 .22 → 白 .24</span></li>
+                <li><span class="spec-k">边框</span><span class="spec-v">1px 白 .62（底部 .22）</span></li>
+                <li><span class="spec-k">文字</span><span class="spec-v">#4364F7 · 600 · 14px</span></li>
+                <li><span class="spec-k">阴影</span><span class="spec-v">--shadow-nav-active</span></li>
+                <li><span class="spec-k">尺寸</span><span class="spec-v">高 42px / radius 16px / padding 0 14px</span></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 04 组件样例 ================= -->
+      <section class="sec" id="components" aria-labelledby="components-title">
+        <div class="wrap">
+          <header class="sec-head">
+            <div class="sec-title">
+              <p class="kicker">04 · Components</p>
+              <h2 id="components-title">组件样例 · 从按钮到图表</h2>
+              <p class="sec-desc">主按钮 / 玻璃按钮 / 图标按钮 / ⌘K 搜索 / KPI 卡 / 活动行 / 标签胶囊 / 双曲线图 / 玻璃 toast。所有控件保留键盘焦点环：2px accent + 2px offset。</p>
+            </div>
+            <span class="sec-count">9 samples</span>
+          </header>
+
+          <div class="demo-grid">
+            <!-- 按钮与图标 -->
+            <section class="panel card glass lift" aria-labelledby="demo-buttons">
+              <div class="panel-head">
+                <h3 id="demo-buttons">按钮与图标</h3>
+                <span class="panel-tag">Buttons</span>
+              </div>
+              <div class="demo-row">
+                <button class="btn btn-primary" type="button">开始构建 <span aria-hidden="true">→</span></button>
+                <button class="btn btn-ghost" type="button"><span class="play" aria-hidden="true">▶</span> 观看演示</button>
+                <button class="icon-btn glass" type="button" aria-label="通知（8px 未读点）">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                  <span class="notif-dot" aria-hidden="true"></span>
+                </button>
+              </div>
+              <p class="panel-note">主按钮 40px 高 / pill / 135° accent 渐变 · 玻璃次按钮只提亮 · 图标按钮 40×40 + 8px 通知点</p>
+            </section>
+
+            <!-- 搜索与标签 -->
+            <section class="panel card glass lift" aria-labelledby="demo-search">
+              <div class="panel-head">
+                <h3 id="demo-search">搜索与标签</h3>
+                <span class="panel-tag">Search &amp; Chips</span>
+              </div>
+              <div class="search-pill glass-sub">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <span class="search-ph">搜索任何内容…</span>
+                <kbd class="keycap">⌘K</kbd>
+              </div>
+              <div class="chips">
+                <span class="chip">LIVE FEED</span>
+                <span class="chip chip--pos">↑ 12.5%</span>
+                <span class="chip chip--warn">待办 3</span>
+                <span class="chip chip--rose">收藏</span>
+              </div>
+              <p class="panel-note">搜索胶囊 40px 高 / pill / 右侧 ⌘K 键帽 11px · 标签胶囊 10px 600，底色为语义色 15%</p>
+            </section>
+
+            <!-- KPI 卡 -->
+            <section class="panel card glass lift" aria-labelledby="demo-kpi">
+              <div class="panel-head">
+                <h3 id="demo-kpi">KPI 卡</h3>
+                <span class="panel-tag">Metric</span>
+              </div>
+              <div class="kpi glass-sub lift-sub">
+                <div class="kpi-top">
+                  <span class="kpi-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15l4-6 3 3 4-6"/>
+                    </svg>
+                  </span>
+                  <span class="kpi-name">月度活跃用户</span>
+                </div>
+                <div class="kpi-value">18,420</div>
+                <div class="kpi-foot">
+                  <span class="kpi-delta">↑ 12.5%</span>
+                  <svg class="spark" viewBox="0 0 56 24" aria-hidden="true" focusable="false">
+                    <path class="spark-fill" d="M2 18 L8 15 L14 17 L20 11 L26 13 L32 8 L38 10 L44 6 L50 8 L54 4 L54 24 L2 24 Z"/>
+                    <path class="spark-line" d="M2 18 L8 15 L14 17 L20 11 L26 13 L32 8 L38 10 L44 6 L50 8 L54 4"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="panel-note">32px 图标砖（radius 12px）/ 20–21px tabular 数值 / ↑12.5% / 56×24 sparkline · radius 22px</p>
+            </section>
+
+            <!-- 活动行 -->
+            <section class="panel card glass lift" aria-labelledby="demo-activity">
+              <div class="panel-head">
+                <h3 id="demo-activity">活动行</h3>
+                <span class="panel-tag">Activity</span>
+              </div>
+              <div class="activity glass-sub">
+                <div class="act-row">
+                  <span class="avatar avatar--a" aria-hidden="true">林</span>
+                  <div class="act-main">
+                    <span class="act-name">林若彤 · 更新了设计令牌</span>
+                    <span class="act-time">2 分钟前</span>
+                  </div>
+                  <span class="status-dot status-dot--pos" aria-label="在线"></span>
+                </div>
+                <div class="act-row">
+                  <span class="avatar avatar--b" aria-hidden="true">MC</span>
+                  <div class="act-main">
+                    <span class="act-name">Maya Chen · 提交评审</span>
+                    <span class="act-time">18 分钟前</span>
+                  </div>
+                  <span class="status-dot status-dot--warn" aria-label="待办"></span>
+                </div>
+                <div class="act-row">
+                  <span class="avatar avatar--c" aria-hidden="true">AK</span>
+                  <div class="act-main">
+                    <span class="act-name">Alex Kim · 收藏了「玻璃材质」</span>
+                    <span class="act-time">1 小时前</span>
+                  </div>
+                  <span class="status-dot status-dot--rose" aria-label="喜爱"></span>
+                </div>
+              </div>
+              <p class="panel-note">36px 渐变头像（白色姓名缩写 + 1px 白描边）/ 姓名 + 时间 / 右侧 8px 语义圆点</p>
+            </section>
+
+            <!-- 双曲线图 -->
+            <section class="panel card glass lift demo-span" aria-labelledby="demo-chart">
+              <div class="panel-head">
+                <h3 id="demo-chart">双曲线图</h3>
+                <span class="panel-tag">Chart</span>
+              </div>
+              <div class="chart-legend">
+                <span><i class="legend-dot legend-dot--accent" aria-hidden="true"></i>Visitors · 访客</span>
+                <span><i class="legend-dot legend-dot--soft" aria-hidden="true"></i>Page Views · 浏览量</span>
+              </div>
+              <div class="chart-frame">
+                <div class="chart-y" aria-hidden="true">
+                  <span>30K</span>
+                  <span>20K</span>
+                  <span>10K</span>
+                  <span>0</span>
+                </div>
+                <div class="chart-plot">
+                  <svg viewBox="0 0 600 160" role="img" aria-label="访客与浏览量双曲线示意：访客高于浏览量，两条曲线整体上升">
+                    <defs>
+                      <linearGradient id="chartVisitorsFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop class="stop-accent" offset="0%" stop-opacity=".30"/>
+                        <stop class="stop-accent" offset="100%" stop-opacity="0"/>
+                      </linearGradient>
+                      <linearGradient id="chartViewsFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop class="stop-soft" offset="0%" stop-opacity=".24"/>
+                        <stop class="stop-soft" offset="100%" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <g aria-hidden="true">
+                      <line class="grid-line" x1="0" y1="20" x2="600" y2="20"/>
+                      <line class="grid-line" x1="0" y1="60" x2="600" y2="60"/>
+                      <line class="grid-line" x1="0" y1="100" x2="600" y2="100"/>
+                      <line class="axis-line" x1="0" y1="140" x2="600" y2="140"/>
+                    </g>
+                    <path fill="url(#chartVisitorsFill)" d="M20 118 C60 108 80 92 120 96 C160 100 180 74 220 78 C260 82 280 56 320 62 C360 68 380 44 420 50 C460 56 490 32 530 38 C555 42 575 30 590 28 L590 140 L20 140 Z"/>
+                    <path fill="url(#chartViewsFill)" d="M20 134 C60 128 90 112 130 116 C170 120 200 96 240 100 C280 104 310 84 350 88 C390 92 420 68 460 72 C500 76 540 56 580 58 L580 140 L20 140 Z"/>
+                    <path class="line-views" d="M20 134 C60 128 90 112 130 116 C170 120 200 96 240 100 C280 104 310 84 350 88 C390 92 420 68 460 72 C500 76 540 56 580 58"/>
+                    <path class="line-visitors" d="M20 118 C60 108 80 92 120 96 C160 100 180 74 220 78 C260 82 280 56 320 62 C360 68 380 44 420 50 C460 56 490 32 530 38 C555 42 575 30 590 28"/>
+                  </svg>
+                </div>
+                <div class="chart-x" aria-hidden="true">
+                  <span>周一</span>
+                  <span>周二</span>
+                  <span>周三</span>
+                  <span>周四</span>
+                  <span>周五</span>
+                  <span>周六</span>
+                  <span>周日</span>
+                </div>
+              </div>
+              <p class="panel-note">11px 轴标签 · 主线 accent 2.6px / 副线 accent-soft 2.2px · 面积渐变到透明 · 网格线 ink-muted 22% 虚线 3 3</p>
+            </section>
+
+            <!-- Toast -->
+            <section class="panel card glass lift demo-span" aria-labelledby="demo-toast">
+              <div class="panel-head">
+                <h3 id="demo-toast">玻璃 Toast</h3>
+                <span class="panel-tag">Toast</span>
+              </div>
+              <div class="toast-demo">
+                <div class="toast glass-sub">
+                  <span class="toast-dot" aria-hidden="true"></span>
+                  <p>已保存 3 项修改，正在同步到设计令牌</p>
+                  <span class="toast-time">2600ms 后淡出</span>
+                </div>
+              </div>
+              <p class="panel-note">右下角浮出 20px · radius 16px · accent 圆点 + 13px 600 文案 · 2600ms 后淡出</p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 05 动效 ================= -->
+      <section class="sec" id="motion" aria-labelledby="motion-title">
+        <div class="wrap">
+          <header class="sec-head">
+            <div class="sec-title">
+              <p class="kicker">05 · Motion</p>
+              <h2 id="motion-title">动效 · 缓动与时长</h2>
+              <p class="sec-desc">统一一条主缓动 ease 与一条柔和缓动 ease-soft；卡片 280ms、亚层 220ms、按钮 250ms。透镜 7s / 8s 上下浮动，环境光 14s 呼吸。</p>
+            </div>
+            <span class="sec-count">10 tokens</span>
+          </header>
+
+          <div class="motion-grid">
+            <article class="panel card glass lift" aria-labelledby="motion-token-title">
+              <div class="panel-head">
+                <h3 id="motion-token-title">动效令牌</h3>
+                <span class="panel-tag">Easing &amp; Duration</span>
+              </div>
+              <ul class="motion-list">
+                <li><span class="motion-token">--ease</span><span class="motion-val">cubic-bezier(.22, 1, .36, 1)</span></li>
+                <li><span class="motion-token">--ease-soft</span><span class="motion-val">cubic-bezier(.4, 0, .2, 1)</span></li>
+                <li><span class="motion-token">--dur-card</span><span class="motion-val">280ms</span></li>
+                <li><span class="motion-token">--dur-sub</span><span class="motion-val">220ms</span></li>
+                <li><span class="motion-token">--dur-btn</span><span class="motion-val">250ms</span></li>
+                <li><span class="motion-token">--lens-float-top</span><span class="motion-val">7000ms</span></li>
+                <li><span class="motion-token">--lens-float-bottom</span><span class="motion-val">8000ms</span></li>
+                <li><span class="motion-token">--beam-breathe</span><span class="motion-val">14000ms</span></li>
+                <li><span class="motion-token">--equalizer</span><span class="motion-val">650ms</span></li>
+                <li><span class="motion-token">--theme-shift</span><span class="motion-val">400ms</span></li>
+              </ul>
+            </article>
+
+            <div class="motion-demos">
+              <article class="panel card glass lift" aria-labelledby="demo-lens-title">
+                <div class="demo-stage" aria-hidden="true">
+                  <div class="mini-lens"></div>
+                </div>
+                <h3 id="demo-lens-title">透镜浮动</h3>
+                <p class="demo-caption"><b>--lens-float-top</b> 7000ms · ±7px · rotate -18° → -15°</p>
+              </article>
+
+              <article class="panel card glass lift" aria-labelledby="demo-beam-title">
+                <div class="demo-stage" aria-hidden="true">
+                  <div class="beam-demo"></div>
+                </div>
+                <h3 id="demo-beam-title">光束呼吸</h3>
+                <p class="demo-caption"><b>--beam-breathe</b> 14000ms alternate · opacity .86 → 1 · 位移 12 / 10px · scale 1.03</p>
+              </article>
+
+              <article class="panel card glass lift" aria-labelledby="demo-lift-title">
+                <div class="demo-stage">
+                  <div class="lift-demo glass-sub" tabindex="0">
+                    hover / focus 我
+                    <small>translateY(-4px)</small>
+                  </div>
+                </div>
+                <h3 id="demo-lift-title">卡片 hover 抬升</h3>
+                <p class="demo-caption"><b>--dur-card</b> 280ms · --ease · 只提亮卡面 + 上移，不换色</p>
+              </article>
+            </div>
+
+            <p class="motion-note glass-sub">
+              <b>prefers-reduced-motion: reduce</b>
+              <span>时：token 把 --dur-card / --dur-sub / --dur-btn 压到 150ms，本页停止透镜浮动、光束呼吸与所有位移动画，只保留颜色与透明度过渡；焦点环与 hover 提亮仍然可用。</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 06 令牌表 ================= -->
+      <section class="sec" id="tokens" aria-labelledby="tokens-title">
+        <div class="wrap">
+          <header class="sec-head">
+            <div class="sec-title">
+              <p class="kicker">06 · Tokens</p>
+              <h2 id="tokens-title">令牌表 · 圆角 / 阴影 / 间距</h2>
+              <p class="sec-desc">唯一 token 源为同目录 design-tokens.css。圆角 12 / 16 / 22 / 26 / 28 / pill，阴影 8 条，间距 4px 基准 10 阶。</p>
+            </div>
+            <span class="sec-count">design-tokens.css</span>
+          </header>
+
+          <div class="token-stack">
+            <article class="panel card glass lift" aria-labelledby="radius-title">
+              <div class="panel-head">
+                <h3 id="radius-title">圆角实物</h3>
+                <span class="panel-tag">Radius</span>
+              </div>
+              <div class="radius-grid">
+                <div class="radius-item">
+                  <span class="radius-box" style="--r:var(--radius-sm)"></span>
+                  <b>--radius-sm</b><span>12px</span>
+                </div>
+                <div class="radius-item">
+                  <span class="radius-box" style="--r:var(--radius-md)"></span>
+                  <b>--radius-md</b><span>16px</span>
+                </div>
+                <div class="radius-item">
+                  <span class="radius-box" style="--r:var(--radius-lg)"></span>
+                  <b>--radius-lg</b><span>22px</span>
+                </div>
+                <div class="radius-item">
+                  <span class="radius-box" style="--r:var(--radius-xl)"></span>
+                  <b>--radius-xl</b><span>26px</span>
+                </div>
+                <div class="radius-item">
+                  <span class="radius-box" style="--r:var(--radius-2xl)"></span>
+                  <b>--radius-2xl</b><span>28px</span>
+                </div>
+                <div class="radius-item">
+                  <span class="radius-box" style="--r:var(--radius-pill)"></span>
+                  <b>--radius-pill</b><span>999px</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel card glass lift" aria-labelledby="shadow-title">
+              <div class="panel-head">
+                <h3 id="shadow-title">阴影实物</h3>
+                <span class="panel-tag">Shadow</span>
+              </div>
+              <div class="shadow-grid">
+                <div class="shadow-item">
+                  <span class="shadow-sample" style="--sh:var(--shadow-glass)"></span>
+                  <b>--shadow-glass</b>
+                </div>
+                <div class="shadow-item">
+                  <span class="shadow-sample" style="--sh:var(--shadow-glass-inset)"></span>
+                  <b>--shadow-glass-inset</b>
+                </div>
+                <div class="shadow-item">
+                  <span class="shadow-sample" style="--sh:var(--shadow-glass-hover)"></span>
+                  <b>--shadow-glass-hover</b>
+                </div>
+                <div class="shadow-item">
+                  <span class="shadow-sample" style="--sh:var(--shadow-subcard)"></span>
+                  <b>--shadow-subcard</b>
+                </div>
+                <div class="shadow-item">
+                  <span class="shadow-sample" style="--sh:var(--shadow-accent)"></span>
+                  <b>--shadow-accent</b>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel card glass lift" aria-labelledby="space-title">
+              <div class="panel-head">
+                <h3 id="space-title">间距标尺</h3>
+                <span class="panel-tag">Spacing · 4px 基准</span>
+              </div>
+              <div class="ruler">
+                <div class="ruler-row" style="--bar:var(--space-2xs)"><span class="ruler-bar"></span><span class="ruler-label">--space-2xs · 2px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-xs)"><span class="ruler-bar"></span><span class="ruler-label">--space-xs · 4px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-sm)"><span class="ruler-bar"></span><span class="ruler-label">--space-sm · 8px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-md)"><span class="ruler-bar"></span><span class="ruler-label">--space-md · 10px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-lg)"><span class="ruler-bar"></span><span class="ruler-label">--space-lg · 12px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-xl)"><span class="ruler-bar"></span><span class="ruler-label">--space-xl · 14px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-2xl)"><span class="ruler-bar"></span><span class="ruler-label">--space-2xl · 16px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-3xl)"><span class="ruler-bar"></span><span class="ruler-label">--space-3xl · 20px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-4xl)"><span class="ruler-bar"></span><span class="ruler-label">--space-4xl · 24px</span></div>
+                <div class="ruler-row" style="--bar:var(--space-5xl)"><span class="ruler-bar"></span><span class="ruler-label">--space-5xl · 32px</span></div>
+              </div>
+              <p class="ruler-note">间距值随 --u 缩放：1440 视口时 1u = 1px，下表数值即实际 px；<code>--space-gutter</code> 与 <code>--space-card-gap</code> 另有 clamp 托底。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= 页脚 ================= -->
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer-card card glass">
+          <div class="footer-grid">
+            <div class="footer-col">
+              <p class="kicker">Source &amp; Meta</p>
+              <h2>来源与提取</h2>
+              <ul class="meta-list">
+                <li><span>参考实现</span><b>glassmio_glassmorphism_dashboard.html</b></li>
+                <li><span>提取时间</span><b>2026-11-13</b></li>
+                <li><span>版本</span><b>v1.0 · edition 01</b></li>
+                <li><span>基准视口</span><b>1440 × 900 / 390 × 844</b></li>
+                <li><span>本页</span><b>spec-showcase.html（单文件，纯手写 HTML / CSS / JS）</b></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <p class="kicker">Files &amp; Import</p>
+              <h2>配套文件</h2>
+              <ul class="file-list">
+                <li><span class="file-dot" aria-hidden="true"></span><b>design-tokens.json</b><span>主 token 源（颜色 / 字阶 / 间距 / 圆角 / 阴影 / 动效）</span></li>
+                <li><span class="file-dot" aria-hidden="true"></span><b>design-tokens.css</b><span>CSS 变量 + @supports 兜底 + 减少动效 / 强制色覆盖</span></li>
+                <li><span class="file-dot" aria-hidden="true"></span><b>background.css</b><span>页面底色与环境光背景（CSS 渐变，可选 SVG 精确层）</span></li>
+                <li><span class="file-dot" aria-hidden="true"></span><b>caustic-backdrop.svg</b><span>环境光焦散层，本页已整段内联为 fixed 背景</span></li>
+                <li><span class="file-dot" aria-hidden="true"></span><b>UI-SPEC.md</b><span>风格说明与验收记录</span></li>
+              </ul>
+              <p class="import-note glass-sub">导入方式：<b>网页工作台 → 风格优化 → 添加风格 → 填该目录路径</b>（style-template/glassmio-glassmorphism）。</p>
+            </div>
+          </div>
+          <p class="footer-rule">Glassmio · 玻璃拟态 / 流光冰蓝 — 本页所有颜色、字阶、圆角、阴影、玻璃渐变与动效均取自 design-tokens.css，不另造 token；玻璃不是灰卡片，而是一片压着光的冰。</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ================= 右下角自检徽标（同步 DOM 文本，供 dump-dom 读取） ================= -->
+  <div id="selfcheck" class="selfcheck" role="status" aria-live="off" data-inner="" data-scroll="" data-overflow="0" data-h1-fontsize="">
+    <span class="selfcheck-dot" aria-hidden="true"></span>
+    <span id="selfcheck-text" class="selfcheck-text">— / — · 自检中 · H1 —</span>
+  </div>
+
+  <script>
+    (function () {
+      var badge = document.getElementById('selfcheck');
+      var badgeText = document.getElementById('selfcheck-text');
+      var h1 = document.querySelector('h1');
+      if (!badge || !badgeText) return;
+
+      function formatH1() {
+        if (!h1) return '—';
+        var size = parseFloat(window.getComputedStyle(h1).fontSize);
+        return isFinite(size) ? size.toFixed(1) : '—';
+      }
+
+      function run() {
+        var inner = Math.round(window.innerWidth);
+        var scroll = Math.round(document.documentElement.scrollWidth);
+        var ok = scroll <= inner + 1;
+        var h1Size = formatH1();
+        var text = inner + ' / ' + scroll + ' · ' + (ok ? 'OK' : 'OVERFLOW') + ' · H1 ' + h1Size + 'px';
+
+        badgeText.textContent = text;
+        badge.setAttribute('data-inner', String(inner));
+        badge.setAttribute('data-scroll', String(scroll));
+        badge.setAttribute('data-overflow', ok ? '0' : '1');
+        badge.setAttribute('data-h1-fontsize', h1Size);
+        badge.classList.toggle('is-overflow', !ok);
+        badge.setAttribute('title', 'innerWidth / scrollWidth · 溢出判定 scrollWidth <= innerWidth + 1 · H1 ' + h1Size + 'px');
+      }
+
+      run();
+      window.addEventListener('resize', run);
+      window.addEventListener('orientationchange', run);
+      window.addEventListener('load', run);
+      if (window.ResizeObserver && document.body) {
+        try { new ResizeObserver(run).observe(document.documentElement); } catch (err) { /* 忽略：初次 run 已写入文本 */ }
+      }
+    })();
+  </script>
+</body>
+</html>

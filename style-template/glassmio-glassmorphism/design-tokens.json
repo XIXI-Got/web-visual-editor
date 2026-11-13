@@ -1,0 +1,235 @@
+{
+  "_readme": "Glassmio 玻璃拟态 · 流光冰蓝。提取自单文件参考实现 glassmio_glassmorphism_dashboard.html（Tailwind CDN + 内联 SVG 环境光）。系统只提取 meta、color、typography.families、spacing、radius、shadow、motion；layout / components / effects / imagery / breakpoints 仅供人读。所有以 _ 开头的键会被忽略。",
+  "meta": {
+    "name": "Glassmio 玻璃拟态 · 流光冰蓝",
+    "version": "1.0",
+    "edition": "01",
+    "date": "2026-11",
+    "referenceViewport": "1440 × 900 / 390 × 844",
+    "phoneViewport": "390x844",
+    "source": "glassmio_glassmorphism_dashboard.html（C:\\Users\\hehe\\Downloads，单文件 + Tailwind CDN + 内联 SVG）",
+    "extractedAt": "2026-11-13",
+    "houseRule": "玻璃不是一块灰卡片，而是一片压着光的冰：卡面只给 38%→6% 的 135° 白渐变、1px 高光边和 22px 模糊；所有颜色都来自背后的奶油、天蓝与长春花光束，卡片自己不发彩色光。"
+  },
+
+  "color": {
+    "paper": {
+      "value": "#DCE4FA",
+      "role": "页面底色：冰蓝雾面底，全站唯一底色（body background-color）"
+    },
+    "paper-deep": {
+      "value": "#CDD9F8",
+      "role": "底色深处：125° 线性渐变中段，给玻璃一个「暗底」托住"
+    },
+    "ink": {
+      "value": "#1E293B",
+      "role": "主文字、卡片标题、KPI 数值、导航常态；不用纯黑"
+    },
+    "accent": {
+      "value": "#5B7CFA",
+      "role": "唯一强调色 royal blue：主按钮、激活导航、焦点环、图表主线、链接（面积 < 8%）"
+    },
+    "accent-deep": {
+      "value": "#4E6EF2",
+      "role": "强调色暗端：主按钮渐变终点、激活态文字 #4364F7 的近邻"
+    },
+    "accent-bright": {
+      "value": "#6484FF",
+      "role": "强调色亮端：主按钮渐变起点"
+    },
+    "accent-soft": {
+      "value": "#93B4FF",
+      "role": "弱强调：图表副线、面积填充、进度条过渡"
+    },
+    "accent-violet": {
+      "value": "#6B66F8",
+      "role": "标题渐变紫端：Hero 标题第二行 text-transparent 渐变"
+    },
+    "indigo": {
+      "value": "#4F46E5",
+      "role": "深靛：图标底色、渐变深端、hover 加深"
+    },
+    "beam-cream": {
+      "value": "#FFF9F4",
+      "role": "暖奶油光束：左下卷曲光带，环境光里唯一暖色"
+    },
+    "beam-ice": {
+      "value": "#E8F5FF",
+      "role": "冷白冰光束：右上斜向 45° 光带的高光段"
+    },
+    "lilac": {
+      "value": "#D4D7F5",
+      "role": "长春花紫阴影袋：左下 / 中上折角，玻璃的「阴影色」"
+    },
+    "ink-muted": {
+      "value": "#5C6C84",
+      "role": "次级文字：说明、单位、时间、轴标签（正文唯一允许的颜色）"
+    },
+    "glass-tint": {
+      "value": "rgba(255,255,255,0.38)",
+      "role": "玻璃卡顶部白：135° 渐变起点（0% 位置）"
+    },
+    "glass-tint-mid": {
+      "value": "rgba(255,255,255,0.16)",
+      "role": "玻璃卡中段白：135° 渐变 52% 位置"
+    },
+    "glass-stroke": {
+      "value": "rgba(255,255,255,0.48)",
+      "role": "亚层玻璃 1px 边框（上 / 左亮，右 / 下 .14–.16）；固定 1px 不加重"
+    },
+    "hairline": {
+      "value": "rgba(255,255,255,0.35)",
+      "role": "卡片内分隔线（border-t border-b）：固定 1px"
+    },
+    "positive": {
+      "value": "#34D399",
+      "role": "正向语义：↑ 增长、在线状态点、完成勾（仅 8–14px 与 11px 文字）"
+    },
+    "warning": {
+      "value": "#FBBF24",
+      "role": "警示语义：待办点、日程点（仅圆点 / 图标）"
+    },
+    "rose": {
+      "value": "#F43F5E",
+      "role": "喜爱语义：收藏心形选中态（仅图标）"
+    },
+    "sky": {
+      "value": "#93C5FD",
+      "role": "冷语义：第二数据线、面积渐变、天气图标底"
+    },
+    "teal": {
+      "value": "#2DD4BF",
+      "role": "第四语义：Sessions 类 KPI 的 sparkline"
+    },
+    "violet": {
+      "value": "#A855F7",
+      "role": "第三语义：Conversion 类 KPI 的 sparkline / 玻璃透镜高光"
+    },
+    "focus": {
+      "value": "#5B7CFA",
+      "role": "键盘焦点：2px 实线 + 2px offset，永不移除"
+    }
+  },
+
+  "typography": {
+    "families": {
+      "sans": "\"Plus Jakarta Sans\", \"Inter\", \"Source Han Sans SC\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    "roles": {
+      "hero": "clamp(26px, calc(1.8vw + 20px), 34px) / 1.16 / 800 / -.025em / none / ink（28→32px，第二行用 accent→accent-violet 渐变字）",
+      "section": "clamp(15px, calc(.55vw + 12px), 17px) / 1.3 / 700 / -.012em / none / ink（卡片区标题，16px 基准）",
+      "cardTitle": "clamp(13.5px, calc(.5vw + 11px), 15.5px) / 1.3 / 700 / -.01em / none / ink（小部件标题 14–15px）",
+      "metric": "clamp(19px, calc(.9vw + 14px), 22px) / 1.1 / 800 / -.02em / tabular-nums / ink（KPI 数值 20–21px）",
+      "metricBig": "clamp(28px, calc(2vw + 18px), 36px) / 1.05 / 800 / -.02em / tabular-nums / ink（天气温度 34px，全站最大数字）",
+      "body": "clamp(13px, calc(.35vw + 11.6px), 14px) / 1.62 / 400 / .002em / none / ink-muted（正文 13.5px）",
+      "navItem": "clamp(13.5px, calc(.25vw + 12.8px), 14.5px) / 1.3 / 500 → 600（激活）/ .005em / none / ink-muted → ink",
+      "label": "12.5px / 1.35 / 600 / .01em / none / ink（KPI 名称、行标题 12–13px）",
+      "micro": "11px / 1.3 / 500–600 / .02em / none / ink-muted（时间戳、坐标轴、单位 10.5–11.5px）",
+      "badge": "10px / 1.2 / 600 / .02em / none / accent（标签胶囊、Live Feed）"
+    },
+    "rules": "单一字族（Plus Jakarta Sans，Inter 兜底）：标题 700–800、正文 400–500、微标签 500–600；数字一律 tabular-nums；不用全大写微标签（与 Spatial Glass 相反），不用等宽字体。"
+  },
+
+  "spacing": {
+    "unit": "4px 基准：卡片内 padding 16–24px，卡与卡之间 20px（gap-5），KPI 之间 14–16px",
+    "2xs": "2px",
+    "xs": "4px",
+    "sm": "8px",
+    "md": "10px",
+    "lg": "12px",
+    "xl": "14px",
+    "2xl": "16px",
+    "3xl": "20px",
+    "4xl": "24px",
+    "5xl": "32px",
+    "gutter": "clamp(12px, 1.6vw, 24px)",
+    "cardGap": "clamp(14px, 1.4vw, 20px)"
+  },
+
+  "radius": {
+    "sm": "12px",
+    "md": "16px",
+    "lg": "22px",
+    "xl": "26px",
+    "2xl": "28px",
+    "pill": "999px",
+    "round": "50%"
+  },
+
+  "shadow": {
+    "glass": "0 18px 42px -12px rgba(79,108,220,.14), 0 4px 16px -2px rgba(15,23,42,.04)",
+    "glass-inset": "inset 0 1px 1px rgba(255,255,255,.72), inset 0 -1px 1px rgba(255,255,255,.12)",
+    "glass-hover": "0 24px 48px -10px rgba(79,108,220,.20), 0 8px 20px -4px rgba(15,23,42,.05)",
+    "subcard": "0 8px 20px -6px rgba(91,124,250,.10), inset 0 1px 1px rgba(255,255,255,.65)",
+    "subcard-hover": "0 12px 26px -6px rgba(91,124,250,.20), inset 0 1px 1px rgba(255,255,255,.85)",
+    "accent": "0 10px 24px -5px rgba(84,114,245,.52), inset 0 1px 1px rgba(255,255,255,.50)",
+    "accent-hover": "0 14px 28px -4px rgba(84,114,245,.65), inset 0 1px 1px rgba(255,255,255,.65)",
+    "nav-active": "0 6px 16px -4px rgba(91,124,250,.22)"
+  },
+
+  "motion": {
+    "ease": "cubic-bezier(0.22, 1, 0.36, 1)",
+    "ease-soft": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "dur-card": "280ms",
+    "dur-sub": "220ms",
+    "dur-btn": "250ms",
+    "lens-float-top": "7000ms",
+    "lens-float-bottom": "8000ms",
+    "beam-breathe": "14000ms",
+    "equalizer": "650ms",
+    "theme-shift": "400ms"
+  },
+
+  "layout": {
+    "_note": "不参与 token 提取，供人 / Agent 阅读",
+    "shellMaxWidth": "1540px",
+    "shellPadding": "12 / 20 / 24px（<640 / <1024 / ≥1024）",
+    "sidebarWidth": "245px，sticky 高度 calc(100svh - 3rem)，<1024px 改为抽屉 + 遮罩",
+    "mainGrid": "xl(≥1280) 12 列：左 6（Hero + Analytics）/ 右 6（4×KPI + Recent Activity）",
+    "bottomRow": "lg(≥1024) 12 列 = 2 + 2 + 3 + 3 + 2（Weather / Calendar / Tasks / Music / Quick Actions）",
+    "kpiRow": "2 列（<640）→ 4 列（≥640）",
+    "cardGap": "20px（gap-5）",
+    "cardPadding": "16 / 20 / 24 / 32px（KPI / 小部件 / 常规 / Hero）"
+  },
+
+  "components": {
+    "_note": "组件规格：尺寸 / 状态 / 禁用做法（不参与 token 提取）",
+    "glassCard": "radius 26px（KPI 22px、小部件 26px）/ 135° linear-gradient(rgba(255,255,255,.38), .16 52%, .06) / backdrop-filter blur(22px) saturate(160%) / shadow glass + glass-inset；hover translateY(-2px)，只在卡面提亮（.44/.20/.09），不换色",
+    "glassSubcard": "radius 16px / 135° linear-gradient(.34 → .10) / blur(16px) saturate(150%) / border 1px glass-stroke（右上 / 下 .14–.16）/ shadow subcard；hover .50→.22 + translateY(-2px)",
+    "navItem": "高 42px / radius 16px / padding 0 14px / 14px 文字 + 18px 图标 gap 12px；激活态 nav-item-active（gradient accent .22 → white .24、1px 白 .62 上边框、文字 #4364F7 600、shadow nav-active）",
+    "buttonPrimary": "高 40px / padding 0 20px / radius pill / 135° accent-bright→accent-deep / 白字 600 13.5px / shadow accent；hover translateY(-1px) + brightness(1.04) + shadow accent-hover",
+    "buttonGhost": "glassSubcard 底 + ink 文字 600 / 高 40px / radius pill；hover 仅提亮",
+    "iconButton": "40×40px / radius pill / glassCard / coolGray → ink hover；(badge 点 8px，距右上 2px)",
+    "searchPill": "高 40px / radius pill / glassCard / 左 16px 放大镜 / 右 ⌘K 键帽（11px、bg-white/35、1px 白 .60、radius 8px）",
+    "kpiCard": "radius 22px / p 16px / 图标砖 32px radius 12px（accent 15% 底 + 1px 白 .60 + accent 图标）/ 名称 11.5px / 数值 20–21px 800 / 底部 sparkline 56×24 + ↑% 11px positive",
+    "badgeChip": "pill / 10px 600 / bg color 15% / 文字同色 700 / padding 2px 8px",
+    "avatar": "36px 圆形 / object-fit cover / 1px 白 .80 描边 / 在线点 10px + 2px 白环",
+    "chart": "双平滑曲线（C 贝塞尔 45%/55% 控制点）/ 主线 accent 2.6px、副线 accent-soft 2.2px / 面积渐变到透明 / 网格线 #94A3B8 22% 虚线 3 3 / 轴 11px ink-muted / hover 虚线指示 + 玻璃 tooltip",
+    "modal": "radius 28px / glassCard / 遮罩 slate-900/20 + blur(4px) / 关闭键 32px 圆形 bg-white/45",
+    "toast": "右下 20px / radius 16px / glassCard / accent 圆点 + 13px 600 文案 / 2600ms 后淡出"
+  },
+
+  "effects": {
+    "backdropLayers": "① body 底色 + 3 个椭圆径向渐变（190,212,255 / 212,214,246 / 223,232,252）+ 125° 线性冰蓝；② fixed 全屏 SVG 光焦层：左下奶油丝带、右上 45° 冰蓝光束 ×4、长春花阴影袋 ×2，feGaussianBlur 26–38；③ 呼吸动画 14s alternate（opacity .86→1、位移 -12/10px、scale 1.03）",
+    "specularHighlight": "卡面 inset 0 1px 1px rgba(255,255,255,.72) 就是玻璃的「高光边」，不要另加彩色 glow",
+    "floatingLenses": "Hero 右下方两片 3D 椭圆玻璃透镜：径向 specularGlow + 双色 rim 渐变，7s / 8s 上下浮动 ±6–7px，rotate -18°→-15° / 14°→17°",
+    "softGlow": "Hero 卡内两团 decorative 光斑：indigo-400/25 blur-2xl、purple-400/20 blur-2xl（仅 Hero 允许）",
+    "scrollbar": "6px / 轨道透明 / 拇指 rgba(148,163,184,.35) → accent 55% hover",
+    "selection": "accent 20% 底 + indigo-950 文字"
+  },
+
+  "imagery": {
+    "_note": "影像规则，写比例与裁切，不附截图",
+    "avatars": "1:1 正方形，object-fit: cover，圆形裁切，1px rgba(255,255,255,.80) 描边；onerror 兜底为 accent 底 + 白色姓名缩写",
+    "albumCover": "1:1 / 56px / radius 16px / 三层渐变（indigo-300 → purple-300 → sky-300）+ 内圈 radial 高光 + 底部 accent 压暗",
+    "forbidden": "实拍大图铺底、发光噪点滤镜、二次彩色渐变描边、纯黑 / 纯白大面积块"
+  },
+
+  "breakpoints": {
+    "sm": 640,
+    "lg": 1024,
+    "xl": 1280,
+    "shellMax": 1540,
+    "desktopMin": 1280
+  }
+}

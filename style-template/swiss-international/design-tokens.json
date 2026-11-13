@@ -1,0 +1,116 @@
+{
+  "_readme": "瑞士国际主义 SWISS+ · 风格规范。system 提取 meta / color / typography.families / spacing / radius / shadow / motion；layout / components / imagery / breakpoints 仅供人与 Agent 阅读。来源：demo/swiss-studio/index.html（SWISS+ International Design Studio）。",
+  "meta": {
+    "name": "瑞士国际主义 SWISS+",
+    "version": "1.0",
+    "edition": "01",
+    "date": "2026-11",
+    "referenceViewport": "1440x960",
+    "phoneViewport": "390x844",
+    "source": "demo/swiss-studio/index.html · International Typographic Style"
+  },
+
+  "color": {
+    "paper": { "value": "#F8F8F6", "rgb": "248, 248, 246", "role": "页面底色：全站默认背景" },
+    "white": { "value": "#FFFFFF", "rgb": "255, 255, 255", "role": "反白表面：色板、图片文字、按钮文字" },
+    "ink": { "value": "#090909", "rgb": "9, 9, 9", "role": "主文字 / 结构：标题、正文、1px 结构线、主按钮底" },
+    "inkSoft": { "value": "#444444", "rgb": "68, 68, 68", "role": "次级文字：字重说明、辅助说明" },
+    "muted": { "value": "#6F6F6F", "rgb": "111, 111, 111", "role": "元数据：色值标签、日期、版权" },
+    "red": { "value": "#E30613", "rgb": "227, 6, 19", "role": "强调色：主按钮、年份条、当前态、图标（面积 < 10%）" },
+    "redDeep": { "value": "#C20511", "rgb": "194, 5, 17", "role": "红色 hover：主按钮按压" },
+    "line": { "value": "#DEDEDE", "rgb": "222, 222, 222", "role": "分隔线：固定 1px 栅格线" },
+    "lineStrong": { "value": "#BDBDBD", "rgb": "189, 189, 189", "role": "强分隔线：Hero 引线、统计竖线" },
+    "tint": { "value": "#F8DADA", "rgb": "248, 218, 218", "role": "网格示意：12 列网格条" }
+  },
+
+  "typography": {
+    "families": {
+      "display": "Helvetica Neue, Helvetica, Arial, PingFang SC, Microsoft YaHei, sans-serif",
+      "sans": "Arial, Helvetica Neue, Helvetica, PingFang SC, Microsoft YaHei, sans-serif"
+    },
+    "roles": {
+      "display": { "family": "display", "size": "clamp(32px, 2.95vw, 62px)", "weight": 750, "leading": 0.99, "tracking": "-0.065em", "case": "none", "color": "ink" },
+      "year": { "family": "display", "size": "clamp(30px, 2.3vw, 48px)", "weight": 300, "leading": 1, "tracking": "-0.05em", "numeric": "tabular-nums", "color": "white" },
+      "specimen": { "family": "display", "size": "clamp(76px, 7vw, 140px)", "weight": 500, "leading": 0.8, "tracking": "-0.09em", "color": "ink" },
+      "quote": { "family": "sans", "size": "clamp(16px, 1.15vw, 22px)", "weight": 400, "leading": 1.2, "tracking": "-0.04em", "color": "ink" },
+      "stat": { "family": "display", "size": "clamp(22px, 1.5vw, 32px)", "weight": 400, "leading": 1, "tracking": "-0.05em", "color": "ink" },
+      "sectionLabel": { "family": "sans", "size": "clamp(12px, 0.9vw, 13px)", "weight": 750, "leading": 1.2, "tracking": "0.045em", "case": "uppercase", "color": "ink" },
+      "cardTitle": { "family": "sans", "size": "clamp(10.5px, 0.78vw, 11px)", "weight": 750, "leading": 1.25, "tracking": "0", "color": "ink" },
+      "body": { "family": "sans", "size": "clamp(11px, 0.82vw, 12px)", "weight": 400, "leading": 1.55, "tracking": "0", "measure": "72ch", "color": "ink" },
+      "micro": { "family": "sans", "size": "clamp(8.5px, 0.6vw, 9px)", "weight": 400, "leading": 1.4, "tracking": "0.02em", "case": "none", "color": "muted" }
+    }
+  },
+
+  "spacing": {
+    "unit": "1px（1440 视口下；页面用 --u: clamp(.45px, calc(100vw / 1440), 1px) 缩放）",
+    "xs": "max(3px, calc(4 * var(--u)))",
+    "sm": "max(6px, calc(8 * var(--u)))",
+    "md": "max(8px, calc(12 * var(--u)))",
+    "lg": "max(12px, calc(16 * var(--u)))",
+    "xl": "max(16px, calc(24 * var(--u)))",
+    "2xl": "max(22px, calc(32 * var(--u)))"
+  },
+
+  "radius": {
+    "none": "0"
+  },
+
+  "shadow": {
+    "none": "none"
+  },
+
+  "motion": {
+    "ease-out": "cubic-bezier(.22, .61, .21, 1)",
+    "dur-ui": "240ms",
+    "dur-image": "600ms",
+    "dur-hero": "1200ms"
+  },
+
+  "layout": {
+    "_note": "系统不提取，仅供阅读",
+    "pageMaxWidth": "1920px（width: min(100%, 1920px) 居中）",
+    "topGrid": "1.48fr .95fr .88fr .72fr",
+    "bottomGrid": "1fr 1fr .95fr 1fr .85fr 1.55fr",
+    "gutter": "clamp(18px, calc(28 * var(--u)), 32px)",
+    "panelPaddingY": "clamp(15px, calc(25 * var(--u)), 25px)",
+    "hairline": "1px solid #DEDEDE",
+    "panelMinHeight": "top 520px / bottom 260px",
+    "grid": "12 列示意；四栏 / 六栏模块化排版",
+    "alignment": "全部左对齐，右侧留白，不用居中标题"
+  },
+
+  "components": {
+    "_note": "系统不提取，仅供阅读",
+    "nav": { "height": "40px", "link": "9.5–10px / 600", "hover": "红色" },
+    "button": {
+      "primary": { "bg": "#E30613", "text": "#FFFFFF", "hoverBg": "#C20511" },
+      "secondary": { "bg": "#090909", "text": "#FFFFFF", "hoverBg": "#E30613" },
+      "tertiary": { "bg": "transparent", "text": "#090909", "border": "1px solid #090909" },
+      "text": { "borderBottom": "1px solid #BDBDBD" },
+      "shared": { "padding": "12px", "textTransform": "uppercase", "letterSpacing": "0.05em", "radius": "0", "hoverTransform": "translateX(3px)" }
+    },
+    "projectCard": { "imageRatio": "4/5", "imageFilter": "grayscale(1)", "hoverScale": 1.06, "title": "11px / 750" },
+    "field": { "minHeight": "32px", "border": "1px solid #DEDEDE", "focusBorder": "#E30613", "radius": "0" },
+    "modal": { "width": "min(560px, 100%)", "imageRatio": "16/10", "radius": "0", "backdrop": "rgba(9,9,9,.55)" },
+    "toast": { "bg": "#090909", "text": "#FFFFFF", "bottom": "24px", "duration": "2200ms" }
+  },
+
+  "imagery": {
+    "_note": "系统不提取，仅供阅读",
+    "hero": "3:4，object-fit: cover，object-position: 52% 42%，grayscale(1) contrast(1.02)",
+    "project": "4:5，居中裁切，grayscale(1)",
+    "article": "65:47，object-fit: cover，grayscale(1)",
+    "modal": "16:10",
+    "forbidden": "圆角、阴影、彩色滤镜、渐变叠加、发光、玻璃拟态"
+  },
+
+  "breakpoints": {
+    "wide": "> 1340",
+    "laptopMax": 1340,
+    "tabletMax": 1100,
+    "navCollapse": "901–1100",
+    "stackMax": 900,
+    "phoneMax": 700,
+    "smallMax": 420
+  }
+}

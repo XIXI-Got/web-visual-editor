@@ -1,0 +1,63 @@
+/* Glassmio 玻璃拟态 · 流光冰蓝 —— 原生背景（推荐背景，必须和前景一起应用）
+   背景是这套风格的「光源」：所有颜色都来自这层固定的环境光，玻璃卡只借光不发光。
+   用法：整块加到页面上替换原有背景；不要叠在旧背景上，也不要放进 section 内部。
+   纯 CSS 渐变复现原页光焦层；像素级精确版见文件末尾的 SVG 替换写法。 */
+
+html {
+  color-scheme: light;
+  background-color: #DCE4FA;
+  background-image:
+    /* ① 右上 45° 冰蓝光束 ×2 */
+    linear-gradient(206deg, rgba(255,255,255,.92) 0%, rgba(232,245,255,.72) 11%,
+                    rgba(188,224,255,.36) 25%, rgba(200,220,255,0) 44%),
+    linear-gradient(214deg, rgba(242,249,255,.86) 0%, rgba(196,227,255,.54) 13%,
+                    rgba(185,213,255,.18) 29%, rgba(213,224,252,0) 46%),
+    /* ② 左下奶油 / 象牙丝带 */
+    linear-gradient(112deg, rgba(255,255,255,0) 3%, rgba(255,255,255,.92) 17%,
+                    rgba(255,253,249,.86) 26%, rgba(250,243,238,.48) 37%,
+                    rgba(245,236,233,0) 52%),
+    /* ③ 长春花紫阴影袋（左下 / 中上折角） */
+    radial-gradient(48% 48% at 16% 84%, rgba(212,215,245,.92) 0%, rgba(223,227,249,.55) 60%, rgba(233,237,252,0) 100%),
+    radial-gradient(44% 44% at 46% 22%, rgba(197,210,250,.88) 0%, rgba(212,221,251,.45) 65%, rgba(228,234,252,0) 100%),
+    /* ④ 底色：三枚径向光斑 + 125° 线性 */
+    radial-gradient(ellipse 68% 58% at 62% 22%, rgba(190,212,255,.88) 0%, transparent 72%),
+    radial-gradient(ellipse 55% 65% at 12% 85%, rgba(212,214,246,.92) 0%, transparent 68%),
+    radial-gradient(ellipse 60% 55% at 88% 82%, rgba(223,232,252,.90) 0%, transparent 70%),
+    linear-gradient(125deg, #E7ECFC 0%, #CDD9F8 46%, #DDE5FA 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body { background: transparent; background-attachment: fixed; }
+
+/* 可选 14s 呼吸；不需要环境动效就删掉这一段 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(40% 34% at 72% 12%, rgba(255,255,255,.28) 0%, rgba(255,255,255,0) 70%);
+  animation: glassBeamBreath 14s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+
+@keyframes glassBeamBreath {
+  0%   { opacity: .86; transform: translate3d(0, 0, 0) scale(1); }
+  100% { opacity: 1;   transform: translate3d(-12px, 10px, 0) scale(1.03); }
+}
+
+::selection { background: rgba(91, 124, 250, .22); color: #1E293B; }
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; opacity: 1; transform: none; }
+}
+
+@media (forced-colors: active) {
+  html { background-image: none; }
+  body::before { display: none; }
+}
+
+/* 可选精确光焦层：把 caustic-backdrop.svg 复制到项目 assets/，删掉 ①②③ 六层渐变，
+   然后把 body::before 的 background 换成 url("assets/caustic-backdrop.svg") center / cover no-repeat。 */

@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Glassmio 玻璃拟态 · 流光冰蓝 — design tokens
+   提取自 glassmio_glassmorphism_dashboard.html
+   与 design-tokens.json 同值；系统在缺少 json 时也会从这里解析 --name: value
+   基准：1440 视口时 1u = 1px（--u 是所有尺寸的唯一设计单位）
+   ========================================================================== */
+
+:root {
+  /* ---- 缩放基准 ---- */
+  --design-w: 1440;
+  --u: clamp(.45px, calc(100vw / var(--design-w)), 1px);
+
+  /* ---- 色彩 ---- */
+  --paper: #DCE4FA;
+  --paper-deep: #CDD9F8;
+  --ink: #1E293B;
+  --accent: #5B7CFA;
+  --accent-deep: #4E6EF2;
+  --accent-bright: #6484FF;
+  --accent-soft: #93B4FF;
+  --accent-violet: #6B66F8;
+  --indigo: #4F46E5;
+  --beam-cream: #FFF9F4;
+  --beam-ice: #E8F5FF;
+  --lilac: #D4D7F5;
+  --ink-muted: #5C6C84;
+  --glass-tint: rgba(255, 255, 255, .38);
+  --glass-tint-mid: rgba(255, 255, 255, .16);
+  --glass-stroke: rgba(255, 255, 255, .48);
+  --hairline: rgba(255, 255, 255, .35);
+  --positive: #34D399;
+  --warning: #FBBF24;
+  --rose: #F43F5E;
+  --sky: #93C5FD;
+  --teal: #2DD4BF;
+  --violet: #A855F7;
+  --focus: #5B7CFA;
+
+  /* ---- 字体（单一字族；--font-display 是同值别名，中文回退同栈） ---- */
+  --font-sans: "Plus Jakarta Sans", "Inter", "Source Han Sans SC", "Noto Sans SC",
+               "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-display: var(--font-sans);
+
+  /* ---- 字阶（全部走 --u，无固定 px 死值） ---- */
+  --fs-hero: clamp(26px, calc(16 * var(--u) + 14px), 34px);
+  --fs-h2: clamp(15px, calc(2 * var(--u) + 14px), 17px);
+  --fs-h3: clamp(13.5px, calc(2 * var(--u) + 12.5px), 15.5px);
+  --fs-metric: clamp(19px, calc(7 * var(--u) + 14px), 22px);
+  --fs-metric-big: clamp(28px, calc(20 * var(--u) + 14px), 36px);
+  --fs-body: clamp(13px, calc(1.5 * var(--u) + 12px), 14px);
+  --fs-nav: clamp(13.5px, calc(1 * var(--u) + 13px), 14.5px);
+  --fs-label: clamp(11px, calc(2 * var(--u) + 10.5px), 13px);
+  --fs-micro: clamp(10px, calc(1 * var(--u) + 10px), 11.5px);
+  --fs-badge: max(9.5px, calc(9.5 * var(--u) + .5px));
+  --tracking-tight: -.025em;
+  --tracking-h2: -.012em;
+
+  /* ---- 间距（4px 基准） ---- */
+  --space-2xs: calc(2 * var(--u));
+  --space-xs: calc(4 * var(--u));
+  --space-sm: calc(8 * var(--u));
+  --space-md: calc(10 * var(--u));
+  --space-lg: calc(12 * var(--u));
+  --space-xl: calc(14 * var(--u));
+  --space-2xl: calc(16 * var(--u));
+  --space-3xl: calc(20 * var(--u));
+  --space-4xl: calc(24 * var(--u));
+  --space-5xl: calc(32 * var(--u));
+  --space-gutter: max(12px, calc(18 * var(--u)));
+  --space-card-gap: clamp(14px, calc(14 * var(--u) + 2px), 20px);
+
+  /* ---- 圆角 ---- */
+  --radius-sm: calc(12 * var(--u));
+  --radius-md: calc(16 * var(--u));
+  --radius-lg: calc(22 * var(--u));
+  --radius-xl: calc(26 * var(--u));
+  --radius-2xl: calc(28 * var(--u));
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
+  /* ---- 玻璃材质 ---- */
+  --glass-blur: calc(22 * var(--u));
+  --glass-blur-sub: calc(16 * var(--u));
+  --glass-sat: 160%;
+  --glass-grad: linear-gradient(135deg,
+      rgba(255, 255, 255, .38) 0%,
+      rgba(255, 255, 255, .16) 52%,
+      rgba(255, 255, 255, .06) 100%);
+  --glass-grad-hover: linear-gradient(135deg,
+      rgba(255, 255, 255, .44) 0%,
+      rgba(255, 255, 255, .20) 50%,
+      rgba(255, 255, 255, .09) 100%);
+  --glass-sub-grad: linear-gradient(135deg,
+      rgba(255, 255, 255, .34) 0%,
+      rgba(255, 255, 255, .10) 100%);
+  --glass-sub-grad-hover: linear-gradient(135deg,
+      rgba(255, 255, 255, .50) 0%,
+      rgba(255, 255, 255, .22) 100%);
+  --btn-grad: linear-gradient(135deg, #6484FF 0%, #4E6EF2 100%);
+  --heading-grad: linear-gradient(90deg, #5B7CFA 0%, #6B66F8 100%);
+
+  /* ---- 阴影 ---- */
+  --shadow-glass: 0 18px 42px -12px rgba(79, 108, 220, .14), 0 4px 16px -2px rgba(15, 23, 42, .04);
+  --shadow-glass-inset: inset 0 1px 1px rgba(255, 255, 255, .72), inset 0 -1px 1px rgba(255, 255, 255, .12);
+  --shadow-glass-hover: 0 24px 48px -10px rgba(79, 108, 220, .20), 0 8px 20px -4px rgba(15, 23, 42, .05);
+  --shadow-subcard: 0 8px 20px -6px rgba(91, 124, 250, .10), inset 0 1px 1px rgba(255, 255, 255, .65);
+  --shadow-subcard-hover: 0 12px 26px -6px rgba(91, 124, 250, .20), inset 0 1px 1px rgba(255, 255, 255, .85);
+  --shadow-accent: 0 10px 24px -5px rgba(84, 114, 245, .52), inset 0 1px 1px rgba(255, 255, 255, .50);
+  --shadow-accent-hover: 0 14px 28px -4px rgba(84, 114, 245, .65), inset 0 1px 1px rgba(255, 255, 255, .65);
+  --shadow-nav-active: 0 6px 16px -4px rgba(91, 124, 250, .22);
+
+  /* ---- 动效 ---- */
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --ease-soft: cubic-bezier(.4, 0, .2, 1);
+  --dur-card: 280ms;
+  --dur-sub: 220ms;
+  --dur-btn: 250ms;
+  --lens-float-top: 7000ms;
+  --lens-float-bottom: 8000ms;
+  --beam-breathe: 14000ms;
+  --equalizer: 650ms;
+  --theme-shift: 400ms;
+}
+
+/* 不支持 backdrop-filter 时：退化为更实的白玻璃，仍然可读，不要留透明空壳 */
+@supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+  :root {
+    --glass-grad: linear-gradient(135deg, rgba(255, 255, 255, .72) 0%, rgba(238, 244, 255, .58) 100%);
+    --glass-sub-grad: linear-gradient(135deg, rgba(255, 255, 255, .66) 0%, rgba(238, 244, 255, .46) 100%);
+    --glass-blur: 0px;
+    --glass-blur-sub: 0px;
+  }
+}
+
+/* 动效可关闭：只保留 150ms 内的透明度变化，不位移、不缩放 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-card: 150ms;
+    --dur-sub: 150ms;
+    --dur-btn: 150ms;
+  }
+}
+
+/* 高对比度 / 强制色模式：玻璃必须让位给实底，否则文字不可读 */
+@media (forced-colors: active) {
+  :root {
+    --glass-grad: Canvas;
+    --glass-sub-grad: Canvas;
+    --glass-stroke: CanvasText;
+  }
+}
