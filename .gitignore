@@ -32,7 +32,7 @@ deliverables/video/_tts2/
 # 私有风格包（外部提取，不公开）
 deliverables/private-styles/
 # 私有 pro 规范，只保留本地，不发布
-style-template/**/PRO-SPEC.md
+style-template/**/PRO-*
 
 # 发布/构建产物：插件目录里的 tgz 副本不提交（正式包放 releases/）
 dsh-plugin/*.tgz
@@ -47,3 +47,12 @@ preview.2026*.png
 .cmp-*.png
 .ratio-*.png
 .six-*.png
+
+# 发布包只在本地构建，不入库（dsh-plugin/ 和 releases/ 里的 tgz 都不提交）
+dsh-plugin/*.tgz
+releases/*.tgz
+
+# 旧 demo 调试页（本地保留，不入库）
+demo/_diag.html
+demo/_diag2.html
+demo/_e2e.html
