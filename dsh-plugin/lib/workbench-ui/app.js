@@ -28,6 +28,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     showPick: false,
     path: "",
     pick: { path: "", data: null, busy: false, err: "", typed: null, for: "" },
+    stylePick: { open: false, path: "", data: null, busy: false, err: "", typed: null },
     apiBase: "",
     token: "",
     styles: [],
@@ -899,11 +900,65 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       '</div>';
   }
 
+  async function loadStylePick(dir) {
+    var sp = S.stylePick;
+    sp.busy = true;
+    sp.err = "";
+    render();
+    try {
+      var d = await hostCall("browse", { path: dir || "" });
+      sp.data = d || null;
+      sp.path = (d && d.path) || "";
+      sp.typed = sp.path;
+      if (d && d.error) sp.err = d.error;
+    } catch (e) {
+      sp.err = "打不开这个目录：" + String((e && e.message) || e);
+    }
+    sp.busy = false;
+    render();
+  }
+
   function startStyleTargetPick() {
-    S.pick.for = "styleTarget";
-    S.showPick = true;
-    S.pick.path = S.style.target || "";
-    loadPick(S.style.target || (S.proj && S.proj.dir) || "");
+    S.stylePick.open = true;
+    loadStylePick(S.style.target || "");
+  }
+
+  function closeStylePick() {
+    S.stylePick.open = false;
+    S.stylePick.data = null;
+    render();
+  }
+
+  function stylePickModal() {
+    var sp = S.stylePick;
+    var d = sp.data || {};
+    var here = d.here || {};
+    var cur = sp.path || d.path || "";
+    var typed = sp.typed != null ? sp.typed : cur;
+    var badge = here && here.mode
+      ? '<span class="sp-badge">✓ 可用 · ' + esc(here.mode) + (here.framework ? " / " + esc(here.framework) : "") + '</span>'
+      : '<span class="sp-badge dim">未识别项目类型（也可以选）</span>';
+    var dirs = (d.dirs || []).map(function (x) {
+      return '<button class="sp-dir' + (x.mode ? " known" : "") + '" data-act="style-pick-enter" data-dir="' + esc(x.path) + '">' +
+        '<span>📁 ' + esc(x.name) + '</span>' + (x.mode ? '<i>' + esc(x.mode) + '</i>' : '') + '</button>';
+    }).join("") || '<div class="sp-empty">' + (sp.busy ? "读取中…" : "这个目录下没有子文件夹") + '</div>';
+    return '<div class="sp-mask" data-act="style-pick-cancel"></div>' +
+      '<div class="sp-panel" role="dialog" aria-modal="true">' +
+        '<div class="sp-head"><div><b>选择风格优化目标项目</b>' +
+          '<p>只设置「应用风格」的目标，不会打开或切换到该项目的编辑视图。可以选任意本地目录，不要求之前打开过。</p></div>' +
+          '<button class="sp-x" data-act="style-pick-cancel" title="关闭（Esc）">×</button></div>' +
+        '<div class="sp-pathrow">' +
+          '<button class="btn ghost" data-act="style-pick-up"' + (d.parent ? "" : " disabled") + '>↑ 上一级</button>' +
+          '<input class="sp-pathinput" data-field="stylePickPath" value="' + esc(typed) + '" placeholder="直接输入 / 粘贴目录路径，Enter 进入" spellcheck="false" autocomplete="off">' +
+          badge +
+        '</div>' +
+        (sp.err ? '<div class="sp-err">' + esc(sp.err) + '</div>' : "") +
+        '<div class="sp-list">' + dirs + '</div>' +
+        '<div class="sp-foot">' +
+          '<button class="btn ghost" data-act="style-pick-cancel">取消</button>' +
+          '<button class="btn pri" data-act="style-pick-ok"' + (sp.busy || !cur ? " disabled" : "") + '>用这个目录作为风格目标</button>' +
+        '</div>' +
+      '</div>';
   }
 
   function applyStatusCard() {
@@ -1224,7 +1279,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       var base0 = String(S.apiBase || '').replace(/\/+$/, '');
       ensureAllStyleFonts(S.styles, base0);
     } catch (e) { /* ignore */ }
-    app.innerHTML = topBar() + standaloneBar() + (S.view === "edit" ? editView() : homeView()) + (S.pagesModal && S.pagesModal.open ? pagesModal() : "") + (S.confirm ? confirmModal() : "") + (S.ai.marquee ? '<div class="ai-hint">▣ 在页面上拖一个框选区域（Esc 取消）</div>' : "");
+    app.innerHTML = topBar() + standaloneBar() + (S.view === "edit" ? editView() : homeView()) + (S.pagesModal && S.pagesModal.open ? pagesModal() : "") + (S.confirm ? confirmModal() : "") + (S.stylePick && S.stylePick.open ? stylePickModal() : "") + (S.ai.marquee ? '<div class="ai-hint">▣ 在页面上拖一个框选区域（Esc 取消）</div>' : "");
     try { app.insertAdjacentHTML("beforeend", applyStatusCard()); } catch (e) { /* ignore */ }
     renderNav();
     try { bindEditorFrame(); } catch (e) { /* ignore */ }
@@ -1241,6 +1296,20 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     }
     var act = t.getAttribute("data-act");
     if (act === "style-target-pick") { startStyleTargetPick(); return; }
+    if (act === "style-pick-cancel") { closeStylePick(); return; }
+    if (act === "style-pick-up") { loadStylePick((S.stylePick.data && S.stylePick.data.parent) || ""); return; }
+    if (act === "style-pick-enter") { loadStylePick(t.getAttribute("data-dir") || ""); return; }
+    if (act === "style-pick-ok") {
+      var spDir = S.stylePick.path;
+      if (!spDir) { try { wbToast("还没选目录", 1600); } catch (e) { /* ignore */ } return; }
+      S.style.target = spDir;
+      writeLS("ve-wb:styleTarget", spDir);
+      S.stylePick.open = false;
+      S.stylePick.data = null;
+      render();
+      try { wbToast("风格目标项目已设为：" + spDir, 2600); } catch (e) { /* ignore */ }
+      return;
+    }
     if (act === "style-target-pick-cancel") { S.showPick = false; S.pick.for = ""; render(); return; }
     if (act === "apply-close") { S.apply = null; render(); return; }
     if (act === "apply-goto") {
@@ -1326,6 +1395,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     var f = e.target && e.target.getAttribute ? e.target.getAttribute("data-field") : null;
     if (f === "path") S.path = e.target.value;
     if (f === "pickPath") { S.pick.typed = e.target.value; syncPickOpenBtn(); }
+    if (f === "stylePickPath") { S.stylePick.typed = e.target.value; return; }
     if (f === "styleTarget") {
       var stv = e.target.value;
       if (stv === "__browse__") { startStyleTargetPick(); return; }
@@ -1336,6 +1406,13 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     if (f === "aiText") S.ai.text = e.target.value;
   });
   document.addEventListener("keydown", function (e) {
+    var kField = e.target && e.target.getAttribute ? e.target.getAttribute("data-field") : null;
+    if (kField === "stylePickPath" && e.key === "Enter") {
+      e.preventDefault();
+      loadStylePick(String(S.stylePick.typed || "").trim());
+      return;
+    }
+    if (e.key === "Escape" && S.stylePick && S.stylePick.open) { closeStylePick(); return; }
     if (e.key === "Escape") {
       if (S.nav && S.nav.open) { S.nav.open = false; renderNav(); return; }
       if (S.ai && S.ai.open) { S.ai.open = false; render(); return; }
