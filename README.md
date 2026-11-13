@@ -1,4 +1,4 @@
-# 网页视觉修改器（visual-editor）
+# DSH 网页可视化编辑器（visual-editor）
 
 [English](README.en.md) · 中文
 

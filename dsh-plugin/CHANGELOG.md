@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.114（产品更名：DSH 网页可视化编辑器）
+- 展示名改为「**DSH 网页可视化编辑器** / **DSH Visual Editor**」，`package.json` 新增 `displayName` / `displayNameEn`，description 以产品名开头。
+- README（中 / 英）与插件 README 的标题同步更名，英文 README 注明别名 `Web Visual Editor (visual-editor)`。
+- 保持不变：包名 `dsh-ui-editor`、插件 id / cordis patch、代码内的「网页修改器」「网页工作台」等界面文案（避免破坏已安装实例与 e2e 的 DOM 文案检测）。
+
 ## 1.1.113（构建流程：自动同步工作台前端；发布包不入库）
 - `tools/build-release.mjs` 构建前自动把 `workbench-ui/`（源）同步到 `dsh-plugin/lib/workbench-ui/`（发布产物），避免两份副本再漂移。
 - 仓库不再入库发布包：`dsh-plugin/*.tgz`、`releases/*.tgz` 全部 ignore，tgz 只在本地生成（`node tools/build-release.mjs` 后本地两份都有）。

@@ -1,4 +1,6 @@
-# Web Visual Editor
+# DSH Visual Editor
+
+Also known as Web Visual Editor (`visual-editor`).
 
 Edit the page you already have — text, images, sizes, spacing, positions — right in the browser,
 then write the result back into source files. Every save keeps a backup. No npm dependencies,
