@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>小红书封面 · 风格切换（蓝白版）· 1080×1440</title>
+<style>
+  :root {
+    --bg-1: #f5f9ff;
+    --bg-2: #e8f0ff;
+    --card: #ffffff;
+    --ink: #0b1220;
+    --ink-2: #33415c;
+    --ink-3: #7b8aa6;
+    --blue: #2e5bff;
+    --blue-2: #7c9bff;
+    --blue-soft: rgba(46, 91, 255, .10);
+    --line: rgba(27, 58, 128, .14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1440px; }
+  body {
+    background: var(--bg-1);
+    color: var(--ink);
+    font-family: "Inter Tight", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .cover {
+    position: relative;
+    width: 1080px; height: 1440px;
+    padding: 54px 64px 46px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    background:
+      radial-gradient(90% 62% at 50% -8%, rgba(124, 155, 255, .34), rgba(124, 155, 255, 0) 62%),
+      radial-gradient(70% 50% at 100% 100%, rgba(46, 91, 255, .12), rgba(46, 91, 255, 0) 60%),
+      linear-gradient(180deg, #f7faff 0%, #eef4ff 58%, #e9f1ff 100%);
+  }
+  /* 点阵 */
+  .cover::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(46, 91, 255, .22) 1px, transparent 1.2px);
+    background-size: 28px 28px;
+    opacity: .38;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.15) 55%, rgba(0,0,0,.7));
+  }
+  .top { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; height: 46px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--blue); color: #fff;
+    display: grid; place-items: center;
+    font-size: 22px; line-height: 1;
+    transform: rotate(-6deg);
+    box-shadow: 0 10px 22px rgba(46, 91, 255, .34);
+  }
+  .brand b { display: block; font-size: 23px; font-weight: 800; letter-spacing: -.01em; }
+  .brand span { display: block; margin-top: 4px; font: 600 11px/1 "Cascadia Mono", Consolas, monospace; letter-spacing: .18em; color: var(--ink-3); }
+  .pill {
+    padding: 9px 15px; border-radius: 999px;
+    border: 1.5px solid var(--ink); background: #fff;
+    font: 700 14px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+    box-shadow: 0 3px 0 rgba(11, 18, 32, .9);
+  }
+  .kicker {
+    position: relative; z-index: 3;
+    margin-top: 34px;
+    display: inline-flex; align-items: center; gap: 9px;
+    font: 700 16px/1 "Cascadia Mono", Consolas, monospace;
+    letter-spacing: .14em; color: var(--ink-2); text-transform: uppercase;
+  }
+  .kicker i { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+
+  /* ── 图：风格切换器（中间偏上） ── */
+  .figure { position: relative; z-index: 2; margin-top: 20px; }
+  .switcher {
+    position: relative;
+    width: 100%;
+    border-radius: 24px;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    box-shadow: 0 44px 80px -34px rgba(19, 44, 110, .36), 0 2px 0 rgba(255,255,255,.9) inset;
+    overflow: hidden;
+    transform: rotate(-.8deg);
+  }
+  .sw-head {
+    height: 54px; display: flex; align-items: center; gap: 9px;
+    padding: 0 20px; border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #ffffff, #f6f9ff);
+  }
+  .sw-head i { width: 11px; height: 11px; border-radius: 50%; background: #d9e2f5; }
+  .sw-head .lib { margin-left: 12px; font: 700 13px/1 "Inter Tight", "Microsoft YaHei", sans-serif; color: var(--ink-2); }
+  .sw-head .lib em { font-style: normal; color: var(--blue); }
+  .sw-head .conn { margin-left: auto; font: 700 11px/1 "Cascadia Mono", Consolas, monospace; color: var(--blue); background: var(--blue-soft); border: 1px solid rgba(46,91,255,.18); padding: 6px 9px; border-radius: 999px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 18px 18px 10px; }
+  .tag-img { display: block; width: 100%; height: 138px; object-fit: cover; object-position: 50% 0; border-radius: 10px; background: #eef2fa; }
+  .style-card { position: relative; border: 1.5px solid var(--line); border-radius: 14px; background: #fff; padding: 8px 8px 9px; }
+  .style-card .name { display: block; margin-top: 8px; font-size: 13.5px; font-weight: 800; letter-spacing: -.01em; }
+  .style-card .meta { display: block; margin-top: 3px; font: 600 10.5px/1 "Cascadia Mono", Consolas, monospace; color: var(--ink-3); }
+  .style-card.on { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46,91,255,.16); }
+  .style-card.on::after {
+    content: "当前"; position: absolute; right: 10px; top: 10px;
+    background: var(--blue); color: #fff;
+    font: 700 10px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+    padding: 5px 8px; border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(46,91,255,.4);
+  }
+  .sw-foot { display: flex; align-items: center; gap: 12px; padding: 4px 18px 16px; }
+  .sw-foot .target { flex: 1; display: flex; align-items: center; gap: 8px; font: 600 12px/1 "Cascadia Mono", Consolas, monospace; color: var(--ink-3); }
+  .sw-foot .target b { color: var(--ink); font-weight: 700; }
+  .sw-foot .btn {
+    padding: 11px 18px; border-radius: 999px; background: var(--blue); color: #fff;
+    font: 800 13px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+    box-shadow: 0 5px 0 rgba(20, 46, 130, .85);
+  }
+  .sw-select {
+    position: absolute; left: 26px; top: -18px; z-index: 4;
+    display: flex; align-items: center; gap: 9px;
+    padding: 10px 14px; border-radius: 999px;
+    background: #fff; border: 1.5px solid var(--ink);
+    box-shadow: 0 4px 0 rgba(11,18,32,.92);
+    font: 800 13px/1 "Inter Tight", "Microsoft YaHei", sans-serif;
+  }
+  .sw-select b { color: var(--blue); }
+  .sw-select span { color: var(--ink-3); font-weight: 600; }
+
+  /* ── 字：图下面 ── */
+  .copy { position: relative; z-index: 3; margin-top: 34px; }
+  h1 {
+    font-size: 112px; line-height: .98; letter-spacing: -.045em; font-weight: 900;
+    color: var(--ink);
+  }
+  h1 .line { display: block; }
+  h1 .hl { position: relative; display: inline-block; color: var(--blue); }
+  h1 .hl { color: #fff; padding: 0 .06em; }
+  h1 .hl::before {
+    content: ""; position: absolute; left: 0; right: 0; top: .06em; bottom: .02em;
+    background: var(--blue); z-index: -1; border-radius: 10px;
+  }
+  .sub { margin-top: 20px; max-width: 920px; font-size: 25px; line-height: 1.55; font-weight: 500; color: var(--ink-2); }
+  .sub b { color: var(--ink); font-weight: 800; }
+  .chips { display: flex; gap: 12px; margin-top: 22px; }
+  .chip { flex: 1; display: flex; align-items: center; gap: 11px; padding: 14px 16px; border-radius: 14px; background: #fff; border: 1.5px solid var(--line); }
+  .chip .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--blue); flex: none; }
+  .chip b { display: block; font-size: 19px; font-weight: 800; letter-spacing: -.01em; white-space: nowrap; }
+  .chip span { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.4; color: var(--ink-3); }
+  .note-line {
+    margin-top: 14px;
+    font: 600 13px/1.5 "Cascadia Mono", Consolas, monospace;
+    color: var(--ink-3); letter-spacing: .01em;
+  }
+  .foot {
+    position: relative; z-index: 3;
+    margin-top: auto; padding-top: 16px;
+    border-top: 1.5px solid rgba(27,58,128,.16);
+    display: flex; align-items: center; justify-content: space-between;
+    font: 700 13.5px/1 "Cascadia Mono", Consolas, monospace;
+    color: var(--ink-2); letter-spacing: .03em;
+  }
+  .foot .right { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+  .foot .arrow { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 15px; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="top">
+    <div class="brand">
+      <div class="logo">✎</div>
+      <div>
+        <b>网页可视化编辑器</b>
+        <span>DSH · VISUAL EDITOR</span>
+      </div>
+    </div>
+    <div class="pill">一键换风格</div>
+  </div>
+
+  <div class="kicker"><i></i><span>风格优化 · 整套视觉一起换</span></div>
+
+  <div class="figure">
+    <div class="sw-select"><b>风格</b> Glassmio 玻璃拟态 · 流光冰蓝 <span>▾</span></div>
+    <div class="switcher">
+      <div class="sw-head">
+        <i></i><i></i><i></i>
+        <div class="lib">风格库 · <em>8 种风格</em></div>
+        <div class="conn">已连接项目 · demo</div>
+      </div>
+      <div class="grid">
+        <div class="style-card on">
+          <img class="tag-img" src="../../style-template/glassmio-glassmorphism/preview.png" alt="" />
+          <span class="name">Glassmio 玻璃拟态</span>
+          <span class="meta">玻璃 · 层次</span>
+        </div>
+        <div class="style-card">
+          <img class="tag-img" src="../../style-template/swiss-international/preview.png" alt="" />
+          <span class="name">瑞士国际主义</span>
+          <span class="meta">纯色 · 干净</span>
+        </div>
+        <div class="style-card">
+          <img class="tag-img" src="../../style-template/aurora-dashboard/preview.png" alt="" />
+          <span class="name">Aurora 极光黑夜</span>
+          <span class="meta">纯色 · 干净</span>
+        </div>
+        <div class="style-card">
+          <img class="tag-img" src="../../style-template/spatial-glass/preview.png" alt="" />
+          <span class="name">Spatial Glass 拟态玻璃</span>
+          <span class="meta">玻璃 · 层次</span>
+        </div>
+        <div class="style-card">
+          <img class="tag-img" src="../../style-template/pixelos-95/preview.png" alt="" />
+          <span class="name">Pixel 复古像素</span>
+          <span class="meta">纯色 · 干净</span>
+        </div>
+        <div class="style-card">
+          <img class="tag-img" src="../../style-template/uneo-neumorphism/preview.png" alt="" />
+          <span class="name">UNEO 暖石拟物</span>
+          <span class="meta">纯色 · 干净</span>
+        </div>
+      </div>
+      <div class="sw-foot">
+        <div class="target">应用到 <b>demo</b> / <b>index.html</b> · 应用前自动备份</div>
+        <div class="btn">应用这个风格 →</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="copy">
+    <h1>
+      <span class="line">8 种风格，</span>
+      <span class="line"><span class="hl">一键切换</span></span>
+    </h1>
+    <p class="sub">颜色、字体、圆角、间距、动效整套一起换；<b>选好风格点应用</b>，Agent 按规范把页面重排一遍，不满意随时对比回退。</p>
+    <div class="note-line">也可以用风格库导入自己的 design-tokens.json / UI-SPEC.md，变成你自己的风格</div>
+    <div class="chips">
+      <div class="chip"><span class="dot"></span><div><b>整套换</b><span>颜色 / 字体 / 圆角一起</span></div></div>
+      <div class="chip"><span class="dot"></span><div><b>可对比</b><span>原版 / 新版并排看</span></div></div>
+      <div class="chip"><span class="dot"></span><div><b>自动备份</b><span>随时回退到上一版</span></div></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>本地运行 · 零依赖 · 支持 Vite / 静态站</span>
+    <span class="right">主页看安装<span class="arrow">→</span></span>
+  </div>
+</div>
+</body>
+</html>
