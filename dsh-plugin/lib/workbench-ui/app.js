@@ -27,12 +27,13 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     msg: "",
     showPick: false,
     path: "",
-    pick: { path: "", data: null, busy: false, err: "", typed: null },
+    pick: { path: "", data: null, busy: false, err: "", typed: null, for: "" },
     apiBase: "",
     token: "",
     styles: [],
     ai: { open: false, text: "", sel: null, busy: false, msg: "", marquee: false },
     style: { target: "", busy: false, addOpen: false, addPath: "", msg: "", open: false, selectedId: "" },
+    apply: null,
     confirm: null,
     pagesModal: { open: false, dir: "", list: null, loading: false },
     nav: { open: false, dir: "", list: null, loading: false, err: "", cur: "" },
@@ -140,6 +141,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     if (method === "style.extract") return rest("/ve/plugin/style/extract", { method: "POST", body: args });
     if (method === "style.save") return rest("/ve/plugin/style/save", { method: "POST", body: args });
     if (method === "agent.prompt") return rest("/ve/plugin/handoff", { method: "POST", body: args });
+    if (method === "conversation.focus") return Promise.resolve({ ok: false, reason: "独立窗口没有 DSH 对话面板（请回 DSH 侧栏点「对话」）" });
     throw new Error("独立模式不支持：" + method);
   }
 
@@ -155,6 +157,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     try {
       var r = await hostCall("projects.list");
       S.projects = (r && r.projects) || [];
+      try { if (!S.style.target && S.projects[0]) S.style.target = S.projects[0].dir; } catch (e) { /* ignore */ }
       if (r && r.info) S.info = r.info;
       S.msg = "";
     } catch (e) {
@@ -218,6 +221,19 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
   }
 
   async function openFromPick() {
+    if (S.pick.for === "styleTarget") {
+      var wantDir = cleanPickPath(pickTypedRaw());
+      if (wantDir && wantDir !== String(S.pick.path || "")) await loadPick(wantDir);
+      var tdir = S.pick.path || wantDir;
+      if (!tdir) { try { wbToast("还没选目录", 1800); } catch (e) { /* ignore */ } return; }
+      S.style.target = tdir;
+      writeLS("ve-wb:styleTarget", tdir);
+      S.showPick = false;
+      S.pick.for = "";
+      render();
+      try { wbToast("目标项目已设为：" + tdir, 2600); } catch (e) { /* ignore */ }
+      return;
+    }
     // 输入框里改了路径但没按 Enter 就直接点「打开这个目录」：先跳到那个目录再判断
     var desired = cleanPickPath(pickTypedRaw());
     if (desired && desired !== String(S.pick.path || "")) {
@@ -251,10 +267,13 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       '<button class="btn ghost" data-act="pick-up" title="上一级"' + (d.parent ? "" : " disabled") + ">↑ 上一级</button>" +
       '<input class="pick-path-input" data-field="pickPath" value="' + esc(typedVal) + '" placeholder="输入或粘贴目录路径，Enter 进入" spellcheck="false" autocomplete="off" title="可以直接输入 / 粘贴目录路径，按 Enter 进入；复制来的引号会自动去掉" />' +
       badge +
-      '<button class="btn pri" data-act="pick-open" title="打开当前目录（输入框里改了路径会先跳过去）"' + ((S.busy || (!(here && here.mode) && !typedDiff)) ? " disabled" : "") + ">" +
-      (S.busy ? "打开中…" : "打开这个目录") +
+      '<button class="btn pri" data-act="pick-open" title="打开当前目录（输入框里改了路径会先跳过去）"' + ((S.pick.for === "styleTarget" ? Boolean(S.busy) : (S.busy || (!(here && here.mode) && !typedDiff))) ? " disabled" : "") + ">" +
+      (S.busy ? "打开中…" : (S.pick.for === "styleTarget" ? "选为目标项目" : "打开这个目录")) +
       "</button>" +
       "</div>";
+    if (S.pick.for === "styleTarget") {
+      header += '<div class="pick-modebar"><span>选一个项目目录作为「风格应用」的目标</span><button class="btn ghost" data-act="style-target-pick-cancel">取消</button></div>';
+    }
     var hint = "";
     var list = dirs.length
       ? dirs.map(function (x) {
@@ -562,44 +581,76 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
   async function doApplyStyle(id, name, dir, opts) {
     opts = opts || {};
     var st = S.style;
-    st.msg = '正在生成风格规范并发送给 Agent…'; render(); try { wbToast('正在应用「' + (name || '') + '」风格…', 2300); } catch (e) {}
+    S.apply = {
+      open: true, styleName: name || "", dir: dir || "",
+      step: "backup", msg: "正在备份项目并生成风格规范…",
+      at: Date.now(), sent: null, sessionId: "", error: "",
+      compareUrl: "", briefFile: "", backupDir: ""
+    };
+    render();
     try {
-      var r = await hostCall('styles.apply', { id: id, dir: dir });
-      if (!r || !r.ok) { st.msg = '失败：' + String((r && r.error) || '未知错误'); render(); return; }
+      var r = await hostCall("styles.apply", { id: id, dir: dir });
+      if (!r || !r.ok) {
+        S.apply.step = "error";
+        S.apply.error = "失败：" + String((r && r.error) || "未知错误");
+        S.apply.msg = S.apply.error;
+        st.msg = S.apply.error;
+        render();
+        return;
+      }
+      S.apply.briefFile = r.briefFile || "";
+      S.apply.backupDir = r.backupDir || "";
+      S.apply.step = "send";
+      S.apply.msg = "规范已生成，正在发送给当前对话里的 Agent…";
+      render();
       if (opts.openCompare) {
         var cu = styleCompareUrl(true, dir);
-        if (cu) { try { window.open(cu, '_blank'); } catch (e) { /* ignore */ } }
+        if (cu) { try { window.open(cu, "_blank"); S.apply.compareUrl = cu; } catch (e) { /* ignore */ } }
       }
-      var sent = await hostCall('agent.prompt', { text: r.text, sessionId: (S.session || QS.get("session") || "") });
+      var sent = await hostCall("agent.prompt", { text: r.text, sessionId: (S.session || QS.get("session") || "") });
       var ok = Boolean(sent && (sent.ok || sent.via));
-      try { wbToast(ok ? '已发送风格，Agent 开始改页面' : '风格发送失败', 3000); } catch (e) {}
-      st.msg = ok ? (opts.openCompare ? '已应用「' + (name || '') + '」风格，对比页已打开，等待新风格生成' : '已把「' + (name || '') + '」风格发给 Agent，切回对话继续') : '发送失败：' + String((sent && (sent.reason || sent.error)) || '未知');
-      writeLS('ve-wb:lastStyle', id);
+      S.apply.step = ok ? "started" : "error";
+      S.apply.sent = sent || null;
+      S.apply.sessionId = String((sent && sent.sessionId) || "");
+      if (ok) {
+        S.apply.msg = "已发送给 Agent：它会在这个对话里开始改页面（不是后台静默执行）。点「去对话查看」可以看进度。";
+      } else {
+        S.apply.error = "发送失败：" + String((sent && (sent.reason || sent.error)) || "未知");
+        S.apply.msg = S.apply.error;
+      }
+      writeLS("ve-wb:lastStyle", id);
       st.selectedId = id;
-    } catch (e) { st.msg = '失败：' + String(e.message || e); }
+      st.msg = ok ? ("已把「" + (name || "") + "」发给对话，等待 Agent 修改") : S.apply.error;
+    } catch (e) {
+      S.apply.step = "error";
+      S.apply.error = "失败：" + String((e && e.message) || e);
+      S.apply.msg = S.apply.error;
+      st.msg = S.apply.error;
+    }
     render();
   }
 
   function applyStyle(id, name, opts) {
     opts = opts || {};
     var st = S.style;
-    var dir = st.target || (S.projects[0] && S.projects[0].dir) || '';
-    if (!dir) { st.msg = '先打开一个项目'; render(); return; }
+    var dir = st.target || (S.projects[0] && S.projects[0].dir) || "";
+    if (!dir) { st.msg = "先选一个目标项目（或点「选择目录…」）"; render(); return; }
     st.selectedId = id;
     askConfirm({
-      title: '应用风格到项目',
+      title: "应用风格到项目",
       rows: [
-        ['风格', String(name || '')],
-        ['项目', dir],
+        ["风格", String(name || "")],
+        ["目标项目", dir]
       ],
-      note: '应用前会自动备份当前版本。可以选择只应用，或应用后立刻打开原版/新版对比。',
-      okText: '应用到该项目',
-      compareText: '应用并打开风格对比',
-      cancelText: '取消',
+      note: "点击后会：① 自动备份当前版本 ② 生成风格规范 ③ 把要求发到当前对话里的 Agent 让它改页面。工作台右下角会显示进度和回执，可以点「去对话查看」。",
+      okText: "应用到该项目",
+      compareText: "应用并打开风格对比",
+      cancelText: "取消",
       onOk: function () { S.confirm = null; doApplyStyle(id, name, dir, {}); },
-      onCompare: function () { S.confirm = null; doApplyStyle(id, name, dir, { openCompare: true }); },
+      onCompare: function () { S.confirm = null; doApplyStyle(id, name, dir, { openCompare: true }); }
     });
   }
+
   function editorSend(type, payload) {
     var f = $("#editor-frame");
     try {
@@ -825,6 +876,77 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     '</div>';
   }
 
+  /* ── 应用风格：目标项目选择 + 进度/回执状态卡 ── */
+  function styleTargetRow(cls) {
+    var st = S.style;
+    var target = String(st.target || ((S.projects[0] && S.projects[0].dir) || ""));
+    if (target && !st.target) st.target = target;
+    var opened = (S.projects || []).map(function (p) { return p.dir; });
+    var opts = opened.map(function (dir) {
+      return '<option value="' + esc(dir) + '"' + (target === dir ? ' selected' : '') + '>' + esc(baseName(dir)) + ' — ' + esc(dir) + '</option>';
+    }).join('');
+    if (!opts) opts = '<option value="">（还没有打开的项目）</option>';
+    if (target && opened.indexOf(target) < 0) {
+      opts = '<option value="' + esc(target) + '" selected>自定义 — ' + esc(target) + '</option>' + opts;
+    }
+    opts += '<option value="__browse__">选择其他目录…</option>';
+    return '<div class="' + (cls || 'stylelib-target') + '">' +
+      '<span>目标项目</span>' +
+      '<select data-field="styleTarget" title="选择要应用风格的项目">' + opts + '</select>' +
+      '<button class="btn ghost stylelib-pickbtn" data-act="style-target-pick" title="选择任意本地项目目录（不必先在编辑器里打开）">选择目录…</button>' +
+      '<span class="stylelib-targetpath" title="' + esc(target) + '">' + (target ? esc(baseName(target)) + ' · ' + esc(target) : "未选择") + '</span>' +
+      '</div>';
+  }
+
+  function startStyleTargetPick() {
+    S.pick.for = "styleTarget";
+    S.showPick = true;
+    S.pick.path = S.style.target || "";
+    loadPick(S.style.target || (S.proj && S.proj.dir) || "");
+  }
+
+  function applyStatusCard() {
+    var a = S.apply;
+    if (!a || !a.open) return '';
+    var steps = [
+      ["backup", "备份项目 + 生成风格规范"],
+      ["send", "发送给当前对话里的 Agent"],
+      ["started", "Agent 开始改页面"]
+    ];
+    var idx = { backup: 0, send: 1, started: 2 }[a.step];
+    var body = steps.map(function (s, i) {
+      var cls = "apply-step";
+      if (a.step === "error") cls += (i <= (idx == null ? 0 : idx)) ? " done" : "";
+      else if (i < idx) cls += " done";
+      else if (i === idx) cls += " cur";
+      return '<div class="' + cls + '"><i></i><span>' + s[1] + '</span></div>';
+    }).join('');
+    var lines = '';
+    if (a.dir) lines += '<div class="apply-line"><span>项目</span><b title="' + esc(a.dir) + '">' + esc(baseName(a.dir)) + ' · ' + esc(a.dir) + '</b></div>';
+    if (a.step === "started") {
+      var sid = a.sessionId ? String(a.sessionId).slice(0, 8) + "…" : "当前对话";
+      lines += '<div class="apply-line"><span>对话</span><b>' + esc(sid) + (a.sent && a.sent.via ? ' · ' + esc(a.sent.via) : '') + '</b></div>';
+      if (a.briefFile) lines += '<div class="apply-line"><span>规范</span><b title="' + esc(a.briefFile) + '">' + esc(a.briefFile) + '</b></div>';
+    }
+    var actions = '';
+    if (a.step === "started") {
+      actions = '<button class="btn pri" data-act="apply-goto">去对话查看</button>' +
+        (a.compareUrl ? '<button class="btn ghost" data-act="apply-compare">打开对比</button>' : '') +
+        '<button class="btn ghost" data-act="apply-close">关闭</button>';
+    } else if (a.step === "error") {
+      actions = '<button class="btn ghost" data-act="apply-close">关闭</button>';
+    } else {
+      actions = '<span class="apply-spinner" aria-hidden="true"></span><span class="apply-hint">处理中，请不要关闭工作台</span>';
+    }
+    return '<div class="apply-status' + (a.step === "error" ? " err" : "") + '" role="status" aria-live="polite">' +
+      '<div class="apply-head"><b>' + esc(a.styleName ? "正在应用「" + a.styleName + "」" : "正在应用风格") + '</b>' +
+      '<button class="apply-x" data-act="apply-close" title="关闭">×</button></div>' +
+      body + lines +
+      '<div class="apply-msg">' + esc(a.msg || '') + '</div>' +
+      '<div class="apply-actions">' + actions + '</div>' +
+      '</div>';
+  }
+
   function styleSection() {
     var st = S.style || {};
     var styles = S.styles || [];
@@ -888,12 +1010,9 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       '<div class="stylelib">' +
         '<div class="stylelib-head"><h2 class="stylelib-title">风格优化</h2>' +
           '<span class="stylelib-sub">选一个风格，Agent 会按它把当前项目改成同样的视觉语言</span></div>' +
-        '<div class="stylelib-target"><span>目标项目</span>' +
-          (S.projects.length
-            ? '<select data-field="styleTarget">' + S.projects.map(function (p) { return '<option value="' + esc(p.dir) + '"' + (target === p.dir ? ' selected' : '') + '>' + esc(baseName(p.dir)) + ' — ' + esc(p.dir) + '</option>'; }).join('') + '</select>'
-            : '<span class="hint">先打开一个项目</span>') +
-          (styles.length ? '' : '<span class="hint">还没有风格：点「＋ 添加风格」导入一份</span>') +
-        '</div>' +
+        styleTargetRow() +
+      (styles.length ? '' : '<div class="stylelib-hint">还没有风格：点「＋ 添加风格」导入一份</div>') +
+      '</div>' +
         (st.addOpen
           ? '<div class="stylelib-addrow">' +
             '<input data-field="styleAddPath" placeholder="规范目录，例如 D:\\styles\\my-style" value="' + esc(st.addPath || '') + '">' +
@@ -993,10 +1112,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       '<div class="sm-panel" role="dialog">' +
       '<div class="sm-head"><h2>风格优化</h2><span class="sm-sub">选一个风格，Agent 会按它把当前项目改成同样的视觉语言</span>' +
       '<button class="sm-close" data-act="style-modal-close" title="关闭（Esc）">✕</button></div>' +
-      '<div class="sm-target"><span>目标项目</span>' +
-      (S.projects.length
-        ? '<select data-field="styleTarget">' + S.projects.map(function (p) { return '<option value="' + esc(p.dir) + '"' + (target === p.dir ? ' selected' : '') + '>' + esc(baseName(p.dir)) + ' — ' + esc(p.dir) + '</option>'; }).join('') + '</select>'
-        : '<span class="hint">先打开一个项目</span>') +
+      styleTargetRow("sm-target") +
       '</div>' +
       '<div class="sm-grid">' + cards + addCard + '</div>' +
       (styles.length
@@ -1108,6 +1224,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       ensureAllStyleFonts(S.styles, base0);
     } catch (e) { /* ignore */ }
     app.innerHTML = topBar() + standaloneBar() + (S.view === "edit" ? editView() : homeView()) + (S.pagesModal && S.pagesModal.open ? pagesModal() : "") + (S.confirm ? confirmModal() : "") + (S.ai.marquee ? '<div class="ai-hint">▣ 在页面上拖一个框选区域（Esc 取消）</div>' : "");
+    try { app.insertAdjacentHTML("beforeend", applyStatusCard()); } catch (e) { /* ignore */ }
     renderNav();
     try { bindEditorFrame(); } catch (e) { /* ignore */ }
   }
@@ -1122,6 +1239,19 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       return;
     }
     var act = t.getAttribute("data-act");
+    if (act === "style-target-pick") { startStyleTargetPick(); return; }
+    if (act === "style-target-pick-cancel") { S.showPick = false; S.pick.for = ""; render(); return; }
+    if (act === "apply-close") { S.apply = null; render(); return; }
+    if (act === "apply-goto") {
+      hostCall("conversation.focus", {}).then(function (r) {
+        try {
+          if (r && r.ok !== false) wbToast("已切回对话，可以看 Agent 的修改进度", 2600);
+          else wbToast("没能自动切回对话：点左侧栏「对话」入口", 3200);
+        } catch (e) { /* ignore */ }
+      }).catch(function () { try { wbToast("切回对话失败：点左侧栏「对话」入口", 3200); } catch (e) { /* ignore */ } });
+      return;
+    }
+    if (act === "apply-compare") { if (S.apply && S.apply.compareUrl) { try { window.open(S.apply.compareUrl, "_blank"); } catch (e) { /* ignore */ } } return; }
     if (act === "theme-toggle") { setTheme(S.theme === "ink" ? "paper" : "ink", true); return; }
     if (act === "popup") {
       if (S.mode === "embedded") {
@@ -1195,7 +1325,11 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
     var f = e.target && e.target.getAttribute ? e.target.getAttribute("data-field") : null;
     if (f === "path") S.path = e.target.value;
     if (f === "pickPath") { S.pick.typed = e.target.value; syncPickOpenBtn(); }
-    if (f === "styleTarget") S.style.target = e.target.value;
+    if (f === "styleTarget") {
+      var stv = e.target.value;
+      if (stv === "__browse__") { startStyleTargetPick(); return; }
+      if (stv) { S.style.target = stv; writeLS("ve-wb:styleTarget", stv); render(); }
+    }
     if (f === "styleSelect") S.style.selectedId = e.target.value;
     if (f === "styleAddPath") S.style.addPath = e.target.value;
     if (f === "aiText") S.ai.text = e.target.value;
@@ -1244,6 +1378,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
   render();
   try { S.style.addPath = readLS("ve-wb:lastSpec", ""); } catch (e) { /* ignore */ }
   try { if (!S.style.target && S.projects[0]) S.style.target = S.projects[0].dir; } catch (e) { /* ignore */ }
+  try { var savedStyleTarget = readLS("ve-wb:styleTarget", ""); if (savedStyleTarget) S.style.target = savedStyleTarget; } catch (e) { /* ignore */ }
   notifyHost("ready");
   if (!EMBEDDED) {
     // 独立模式：有接口地址就自动读项目；带 bootTarget 时直接打开该项目

@@ -1362,4 +1362,39 @@ html[data-theme="ink"] .pagenav-item:hover{background:rgba(255,255,255,.10)}
    这里在 ≤760px 时让它回到可换行宽度（桌面保持原样） */
 @media (max-width:760px){
   .stylelib .stylelib-sub{width:auto!important;max-width:100%!important;height:auto!important;min-height:0!important;flex:1 1 100%!important;transform:none!important;white-space:normal!important}
-}
+}
+
+/* ── 风格应用：目标项目选择 ── */
+.stylelib-target { flex-wrap: wrap; row-gap: 8px; }
+.stylelib-pickbtn { height: 36px; padding: 0 12px; font-size: 12px; flex: none; }
+.stylelib-targetpath { font: 500 11px/1.4 var(--font-mono); color: var(--ink55); min-width: 0; max-width: min(46vw, 560px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stylelib-hint { font-size: 12px; color: var(--ink45); margin: 6px 0 10px; }
+.sm-target .stylelib-pickbtn { height: 32px; font-size: 11.5px; }
+.sm-target .stylelib-targetpath { max-width: min(40vw, 420px); }
+.pick-modebar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; margin: 6px 0 8px; border: 1px solid var(--line-soft, rgba(0,0,0,.12)); border-radius: 10px; font-size: 12px; color: var(--ink70); }
+
+/* ── 风格应用状态卡（右下角，显示进度和回执） ── */
+.apply-status { position: fixed; right: 18px; bottom: 18px; z-index: 80; width: min(380px, calc(100vw - 36px)); padding: 14px 16px 16px; border-radius: 16px; background: var(--paper-raised, #fff); border: 1px solid rgba(0,0,0,.12); box-shadow: 0 18px 50px rgba(0,0,0,.18), 0 2px 8px rgba(0,0,0,.08); color: var(--ink, #000); font: 400 12px/1.6 "Inter Tight", Inter, "PingFang SC", "Microsoft YaHei", sans-serif; }
+.apply-status.err { border-color: rgba(200,60,60,.42); }
+.apply-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.apply-head b { font-size: 13px; font-weight: 600; letter-spacing: -.01em; line-height: 1.4; }
+.apply-x { border: 0; background: transparent; color: rgba(0,0,0,.45); font-size: 16px; line-height: 1; cursor: pointer; padding: 2px 4px; border-radius: 6px; }
+.apply-x:hover { background: rgba(0,0,0,.06); color: #000; }
+.apply-step { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(0,0,0,.42); padding: 3px 0; }
+.apply-step i { width: 7px; height: 7px; border-radius: 50%; background: #d5d5d5; flex: none; }
+.apply-step.done { color: rgba(0,0,0,.72); }
+.apply-step.done i { background: #22a06b; }
+.apply-step.cur { color: #000; }
+.apply-step.cur i { background: #000; animation: veApplyPulse 1s ease-in-out infinite; }
+@keyframes veApplyPulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+.apply-line { display: flex; gap: 8px; font-size: 11px; color: rgba(0,0,0,.5); padding: 2px 0; align-items: baseline; }
+.apply-line span { flex: none; width: 34px; color: rgba(0,0,0,.38); }
+.apply-line b { font-weight: 500; color: rgba(0,0,0,.72); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.apply-msg { margin: 10px 0 0; font-size: 12px; line-height: 1.65; color: rgba(0,0,0,.72); }
+.apply-status.err .apply-msg { color: #b23b3b; }
+.apply-actions { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.apply-actions .btn { height: 32px; padding: 0 14px; font-size: 12px; }
+.apply-spinner { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,.2); border-top-color: #000; animation: veApplySpin .8s linear infinite; display: inline-block; }
+@keyframes veApplySpin { to { transform: rotate(360deg); } }
+.apply-hint { font-size: 11.5px; color: rgba(0,0,0,.45); }
+@media (max-width: 560px) { .apply-status { left: 12px; right: 12px; bottom: 12px; width: auto; } }

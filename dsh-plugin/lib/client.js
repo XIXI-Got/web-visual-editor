@@ -4523,7 +4523,12 @@ const API_PATH = "/ve/plugin";
                     sent = sent || { ok: false, reason: String((e && e.message) || e) };
                   }
                 }
+                if (sent && sent.ok !== false) sent = Object.assign({}, sent, { sessionId: (sent.sessionId || dshSessionId()) });
                 data = sent;
+              }
+              else if (method === 'conversation.focus') {
+                const r = closeWorkbench();
+                data = { ok: r && r.length > 0, via: r };
               }
               else if (method === 'workbench.close') {
                 const r = closeWorkbench();
