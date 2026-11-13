@@ -1326,6 +1326,15 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
   /* ── 事件 ── */
   document.addEventListener("click", function (e) {
     var t = e.target && e.target.closest ? e.target.closest("[data-act]") : null;
+    // 打开项目的目录选择框：点周围空白处收起（点框内、或点「打开项目」按钮本身除外）
+    if (S.showPick) {
+      var inBox = Boolean(e.target && e.target.closest && e.target.closest(".pickbox"));
+      var isToggle = Boolean(t && t.getAttribute("data-act") === "toggle-pick");
+      if (!inBox && !isToggle) {
+        S.showPick = false;
+        render();
+      }
+    }
     if (!t) {
       // 点空白处收起页面下拉（点下拉内部不算）
       var inDrop = e.target && e.target.closest && e.target.closest("#ve-pages");
@@ -1467,6 +1476,7 @@ var EMBEDDED = Boolean(window.parent && window.parent !== window) || QS.get("emb
       return;
     }
     if (e.key === "Escape" && S.stylePick && S.stylePick.open) { closeStylePick(); return; }
+    if (e.key === "Escape" && S.showPick) { S.showPick = false; render(); return; }
     if (e.key === "Escape") {
       if (S.nav && S.nav.open) { S.nav.open = false; renderNav(); return; }
       if (S.ai && S.ai.open) { S.ai.open = false; render(); return; }
