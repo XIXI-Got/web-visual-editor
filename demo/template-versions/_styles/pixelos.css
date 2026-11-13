@@ -1,0 +1,113 @@
+/* ===== PixelOS 95 像素桌面 · 覆盖 ATLAS 模板 token ===== */
+:root{
+  --paper:#008080;               /* 桌面青绿：页面唯一底色 */
+  --paper-2:#007272;
+  --ink:#000000;
+  --ink-2:#2F2F2F;
+  --ink-3:#5A5A5A;
+  --line:#808080;
+  --line-2:#A4A4A4;
+  --accent:#000080;              /* 标题栏深蓝：唯一强调 */
+  --accent-2:#1084D0;            /* 活动标题栏渐变终点 */
+  --accent-3:#000080;
+  --surface:#C0C0C0;             /* 窗口主体面 */
+  --surface-2:#DFDFDF;
+  --stroke:#000000;
+  --sheen:none;
+  --r-xs:0px;--r-sm:0px;--r-md:0px;--r-lg:0px;--r-pill:0px;
+  --blur:none;
+  --shadow:2px 2px 0 rgba(0,0,0,.45);
+  --font-display:"Press Start 2P","Courier New",SimSun,"Microsoft YaHei",monospace;
+  --font-sans:"Courier New",SimSun,"Microsoft YaHei",monospace;
+  --font-mono:"Courier New",Consolas,monospace;
+  --display-weight:700;
+  --track:0;
+  --btn-bg:#C0C0C0;--btn-fg:#000000;--btn-border:#000000;
+  --chip-bg:#DFDFDF;
+  --focus:#000080;
+  --chart-line:#000080;
+}
+html{color-scheme:light}
+/* 桌面：青绿 + 16px 点阵 + CRT 扫描线 */
+body{
+  background-color:#008080;
+  background-image:radial-gradient(rgba(255,255,255,.14) 1.5px,rgba(255,255,255,0) 1.6px);
+  background-size:16px 16px;
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;
+  background-image:repeating-linear-gradient(180deg,rgba(0,0,0,.9) 0 1px,rgba(0,0,0,0) 1px 3px);
+}
+header{
+  position:sticky;top:0;z-index:12;
+  background:#C0C0C0;
+  border-bottom:2px solid #808080;
+  box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #000000;
+}
+.brand{font-family:var(--font-display);letter-spacing:.06em;font-size:max(12px,calc(11 * var(--u)))}
+.brand svg{color:#000080}
+.nav-links a{color:#000000;letter-spacing:.04em}
+.nav-links a:hover{background:#000080;color:#FFFFFF}
+/* 窗口面板：2px 凸起立体边框 + 硬阴影 */
+.panel{
+  background:#C0C0C0;
+  border:2px solid;
+  border-color:#FFFFFF #808080 #808080 #FFFFFF;
+  box-shadow:inset 1px 1px 0 #DFDFDF,inset -1px -1px 0 #000000,2px 2px 0 rgba(0,0,0,.45);
+  border-radius:0;
+}
+h1,h2,h3,h4{font-family:var(--font-display);letter-spacing:.01em}
+h1{text-shadow:2px 2px 0 #FFFFFF}
+.kicker{
+  color:#FFFFFF;background:#000080;display:inline-block;
+  padding:calc(2 * var(--u)) calc(8 * var(--u));
+  letter-spacing:.12em;font-weight:700;
+}
+.mono{color:#000080;letter-spacing:.1em;font-weight:700}
+.lede{color:#000000}
+/* hero 底部的品牌字：青绿底上反转成白字 + 硬阴影 */
+.logos span{color:#FFFFFF;text-shadow:1px 1px 0 #000000;letter-spacing:.12em}
+.btn{
+  border:2px solid;border-color:#FFFFFF #000000 #000000 #FFFFFF;
+  background:#C0C0C0;color:#000000;border-radius:0;
+  box-shadow:inset 1px 1px 0 #DFDFDF,inset -1px -1px 0 #808080;
+  font-family:var(--font-sans);font-weight:700;letter-spacing:.02em;
+}
+.btn:hover{background:#DFDFDF}
+.btn:active{transform:translate(1px,1px);border-color:#000000 #FFFFFF #FFFFFF #000000;box-shadow:none}
+.btn.primary{background:linear-gradient(180deg,#1084D0,#000080);color:#FFFFFF;border-color:#FFFFFF #000000 #000000 #FFFFFF}
+.btn.primary:hover{background:linear-gradient(180deg,#2C9BE0,#00008B)}
+.btn.ghost{background:#C0C0C0;color:#000000}
+.chip{background:#DFDFDF;border:1px solid;border-color:#808080 #FFFFFF #FFFFFF #808080;border-radius:0;color:#000000;box-shadow:none;letter-spacing:.04em}
+/* 预览窗 / 仪表盘：标题栏用 Windows 95 活动窗口渐变 */
+.preview-head,.dash-head{
+  background:linear-gradient(90deg,#000080 0%,#1084D0 100%);
+  color:#FFFFFF;padding:calc(5 * var(--u)) calc(8 * var(--u));
+  margin:calc(-1 * 0px);border:0;
+}
+.preview-head .mono,.dash-head b,.dash-head .mono{color:#FFFFFF}
+.preview-title,.stat b,.num b{font-family:var(--font-sans);font-weight:700}
+.ic{
+  background:#DFDFDF;border:1px solid;
+  border-color:#808080 #FFFFFF #FFFFFF #808080;
+  color:#000080;box-shadow:none;border-radius:0;
+}
+.stat,.chart{
+  background:#DFDFDF;border:1px solid;
+  border-color:#808080 #FFFFFF #FFFFFF #808080;
+  border-radius:0;box-shadow:none;
+}
+.stat small,.chart small,.row time{color:#000080}
+.chart svg polyline{stroke:#000080}
+.row{border-bottom:1px dashed #808080}
+.row i{background:#000080}
+.blockquote,.quote blockquote{font-family:var(--font-display);letter-spacing:.01em}
+.who .avatar{background:#DFDFDF;border:1px solid;border-color:#808080 #FFFFFF #FFFFFF #808080;color:#000080;border-radius:0}
+.num{background:#C0C0C0;border:2px solid;border-color:#FFFFFF #808080 #808080 #FFFFFF;padding:calc(10 * var(--u))}
+.step-no{color:#000080;font-weight:700}
+.cta{background:#C0C0C0}
+.cta h2{text-shadow:1px 1px 0 #FFFFFF}
+.step,.feat{border-radius:0}
+footer{background:#C0C0C0;border-top:2px solid #808080;box-shadow:inset 0 1px 0 #FFFFFF}
+.foot h4{color:#000080}
+.copy{border-top:1px solid #808080;color:#2F2F2F}

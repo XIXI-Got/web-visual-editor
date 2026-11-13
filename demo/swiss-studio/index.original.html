@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWISS+ — International Design Studio</title>
+<style>
+:root{--red:#e30613;--black:#090909;--gray:#777;--line:#dedede;--paper:#f8f8f6;--gutter:clamp(18px,1.55vw,32px);--font:Arial,Helvetica,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--black);font-family:var(--font);font-size:12px;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.page{width:100%;overflow:hidden}.top-grid{display:grid;grid-template-columns:1.48fr .95fr .88fr .72fr;min-height:520px;border-bottom:1px solid var(--line)}.panel{padding:25px var(--gutter);border-right:1px solid var(--line);min-width:0}.panel:last-child{border-right:0}.hero{display:flex;flex-direction:column;position:relative;padding-bottom:0}.nav{height:40px;display:flex;align-items:center;gap:clamp(14px,2vw,38px);white-space:nowrap}.brand{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:750;letter-spacing:-.7px;margin-right:auto}.cross{width:24px;height:24px;background:var(--red);position:relative;display:inline-block}.cross:before,.cross:after{content:"";position:absolute;background:#fff;left:50%;top:50%;transform:translate(-50%,-50%)}.cross:before{width:15px;height:5px}.cross:after{width:5px;height:15px}.nav a{font-size:10px;font-weight:600}.nav a:hover{color:var(--red)}.nav-right{display:flex;align-items:center;gap:18px;margin-left:auto}.hamb{border:0;background:none;font-size:20px;padding:0 0 0 4px}.hero-main{display:grid;grid-template-columns:1.05fr .78fr;gap:18px;align-items:center;flex:1;padding-top:30px;padding-bottom:24px}.eyebrow{font-size:10px;line-height:1.55;margin-bottom:28px}.hero h1{font-size:clamp(36px,3.1vw,64px);line-height:.99;letter-spacing:-.065em;font-weight:750;margin:0;max-width:520px}.hero-copy{border-top:1px solid #bdbdbd;margin-top:22px;padding-top:19px;max-width:280px;font-size:11px;line-height:1.55}.text-link{display:inline-flex;align-items:center;gap:24px;margin-top:18px;font-size:10px;font-weight:700;border-bottom:1px solid #111;padding-bottom:5px}.text-link span{font-size:17px;line-height:10px}.hero-photo{height:clamp(250px,20vw,390px);position:relative;overflow:hidden;background:#ddd}.hero-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1);display:block}.vertical-note{position:absolute;right:-13px;top:48%;writing-mode:vertical-rl;font-size:9px;font-weight:700;letter-spacing:.02em}.hero-bottom{height:94px;background:var(--red);color:#fff;margin:0 calc(var(--gutter) * -1);padding:13px var(--gutter);display:grid;grid-template-columns:1fr 1.2fr 70px;align-items:center;gap:12px}.year{font-size:clamp(30px,2.3vw,48px);font-weight:300;letter-spacing:-2px}.quote{font-size:10px;line-height:1.45}.dots{display:flex;gap:11px;align-items:center;justify-content:flex-end}.dot{width:6px;height:6px;border-radius:50%;background:#ffffff80;border:0;padding:0}.dot.active{background:#fff;transform:scale(1.25)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:2px 0 22px}.section-head h2,.module h2{font-size:13px;margin:0;font-weight:750;letter-spacing:-.3px}.section-head a{font-size:9px;font-weight:600}.project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 11px}.project{min-width:0;cursor:pointer}.project-image{height:clamp(90px,7vw,145px);overflow:hidden;background:#ddd;margin-bottom:10px}.project-image img{width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:transform .5s,filter .5s}.project:hover img{transform:scale(1.06);filter:grayscale(.3)}.project h3{font-size:11px;line-height:1.25;margin:0 0 6px;font-weight:750}.project-meta{display:flex;justify-content:space-between;align-items:center;font-size:9px}.project-meta span:last-child{font-size:16px}.type-sample{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-top:18px}.Aa{font-size:clamp(76px,7vw,140px);line-height:.8;letter-spacing:-.09em;font-weight:500}.weights{display:grid;gap:10px;font-size:12px;color:#555}.weights b{color:#111}.weights .red{color:var(--red)}.alphabet{font-size:12px;line-height:1.75;letter-spacing:.07em;font-weight:700;margin-top:24px;overflow-wrap:anywhere}.subhead{font-size:11px;font-weight:700;margin:25px 0 13px}.swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.swatch{height:clamp(36px,3vw,60px);border:1px solid #ddd}.swatch-label{text-align:center;font-size:8px;color:#666;margin-top:6px}.icons{display:flex;justify-content:space-between;font-size:24px;margin-top:18px}.button-stack{display:grid;gap:10px;margin-top:24px}.demo-btn{height:32px;border:1px solid #111;background:transparent;color:#111;text-align:left;padding:0 10px;display:flex;justify-content:space-between;align-items:center;font-size:9px;font-weight:700;transition:.2s}.demo-btn.primary{background:var(--red);border-color:var(--red);color:#fff}.demo-btn.secondary{background:#050505;color:#fff}.demo-btn:hover{transform:translateX(3px)}.form-demo{margin-top:28px}.form-demo h3,.pagination h3{font-size:11px;margin:0 0 13px}.field{margin:0 0 12px}.field label{display:block;font-size:9px;margin-bottom:6px}.field input,.field select{width:100%;height:30px;border:1px solid #d8d8d8;background:transparent;padding:0 9px;font-size:9px;outline:none}.field input:focus,.field select:focus{border-color:var(--red)}.checks{display:flex;gap:16px;flex-wrap:wrap;font-size:9px}.checks label{display:flex;align-items:center;gap:5px}.checks input{accent-color:var(--red);margin:0}.pagination{border-top:1px solid var(--line);margin-top:22px;padding-top:13px}.pages{display:flex;justify-content:space-between;align-items:center;font-size:9px}.pages button{border:0;background:none;padding:3px;font-weight:600}.pages button.active{color:var(--red)}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr .95fr 1fr .85fr 1.55fr;min-height:260px}.module{padding:22px var(--gutter);border-right:1px solid var(--line);min-width:0}.module:last-child{border-right:0}.grid-demo{height:140px;display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin-top:17px}.grid-demo span{background:#f8dada}.grid-meta{display:flex;justify-content:space-between;font-size:8px;margin-top:12px}.quote-mark{font-size:38px;line-height:.8;margin-top:20px;font-weight:800}.big-quote{font-size:clamp(16px,1.15vw,22px);line-height:1.2;letter-spacing:-.04em;margin:0;max-width:245px}.attribution{font-size:9px;margin-top:23px}.stats{display:flex;align-items:center;justify-content:space-between;margin-top:65px;gap:10px}.stat{padding-right:12px;border-right:1px solid #bbb;flex:1}.stat:last-child{border:0}.stat strong{display:block;font-size:clamp(22px,1.5vw,32px);font-weight:400;letter-spacing:-1.5px}.stat span{display:block;font-size:9px;line-height:1.45;margin-top:9px}.article{display:grid;grid-template-columns:65px 1fr;gap:12px;margin-top:16px;align-items:start}.article img{width:65px;height:47px;object-fit:cover;filter:grayscale(1)}.article h3{font-size:10px;line-height:1.25;margin:0 0 6px}.article small{font-size:8px}.newsletter p{font-size:10px;line-height:1.5;margin:27px 0 19px;max-width:190px}.newsletter input{height:32px;width:100%;border:1px solid #ddd;background:transparent;padding:0 9px;font-size:9px}.subscribe{margin-top:10px;background:#050505;color:#fff;border:0;padding:10px 18px;font-size:9px}.privacy{display:flex;align-items:center;gap:5px;font-size:8px;margin-top:22px}.footer-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:750;margin:38px 0 20px}.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.footer-links h4{font-size:9px;margin:0 0 17px}.footer-links a{display:block;font-size:8px;margin-bottom:12px}.copyright{font-size:8px;color:#555;line-height:1.6;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:#111;color:#fff;padding:12px 18px;font-size:11px;z-index:10;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}.modal{position:fixed;inset:0;background:#0009;display:none;place-items:center;padding:20px;z-index:20}.modal.open{display:grid}.modal-card{background:var(--paper);width:min(560px,100%);padding:28px;position:relative}.modal-card img{width:100%;height:220px;object-fit:cover;filter:grayscale(1);margin-bottom:18px}.modal-card h2{font-size:26px;letter-spacing:-1px;margin:0 0 8px}.modal-card p{line-height:1.6;font-size:12px}.close{position:absolute;right:16px;top:13px;border:0;background:none;font-size:24px}
+@media(max-width:1100px){.top-grid{grid-template-columns:1.35fr 1fr 1fr}.buttons-panel{display:none}.bottom-grid{grid-template-columns:repeat(3,1fr)}.module:nth-child(3){border-right:0}.module:nth-child(n+4){border-top:1px solid var(--line)}}
+@media(max-width:700px){.top-grid{grid-template-columns:1fr}.panel{border-right:0;border-bottom:1px solid var(--line)}.nav{gap:12px}.nav a{display:none}.hero-main{grid-template-columns:1fr  .75fr;gap:12px;padding-top:18px}.hero h1{font-size:clamp(34px,9vw,56px)}.hero-photo{height:260px}.hero-bottom{height:80px}.projects-panel,.type-panel{min-height:400px}.project-image{height:120px}.type-sample .Aa{font-size:100px}.bottom-grid{grid-template-columns:1fr 1fr}.module:nth-child(2n){border-right:0}.module:nth-child(n+3){border-top:1px solid var(--line)}.module{min-height:220px}.footer-module{grid-column:1/-1}.footer-links{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:420px){.hero-main{grid-template-columns:1fr}.hero-photo{height:250px;max-width:75%;margin-left:auto}.vertical-note{right:-12px}.hero h1{font-size:43px}.project-grid{gap:20px 9px}.project-image{height:90px}.bottom-grid{grid-template-columns:1fr}.module{border-right:0!important;border-top:1px solid var(--line)}.footer-module{grid-column:auto}.stats{margin-top:35px}}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="top-grid">
+<section class="panel hero">
+  <nav class="nav">
+    <a class="brand" href="#"><i class="cross"></i> SWISS+</a>
+    <a href="#work">Work</a><a href="#studio">Studio</a><a href="#services">Services</a><a href="#journal">Journal</a><a href="#contact">Contact</a>
+    <div class="nav-right"><a href="#">EN⌄</a><button class="hamb" aria-label="menu" onclick="toast('Navigation menu')">☰</button></div>
+  </nav>
+  <div class="hero-main">
+    <div>
+      <div class="eyebrow">Swiss International<br>Style Digital Experience</div>
+      <h1>Simplicity<br>is the ultimate<br>sophistication.</h1>
+      <div class="hero-copy">We create timeless digital experiences<br>rooted in clarity, function and grid.</div>
+      <a class="text-link" href="#work">View our work <span>→</span></a>
+    </div>
+    <div class="hero-photo">
+      <img id="heroImg" src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=900&q=85" alt="Modernist architecture">
+      <div class="vertical-note">Featured Project</div>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <div class="year" id="heroYear">1960</div>
+    <div class="quote" id="heroQuote">Gute Gestaltung<br>ist so wenig Gestaltung<br>wie möglich.<br>— Max Bill</div>
+    <div class="dots"><button class="dot active" onclick="setSlide(0)"></button><button class="dot" onclick="setSlide(1)"></button><button class="dot" onclick="setSlide(2)"></button></div>
+  </div>
+</section>
+<section class="panel projects-panel" id="work">
+  <div class="section-head"><h2>Projects</h2><a href="#journal">View all projects →</a></div>
+  <div class="project-grid">
+    <article class="project" onclick="openProject(0)"><div class="project-image"><img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=600&q=80" alt=""></div><h3>Museum für<br>Gestaltung Zürich</h3><div class="project-meta">Branding, Web <span>→</span></div></article>
+    <article class="project" onclick="openProject(1)"><div class="project-image"><img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=600&q=80" alt=""></div><h3>Bauhaus<br>Foundation</h3><div class="project-meta">Digital, Experience <span>→</span></div></article>
+    <article class="project" onclick="openProject(2)"><div class="project-image"><img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=600&q=80" alt=""></div><h3>Kunsthaus<br>Basel</h3><div class="project-meta">Web, Identity <span>→</span></div></article>
+    <article class="project" onclick="openProject(3)"><div class="project-image"><img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=80" alt=""></div><h3>Luzern Concert<br>Hall</h3><div class="project-meta">Branding, Digital <span>→</span></div></article>
+    <article class="project" onclick="openProject(4)"><div class="project-image"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt=""></div><h3>NZZ<br>Redesign</h3><div class="project-meta">Digital, UX/UI <span>→</span></div></article>
+    <article class="project" onclick="openProject(5)"><div class="project-image"><img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=600&q=80" alt=""></div><h3>Swiss Design<br>Awards</h3><div class="project-meta">Identity, Digital <span>→</span></div></article>
+  </div>
+</section>
+<section class="panel type-panel" id="studio">
+  <div class="section-head"><h2>Typography</h2><span style="font-size:9px">Swiss 721 (Helvetica Neue)</span></div>
+  <div class="type-sample"><div class="Aa">Aa</div><div class="weights"><span>45 Light</span><span>55 Roman</span><b>65 Medium</b><b class="red">75 Bold</b></div></div>
+  <div class="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789</div>
+  <div style="border-top:1px solid var(--line);margin-top:25px"></div>
+  <div class="subhead">Color</div>
+  <div class="swatches">
+    <div><div class="swatch" style="background:#e30613;border-color:#e30613"></div><div class="swatch-label">#E30613</div></div>
+    <div><div class="swatch" style="background:#000"></div><div class="swatch-label">#000000</div></div>
+    <div><div class="swatch" style="background:#333"></div><div class="swatch-label">#333333</div></div>
+    <div><div class="swatch" style="background:#f2f2f2"></div><div class="swatch-label">#F2F2F2</div></div>
+    <div><div class="swatch" style="background:#fff"></div><div class="swatch-label">#FFFFFF</div></div>
+  </div>
+  <div style="border-top:1px solid var(--line);margin-top:23px"></div>
+  <div class="subhead">Iconography</div><div class="icons"><span>＋</span><span>×</span><span>→</span><span>↗</span><span>☰</span></div>
+</section>
+<section class="panel buttons-panel" id="services">
+  <div class="section-head"><h2>Buttons</h2></div>
+  <div class="button-stack">
+    <button class="demo-btn primary" onclick="toast('Primary action selected')">Primary Button <span>→</span></button>
+    <button class="demo-btn secondary" onclick="toast('Secondary action selected')">Secondary Button <span>→</span></button>
+    <button class="demo-btn" onclick="toast('Tertiary action selected')">Tertiary Button <span>→</span></button>
+    <button class="demo-btn" style="border:0;border-bottom:1px solid #bbb;padding-left:0" onclick="toast('Text link selected')">Text Button <span>→</span></button>
+  </div>
+  <div class="form-demo"><h3>Form Elements</h3>
+    <div class="field"><label>Label</label><input placeholder="Input text"></div>
+    <div class="field"><label>Label</label><select><option>Select option</option><option>Branding</option><option>Digital</option></select></div>
+    <div class="checks"><label><input type="checkbox" checked> Checkbox</label><label><input type="checkbox"> Checkbox</label><label><input type="radio" name="r" checked> Radio</label><label><input type="radio" name="r"> Radio</label></div>
+  </div>
+  <div class="pagination"><h3>Navigation / Pagination</h3><div class="pages"><button>←</button><button>01</button><button class="active">02</button><button>03</button><button>04</button><button>05</button><button>→</button></div></div>
+</section>
+</div>
+<div class="bottom-grid">
+<section class="module"><h2>Grid System</h2><div class="grid-demo" id="gridDemo"></div><div class="grid-meta"><span>12 Columns</span><span>Margin 80px</span><span>Gutter 24px</span></div></section>
+<section class="module"><h2>Quotes</h2><div class="quote-mark">“</div><p class="big-quote">Form follows function –<br>that has been misunderstood.<br>Form and function<br>should be one, joined<br>in a spiritual union.</p><div class="attribution">— Frank Lloyd Wright</div></section>
+<section class="module"><h2>Statistics</h2><div class="stats"><div class="stat"><strong>120+</strong><span>Projects<br>Completed</span></div><div class="stat"><strong>30+</strong><span>Awards<br>Received</span></div><div class="stat"><strong>10+</strong><span>Years of<br>Experience</span></div></div></section>
+<section class="module" id="journal"><div class="section-head"><h2>Articles</h2><a href="#">View all articles →</a></div>
+  <div class="article"><img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=200&q=70" alt=""><div><h3>Less but better —<br>The essence of Swiss Design</h3><small>May 12, 2024</small></div></div>
+  <div class="article"><img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=200&q=70" alt=""><div><h3>Typography in Swiss Style:<br>Clarity and Neutrality</h3><small>Apr 28, 2024</small></div></div>
+  <div class="article"><img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=200&q=70" alt=""><div><h3>Grid systems and<br>Visual Order</h3><small>Apr 10, 2024</small></div></div>
+</section>
+<section class="module newsletter"><h2>Newsletter</h2><p>Stay updated with our latest<br>projects and insights.</p><form onsubmit="event.preventDefault();toast('Thank you for subscribing!')"><input type="email" placeholder="Enter your email" required><button class="subscribe">Subscribe</button><label class="privacy"><input type="checkbox" required> I accept the Privacy Policy</label></form></section>
+<footer class="module footer-module" id="contact"><h2>Footer</h2><div class="footer-brand"><i class="cross"></i> SWISS+</div><div class="footer-links"><div><h4>Studio</h4><a href="#">About</a><a href="#">Team</a><a href="#">Careers</a></div><div><h4>Services</h4><a href="#">Branding</a><a href="#">Digital</a><a href="#">Strategy</a></div><div><h4>Resources</h4><a href="#">Journal</a><a href="#">Case Studies</a><a href="#">News</a></div><div><h4>Follow</h4><a href="#">Behance</a><a href="#">LinkedIn</a><a href="#">Instagram</a></div></div><div class="copyright" style="margin-top:14px">© 2024 SWISS+ Studio<br>All rights reserved.</div></footer>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card"><button class="close" onclick="closeModal()">×</button><img id="modalImg" src="" alt=""><h2 id="modalTitle"></h2><p id="modalText"></p></div></div>
+<script>
+const slides=[
+{year:'1960',quote:'Gute Gestaltung<br>ist so wenig Gestaltung<br>wie möglich.<br>— Max Bill',img:'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=900&q=85'},
+{year:'1957',quote:'Less, but better.<br>— Dieter Rams',img:'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=900&q=85'},
+{year:'1928',quote:'Form follows function.<br>— Modernist principle',img:'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85'}
+];
+function setSlide(i){document.getElementById('heroYear').textContent=slides[i].year;document.getElementById('heroQuote').innerHTML=slides[i].quote;document.getElementById('heroImg').src=slides[i].img;document.querySelectorAll('.dot').forEach((d,n)=>d.classList.toggle('active',n===i))}
+let toastTimer;function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
+const projects=[
+['Museum für Gestaltung Zürich','A refreshed digital identity and editorial platform for a leading design museum.'],
+['Bauhaus Foundation','A digital experience connecting the Bauhaus archive with a new generation.'],
+['Kunsthaus Basel','A precise and flexible identity system for contemporary art and culture.'],
+['Luzern Concert Hall','A visual language built around sound, space and shared experience.'],
+['NZZ Redesign','A clear, accessible reading experience for independent journalism.'],
+['Swiss Design Awards','A bold digital platform celebrating Swiss creative excellence.']
+];
+const imgs=[...document.querySelectorAll('.project-image img')].map(x=>x.src);
+function openProject(i){document.getElementById('modalTitle').textContent=projects[i][0];document.getElementById('modalText').textContent=projects[i][1];document.getElementById('modalImg').src=imgs[i];document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+document.getElementById('gridDemo').innerHTML='<span></span>'.repeat(12);
+</script>
+</body>
+</html>

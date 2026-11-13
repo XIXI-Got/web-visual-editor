@@ -1,0 +1,90 @@
+/* ===== Prmpt 白点 · 覆盖 ATLAS 模板 token ===== */
+:root{
+  --paper:#FBFBFB;
+  --paper-2:#F2F2F2;
+  --ink:#000000;
+  --ink-2:rgba(0,0,0,.72);
+  --ink-3:rgba(0,0,0,.50);
+  --line:rgba(0,0,0,.70);
+  --line-2:rgba(0,0,0,.14);
+  --accent:#000000;
+  --accent-2:#141414;
+  --accent-3:rgba(0,0,0,.45);
+  --surface:#FFFFFF;
+  --surface-2:#F2F2F2;
+  --stroke:rgba(0,0,0,.55);
+  --sheen:none;
+  --r-xs:0px;
+  --r-sm:0px;
+  --r-md:0px;
+  --r-lg:0px;
+  --r-pill:0px;
+  --blur:none;
+  --shadow:none;
+  --font-display:"Inter Tight","Inter","Helvetica Neue","Segoe UI","PingFang SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
+  --font-sans:"Inter Tight",Inter,"Helvetica Neue","Segoe UI","PingFang SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --display-weight:700;
+  --track:-.03em;
+  --btn-bg:#FFFFFF;
+  --btn-fg:#000000;
+  --btn-border:#000000;
+  --chip-bg:transparent;
+  --focus:#000000;
+  --chart-line:#000000;
+}
+html{color-scheme:light}
+body{
+  background-color:var(--paper);
+  background-image:radial-gradient(circle,rgba(20,20,20,.16) 1px,rgba(20,20,20,0) 1.2px);
+  background-size:34px 34px;
+  background-attachment:fixed;
+}
+header{
+  position:sticky;top:0;z-index:12;
+  background:var(--paper);
+  border-bottom:1px solid #000;
+}
+.brand{letter-spacing:.22em}
+.brand svg{color:#000}
+.nav-links a{color:rgba(0,0,0,.72)}
+.nav-links a:hover{color:#000}
+h1{letter-spacing:-.045em}
+h1,h2,h3,h4{letter-spacing:var(--track)}
+h1 .accent,h1 em{color:var(--ink);font-style:normal;-webkit-text-stroke:max(1px,calc(2 * var(--u))) var(--ink)}
+.panel{background:var(--surface);border:1px solid var(--stroke);box-shadow:none}
+.kicker{letter-spacing:.3em;color:rgba(0,0,0,.55)}
+.mono{color:rgba(0,0,0,.55)}
+.btn{border-radius:0;border-color:#000;padding:calc(12 * var(--u)) calc(20 * var(--u));font-weight:600;transition:transform .3s cubic-bezier(.22,1,.36,1),background .3s,color .3s}
+.btn:hover{transform:translateY(calc(-2 * var(--u)));background:#000;color:#fff;border-color:#000;text-decoration:none}
+.btn.primary{background:#000;color:#fff;border-color:#000}
+.btn.primary:hover{background:#fff;color:#000}
+.btn.ghost{background:transparent;color:#000}
+.chip{border-radius:0;border-color:#000;color:#000}
+.ic{background:#000;border-color:#000;color:#fff}
+.stat,.chart{border-color:rgba(0,0,0,.5);background:#fff}
+.stat b{letter-spacing:-.03em}
+.stat em{color:rgba(0,0,0,.6)}
+.stat small,.row time,.num small{color:rgba(0,0,0,.5)}
+.avatar{background:#000;color:#fff;border-color:#000}
+.avatar{font-family:var(--font-mono)}
+.preview{border-color:#000}
+.preview-head{border-bottom:1px solid #000}
+.preview-row i{background:#fff;border-color:rgba(0,0,0,.5)}
+.preview-bars span,.preview-row span{background:#F2F2F2;border-color:rgba(0,0,0,.14)}
+blockquote{letter-spacing:-.035em;color:#000}
+.num b{letter-spacing:-.04em;font-weight:700}
+.num{border-top:0}
+.step-no{color:rgba(0,0,0,.55)}
+/* CTA：反白黑块，和中性模板拉出最大差异 */
+.cta{background:#000;border-color:#000;color:#fff}
+.cta h2{color:#fff;letter-spacing:-.04em}
+.cta p{color:rgba(255,255,255,.72)}
+.cta .btn.primary{background:#fff;color:#000;border-color:#fff}
+.cta .btn.primary:hover{background:transparent;color:#fff}
+.cta .btn.ghost{color:#fff;border-color:rgba(255,255,255,.6);background:transparent}
+.cta .btn.ghost:hover{background:#fff;color:#000}
+footer{border-top:1px solid #000}
+.foot h4{letter-spacing:.18em;color:rgba(0,0,0,.5);font-weight:500}
+.foot a{color:rgba(0,0,0,.72)}
+.copy{color:rgba(0,0,0,.45);letter-spacing:.08em}

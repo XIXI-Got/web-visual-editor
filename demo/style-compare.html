@@ -3,13 +3,98 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>风格对比 · 原版 / 新版</title>
+<script>
+/* 对比页默认「纯预览」：自动带上 ve_pure=1，让编辑器内核不挂任何界面（无工具条 / 无悬浮按钮 / 无参考线）。
+   只有点右上角「编辑器」才会用带编辑器的窗口打开页面。
+   想保留编辑器界面调试对比页本身时，用 ?editor=1 打开。 */
+(function () {
+  try {
+    if (location.protocol === 'file:') return;
+    var u = new URL(location.href);
+    if (u.searchParams.get('editor') === '1') return;
+    if (u.searchParams.get('ve_pure') !== '1') {
+      u.searchParams.set('ve_pure', '1');
+      history.replaceState(null, '', u.pathname + u.search + u.hash);
+    }
+  } catch (e) { /* ignore */ }
+})();
+</script>
+<title>风格对比 · STYLE COMPARE</title>
 <style>
-  :root{--ink:#111;--paper:#FBFBFB;--line:rgba(0,0,0,.16);--soft:#E9E7E2;--split:50%}
+  :root{--ink:#111;--paper:#FBFBFB;--line:rgba(0,0,0,.16);--soft:#E9E7E2;--split:50%;--after-opacity:1}
   *{box-sizing:border-box}
-  html,body{margin:0;height:100%;overflow:hidden;background:var(--soft);color:var(--ink);font-family:"Inter Tight","PingFang SC","Noto Sans SC","Helvetica Neue",Arial,sans-serif}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--soft);color:var(--ink);font-family:"Inter Tight","Inter","PingFang SC","Noto Sans SC","Helvetica Neue",Arial,sans-serif}
 
-  /* 新风格生成中：只遮住“新版”那一半，原版仍可对照 */
+  /* ---------- 顶部工具条 ---------- */
+  .bar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--paper);border-bottom:1px solid var(--line);position:relative;z-index:20;flex-wrap:wrap;min-height:56px}
+  .brand{font-weight:700;font-size:13px;letter-spacing:-.01em;white-space:nowrap;margin-right:2px}
+  .brand span{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:500;font-size:10px;letter-spacing:.14em;color:rgba(0,0,0,.52);margin-left:8px}
+  .seg{display:flex;align-items:center;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;background:#fff;flex:0 0 auto}
+  .seg button{border:0;background:transparent;color:rgba(0,0,0,.62);font:600 12px/1 inherit;padding:7px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .seg button:hover{color:#000}
+  .seg button.on{background:#111;color:#fff}
+  .picker{display:flex;align-items:center;gap:6px;min-width:0}
+  .picker > span{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;letter-spacing:.1em;color:rgba(0,0,0,.5);white-space:nowrap}
+  .picker select{
+    max-width:220px;min-width:0;border:1px solid var(--line);border-radius:8px;background:#fff;color:#111;
+    font:500 12px/1.2 inherit;padding:7px 24px 7px 9px;cursor:pointer;appearance:none;
+    background-image:linear-gradient(45deg,transparent 50%,#888 50%),linear-gradient(135deg,#888 50%,transparent 50%);
+    background-position:calc(100% - 12px) 52%,calc(100% - 8px) 52%;background-size:4px 4px;background-repeat:no-repeat;
+  }
+  .dot{width:9px;height:9px;border-radius:50%;border:1px solid rgba(0,0,0,.18);flex:0 0 auto}
+  .swap{border:1px solid var(--line);background:#fff;border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;color:#444}
+  .swap:hover{background:#111;color:#fff;border-color:#111}
+  .spacer{flex:1}
+  .actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+  .actions button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;font:600 12px/1 inherit;cursor:pointer;white-space:nowrap;color:#333}
+  .actions button:hover{border-color:#111;color:#000}
+  .actions button.on{background:#111;color:#fff;border-color:#111}
+
+  /* 快捷风格 chips（右侧切换用，适合录视频） */
+  .quick{display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--paper);border-bottom:1px solid var(--line);position:relative;z-index:19;flex-wrap:wrap}
+  .quick > span{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;letter-spacing:.1em;color:rgba(0,0,0,.5);white-space:nowrap}
+  .quick button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 11px;font:600 11.5px/1 inherit;cursor:pointer;color:#333;display:flex;align-items:center;gap:6px}
+  .quick button i{width:8px;height:8px;border-radius:50%;display:block}
+  .quick button:hover{border-color:#111}
+  .quick button.on{background:#111;color:#fff;border-color:#111}
+  .quick button.on i{box-shadow:0 0 0 1px rgba(255,255,255,.7)}
+
+  .hintbar{display:flex;align-items:center;gap:8px;padding:6px 14px;background:#F4F3F0;border-bottom:1px solid var(--line);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;letter-spacing:.03em;color:rgba(0,0,0,.55);position:relative;z-index:18}
+  .hintbar b{color:#111;font-weight:600}
+
+  .stage{position:absolute;inset:calc(var(--barh, 56px) + var(--quickh, 36px) + var(--hinth, 28px)) 0 0;background:#fff}
+  iframe{position:absolute;top:0;bottom:0;height:100%;border:0;background:#fff}
+  #before{left:0;width:100%}
+  #after{left:0;width:100%;display:none}
+  body.single.show-after #before{display:none}
+  body.single.show-before #after{display:none}
+  body.single.show-after #after{display:block}
+  /* 同一个整页窗口，用裁切而不是缩放窗口：左右两侧始终同宽、同滚动位置 */
+  body.split #before{width:100%;clip-path:inset(0 calc(100% - var(--split)) 0 0)}
+  body.split #after{display:block;left:0;width:100%;clip-path:inset(0 0 0 var(--split))}
+  /* 叠化：原版在上，新版按滑杆透明度叠上去 */
+  body.fade #before{display:block}
+  body.fade #after{display:block;opacity:var(--after-opacity);pointer-events:none;z-index:2}
+  .divider{display:none;position:absolute;top:0;bottom:0;left:var(--split);width:12px;margin-left:-6px;z-index:6;cursor:col-resize;touch-action:none}
+  .divider:before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#111;opacity:.75;transition:opacity .2s}
+  .divider:hover:before,.divider.drag:before{opacity:1}
+  .divider:after{content:"↔";position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font:600 14px/1 ui-monospace,Menlo,Consolas,monospace;box-shadow:0 4px 14px rgba(0,0,0,.24)}
+  body.split .divider{display:block}
+
+  .fade-ctl{display:none;position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:7;align-items:center;gap:10px;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;padding:8px 14px;box-shadow:0 6px 20px rgba(0,0,0,.14)}
+  body.fade .fade-ctl{display:flex}
+  .fade-ctl span{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;letter-spacing:.08em;color:rgba(0,0,0,.55)}
+  .fade-ctl input{width:min(46vw,320px);accent-color:#111}
+
+  .tag{position:absolute;bottom:12px;z-index:4;font:600 10px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;color:#fff;background:#111;border-radius:999px;padding:7px 10px;pointer-events:none}
+  .tag-before{left:12px}
+  .tag-after{right:12px;display:none}
+  body.split .tag-after{display:block}
+  body.single.show-after .tag-before{display:none}
+  body.single.show-after .tag-after{display:block;left:12px;right:auto;bottom:12px}
+  body.fade .tag-after{display:block}
+
+  /* 风格生成中 */
   .pending{position:absolute;left:var(--split);right:0;top:0;bottom:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--paper);color:#111}
   .pending[hidden]{display:none}
   body.single.show-after .pending{left:0;right:0}
@@ -20,121 +105,311 @@
   .pending-text{font:600 13px/1.4 "Inter Tight","PingFang SC","Noto Sans SC",sans-serif;letter-spacing:.08em;color:rgba(0,0,0,.65)}
   @keyframes ve-dot{0%,80%,100%{opacity:.18;transform:translateY(0)}40%{opacity:1;transform:translateY(-4px)}}
 
-  .bar{height:58px;display:flex;align-items:center;gap:8px;padding:0 16px;background:var(--paper);border-bottom:1px solid var(--line);position:relative;z-index:10}
-  .brand{font-weight:700;font-size:13px;letter-spacing:-.01em;margin-right:8px;white-space:nowrap}
-  .brand span{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:500;font-size:10px;letter-spacing:.14em;color:rgba(0,0,0,.52);margin-left:8px}
-  .seg{display:flex;align-items:center;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;background:#fff}
-  .seg button{border:0;background:transparent;color:rgba(0,0,0,.62);font:600 12px/1 inherit;padding:7px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
-  .seg button:hover{color:#000}
-  .seg button.on{background:#111;color:#fff}
-  .spacer{flex:1}
-  .hint{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;color:rgba(0,0,0,.48);white-space:nowrap}
-  .stage{position:absolute;inset:58px 0 0;background:#fff}
-  iframe{position:absolute;top:0;bottom:0;height:100%;border:0;background:#fff}
-  #before{left:0;width:100%}
-  #after{left:0;width:100%;display:none}
-  body.single.show-after #before{display:none}
-  body.single.show-before #after{display:none}
-  body.single.show-after #after{display:block}
-  /* 同一个整页窗口，用裁切而不是缩放窗口：左右两边始终同宽、同滚动位置 */
-  body.split #before{width:100%;clip-path:inset(0 calc(100% - var(--split)) 0 0)}
-  body.split #after{display:block;left:0;width:100%;clip-path:inset(0 0 0 var(--split))}
-  .divider{display:none;position:absolute;top:0;bottom:0;left:var(--split);width:12px;margin-left:-6px;z-index:6;cursor:col-resize;touch-action:none}
-  .divider:before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#111;opacity:.75;transition:opacity .2s}
-  .divider:hover:before,.divider.drag:before{opacity:1}
-  .divider:after{content:"↔";position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font:600 14px/1 ui-monospace,Menlo,Consolas,monospace;box-shadow:0 4px 14px rgba(0,0,0,.24)}
-  body.split .divider{display:block}
-  .tag{position:absolute;bottom:12px;z-index:4;font:600 10px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;color:#fff;background:#111;border-radius:999px;padding:7px 10px;pointer-events:none}
-  .tag-before{left:12px}
-  .tag-after{right:12px;display:none}
-  body.split .tag-after{display:block}
-  body.single.show-after .tag-before{display:none}
-  body.single.show-after .tag-after{display:block;left:12px;right:auto;bottom:12px}
-
-  /* 预览实例端口变了 / 服务已关闭：不再显示浏览器的「拒绝连接」白屏，给一个可操作的重连提示 */
+  /* 离线提示 */
   .offline{position:absolute;inset:0;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--paper);color:var(--ink);text-align:center;padding:24px}
   .offline[hidden]{display:none}
   .offline-title{font:700 15px/1.3 "Inter Tight","PingFang SC",sans-serif;letter-spacing:-.01em}
   .offline-text{font:400 12.5px/1.7 "Inter Tight","PingFang SC",sans-serif;color:rgba(0,0,0,.55);max-width:52ch}
   .offline button{border:0;background:#111;color:#fff;font:600 12px/1 inherit;padding:10px 16px;border-radius:999px;cursor:pointer}
   .offline button:hover{opacity:.86}
-  @media(max-width:620px){.brand span{display:none}.hint{display:none}.bar{gap:6px;padding:0 10px}.seg button{padding:7px 9px;font-size:11px}}
+  .offline-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;max-width:min(92vw,600px)}
+  .offline input{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:500 12.5px/1.2 ui-monospace,Menlo,Consolas,monospace;min-width:min(74vw,300px);background:#fff;color:#111}
+  .offline input:focus{outline:2px solid #111;outline-offset:2px}
+  .offline button.ghost{background:#fff;color:#333;border:1px solid var(--line)}
+  .offline button.ghost:hover{border-color:#111;color:#000;opacity:1}
+  .offline-hint{font:400 11.5px/1.65 ui-monospace,Menlo,Consolas,monospace;color:rgba(0,0,0,.45);max-width:56ch}
+  .offline-hint b{color:rgba(0,0,0,.68);font-weight:600}
+
+  /* 纯净模式：录视频用，只留页面 */
+  body.bare .bar,body.bare .quick,body.bare .hintbar,body.bare .tag,body.bare .fade-ctl{display:none!important}
+  body.bare .divider:after{display:none}
+  body.bare .stage{inset:0}
+  .restore{display:none;position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:99;border:1px solid rgba(0,0,0,.2);background:rgba(255,255,255,.9);color:#333;border-radius:999px;padding:7px 12px;font:600 11px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;cursor:pointer;opacity:0;transition:opacity .25s}
+  .restore:hover{opacity:1}
+  body.bare .restore{display:block}
+  body.bare:hover .restore{opacity:.65}
+
+  @media(max-width:1180px){
+    .picker select{max-width:160px}
+    .actions button{padding:7px 8px}
+    .brand span{display:none}
+  }
+  @media(max-width:900px){
+    .quick{display:none}
+    .hintbar{display:none}
+    .bar{padding:6px 10px;gap:6px;min-height:0}
+    .seg button{padding:6px 8px;font-size:11px}
+    .picker select{max-width:128px;font-size:11px;padding:6px 20px 6px 7px}
+    .stage{inset:var(--barh,52px) 0 0}
+  }
 </style>
 </head>
 <body class="split">
-  <div class="bar">
-    <div class="brand">风格对比<span>ORIGINAL / STYLED</span></div>
+  <div class="bar" id="bar">
+    <div class="brand">风格对比<span>STYLE COMPARE</span></div>
     <div class="seg" role="group" aria-label="预览模式">
       <button type="button" id="btnBefore">原版</button>
       <button type="button" id="btnAfter">新版</button>
       <button type="button" id="btnSplit" class="on">左右对比</button>
+      <button type="button" id="btnFade">叠化</button>
+    </div>
+    <div class="picker">
+      <span>左</span>
+      <select id="selLeft" aria-label="左侧版本"></select>
+      <i class="dot" id="dotLeft" aria-hidden="true"></i>
+    </div>
+    <button class="swap" id="btnSwap" type="button" title="交换左右">⇄</button>
+    <div class="picker">
+      <span>右</span>
+      <select id="selRight" aria-label="右侧版本"></select>
+      <i class="dot" id="dotRight" aria-hidden="true"></i>
     </div>
     <div class="spacer"></div>
-    <div class="hint">拖动中间分割线对比 · 按钮切换单页预览</div>
+    <div class="actions">
+      <button type="button" id="btnEditor" title="在新窗口用编辑器打开右侧页面">编辑器</button>
+      <button type="button" id="btnCycle" title="按风格自动轮播（空格）">▶ 轮播</button>
+      <button type="button" id="btnBare" title="隐藏对比页工具条（H）">无工具条</button>
+      <button type="button" id="btnFull" title="全屏（F）">全屏</button>
+    </div>
   </div>
+
+  <div class="quick" id="quick">
+    <span>右侧切换：</span>
+    <!-- chips 由 JS 生成 -->
+  </div>
+
+  <div class="hintbar" id="hintbar">
+    纯预览（无编辑器界面）· <b>拖</b>分割线 · <b>←/→</b> 切右侧风格 · <b>Shift+←/→</b> 切左侧 · <b>1-9</b> 直选 · <b>空格</b> 轮播 · <b>F</b> 全屏 · <b>H</b> 隐藏工具条 · 要编辑点右上 <b>「编辑器」</b>
+  </div>
+
   <div class="stage" id="stage">
-    <iframe id="before" title="原版页面"></iframe>
-    <iframe id="after" title="新版页面"></iframe>
+    <iframe id="before" title="左侧页面"></iframe>
+    <iframe id="after" title="右侧页面"></iframe>
     <div class="divider" id="divider" role="separator" aria-label="拖动调整左右比例"></div>
+    <div class="fade-ctl" id="fadeCtl">
+      <span>叠化</span>
+      <input type="range" id="fadeRange" min="0" max="100" value="100" aria-label="叠化透明度">
+      <span id="fadePct">100%</span>
+    </div>
     <div class="pending" id="pending" hidden>
       <div class="pending-dots"><i></i><i></i><i></i></div>
       <div class="pending-text">风格生成中…</div>
     </div>
     <div class="offline" id="offline" hidden>
-    <div class="offline-title">预览服务已关闭</div>
-    <div class="offline-text" id="offlineText">项目预览实例被重新打开了（端口变了），正在尝试重新连接…</div>
-    <button type="button" id="offlineRetry">重新连接</button>
+      <div class="offline-title">预览已断开</div>
+      <div class="offline-text" id="offlineText">预览服务端口变了（App 重启 / 项目重新打开都会分配新端口）。粘贴当前项目的预览地址即可恢复。</div>
+      <div class="offline-row">
+        <input id="relinkInput" type="url" placeholder="http://127.0.0.1:49893/" aria-label="新的预览地址" />
+        <button type="button" id="relinkBtn">用这个地址重连</button>
+      </div>
+      <div class="offline-row">
+        <button type="button" id="offlineRetry" class="ghost">原地重试</button>
+        <button type="button" id="copyServe" class="ghost">复制固定端口启动命令</button>
+      </div>
+      <div class="offline-hint">录视频 / 长期对比建议用固定端口：先运行 <b>node demo/_tools/serve-demo.mjs</b>，再打开 <b>http://127.0.0.1:8848/style-compare.html</b>（不依赖编辑器预览，不会断）。</div>
+    </div>
+    <div class="tag tag-before" id="tagBefore">原版 · BEFORE</div>
+    <div class="tag tag-after" id="tagAfter">新版 · AFTER</div>
   </div>
-  <div class="tag tag-before">原版 · BEFORE</div>
-    <div class="tag tag-after">新版 · AFTER</div>
-  </div>
+  <button class="restore" id="restore" type="button">H · 显示工具条</button>
+
 <script>
+(() => {
   const params = new URLSearchParams(location.search);
-  const beforeSrc = params.get('before') || 'muse.original.html';
-  const afterSrc = params.get('after') || 'muse.html';
   const before = document.getElementById('before');
   const after = document.getElementById('after');
   const divider = document.getElementById('divider');
   const stage = document.getElementById('stage');
+  const bar = document.getElementById('bar');
+  const quick = document.getElementById('quick');
+  const hintbar = document.getElementById('hintbar');
+  const selLeft = document.getElementById('selLeft');
+  const selRight = document.getElementById('selRight');
+  const dotLeft = document.getElementById('dotLeft');
+  const dotRight = document.getElementById('dotRight');
+  const tagBefore = document.getElementById('tagBefore');
+  const tagAfter = document.getElementById('tagAfter');
   const btnBefore = document.getElementById('btnBefore');
   const btnAfter = document.getElementById('btnAfter');
   const btnSplit = document.getElementById('btnSplit');
-  before.src = beforeSrc;
-  after.src = afterSrc;
-  let split = 50;
-  let drag = false;
-  function setMode(mode, side) {
-    document.body.classList.toggle('split', mode === 'split');
-    document.body.classList.toggle('single', mode !== 'split');
+  const btnFade = document.getElementById('btnFade');
+  const btnCycle = document.getElementById('btnCycle');
+  const btnBare = document.getElementById('btnBare');
+  const btnFull = document.getElementById('btnFull');
+  const btnSwap = document.getElementById('btnSwap');
+  const restore = document.getElementById('restore');
+  const fadeRange = document.getElementById('fadeRange');
+  const fadePct = document.getElementById('fadePct');
+  const btnEditor = document.getElementById('btnEditor');
+  const EDITOR_MODE = params.get('editor') === '1';
+
+  /* 页面 URL 进 iframe 前统一处理：
+     - 默认纯预览：带 ve_pure=1，编辑器内核不挂任何界面
+     - ?editor=1 模式：带 ve=1，让内核挂出编辑工具 */
+  function viewUrl(u) {
+    try {
+      const url = new URL(u, location.href);
+      if (url.protocol === 'file:') return u;
+      url.searchParams.delete('ve_pure');
+      url.searchParams.delete('ve_embed');
+      url.searchParams.delete('ve_win');
+      if (EDITOR_MODE) url.searchParams.set('ve', '1');
+      else { url.searchParams.delete('ve'); url.searchParams.set('ve_pure', '1'); }
+      return url.toString();
+    } catch { return u; }
+  }
+
+  /* 兜底清单：manifest 拉不到时也能用 */
+  const FALLBACK = [
+    { id: 'neutral', label: '原版模板', note: '无风格基线', url: 'template-neutral.html', chip: '#9aa0a6', group: '模板', kind: 'before' },
+    { id: 'glass', label: '拟态玻璃', note: 'Spatial Glass', url: 'template-versions/glass.html', chip: '#e8c496', group: '模板版本' },
+    { id: 'white', label: '极简白点', note: 'Prmpt 白点', url: 'template-versions/white.html', chip: '#111111', group: '模板版本' },
+    { id: 'aurora', label: '极光', note: 'Aurora', url: 'template-versions/aurora.html', chip: '#11d8b7', group: '模板版本' },
+    { id: 'pixelos', label: 'PixelOS 95', note: '像素桌面', url: 'template-versions/pixelos.html', chip: '#008080', group: '模板版本' },
+    { id: 'uneo', label: 'UNEO 暖石拟物', note: 'Neumorphism', url: 'template-versions/uneo.html', chip: '#8c6f52', group: '模板版本' },
+    { id: 'bluewhite', label: 'DEMO 蓝白', note: 'Blue White', url: 'template-versions/bluewhite.html', chip: '#2563eb', group: '模板版本' },
+    { id: 'muse-original', label: 'muse 原版', note: '旧 demo 初始版', url: 'muse.original.html', chip: '#2563eb', group: '项目历史' },
+    { id: 'muse-current', label: 'muse 当前', note: '工作版本', url: 'muse.html', chip: '#4d6bfe', group: '项目历史' },
+  ];
+  let VERSIONS = FALLBACK;
+  const byId = (id) => VERSIONS.find((v) => v.id === id);
+  const byUrl = (u) => { try { const t = decodeURIComponent(u); return VERSIONS.find((v) => v.url === u || decodeURIComponent(v.url) === t); } catch { return null; } };
+
+  /* ---------- 版本选择 ---------- */
+  let leftId = params.get('left') || '';
+  let rightId = params.get('right') || '';
+  const beforeParam = params.get('before') || '';
+  const afterParam = params.get('after') || '';
+  let mode = params.get('mode') || 'split';
+
+  function groupVersions() {
+    const map = new Map();
+    for (const v of VERSIONS) {
+      if (!map.has(v.group)) map.set(v.group, []);
+      map.get(v.group).push(v);
+    }
+    return [...map.entries()];
+  }
+  function fillSelect(sel, currentId) {
+    sel.innerHTML = '';
+    for (const [g, list] of groupVersions()) {
+      const og = document.createElement('optgroup');
+      og.label = g;
+      for (const v of list) {
+        const o = document.createElement('option');
+        o.value = v.id;
+        o.textContent = v.label + (v.note ? ' · ' + v.note : '');
+        og.appendChild(o);
+      }
+      sel.appendChild(og);
+    }
+    if (!sel.querySelector('option[value="' + currentId + '"]')) {
+      const first = VERSIONS[0];
+      currentId = first ? first.id : '';
+    }
+    sel.value = currentId;
+    return currentId;
+  }
+  function renderQuick() {
+    quick.querySelectorAll('button').forEach((b) => b.remove());
+    const pool = VERSIONS.filter((v) => v.group === '模板版本' || v.kind === 'before');
+    for (const v of pool) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.version = v.id;
+      b.innerHTML = '<i style="background:' + (v.chip || '#888') + '"></i>' + v.label;
+      b.addEventListener('click', () => { stopCycle(); setVersion('right', v.id); });
+      quick.appendChild(b);
+    }
+    syncQuick();
+  }
+  function syncQuick() {
+    quick.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.version === rightId));
+  }
+  const setTag = (el, prefix, v) => { if (el) el.textContent = prefix + (v ? ' · ' + v.label : ''); };
+  function syncUI() {
+    const L = byId(leftId), R = byId(rightId);
+    if (dotLeft) dotLeft.style.background = (L && L.chip) || '#ccc';
+    if (dotRight) dotRight.style.background = (R && R.chip) || '#ccc';
+    setTag(tagBefore, '左', L);
+    setTag(tagAfter, '右', R);
+    selLeft.value = leftId;
+    selRight.value = rightId;
+    syncQuick();
+    document.title = (L ? L.label : '原版') + ' vs ' + (R ? R.label : '新版') + ' · 风格对比';
+  }
+
+  function setVersion(side, id) {
+    const v = byId(id);
+    if (!v) return;
+    if (side === 'left') { leftId = id; before.src = viewUrl(v.url); }
+    else { rightId = id; after.src = viewUrl(v.url); }
+    syncUI();
+    syncParams();
+    if (typeof resetScroll === 'function') resetScroll();
+  }
+
+  /* ---------- URL 同步 ---------- */
+  function syncParams() {
+    try {
+      const p = new URLSearchParams(location.search);
+      ['before', 'after'].forEach((k) => p.delete(k));
+      p.delete('left'); p.delete('right');
+      p.set('before', (byId(leftId) || {}).url || '');
+      p.set('after', (byId(rightId) || {}).url || '');
+      p.set('mode', mode);
+      history.replaceState(null, '', '?' + p.toString());
+    } catch { /* ignore */ }
+  }
+
+  /* ---------- 模式 ---------- */
+  function setMode(next, side) {
+    mode = next;
+    document.body.classList.toggle('split', next === 'split');
+    document.body.classList.toggle('fade', next === 'fade');
+    document.body.classList.toggle('single', next !== 'split' && next !== 'fade');
     document.body.classList.remove('show-before', 'show-after');
-    if (mode !== 'split') document.body.classList.add(side === 'before' ? 'show-before' : 'show-after');
-    btnBefore.classList.toggle('on', mode !== 'split' && side === 'before');
-    btnAfter.classList.toggle('on', mode !== 'split' && side === 'after');
-    btnSplit.classList.toggle('on', mode === 'split');
+    if (next !== 'split' && next !== 'fade') document.body.classList.add(side === 'before' ? 'show-before' : 'show-after');
+    btnBefore.classList.toggle('on', next === 'before');
+    btnAfter.classList.toggle('on', next === 'after');
+    btnSplit.classList.toggle('on', next === 'split');
+    btnFade.classList.toggle('on', next === 'fade');
+    syncParams();
   }
   function setSplit(pct) {
-    split = Math.max(4, Math.min(96, pct));
-    document.documentElement.style.setProperty('--split', split + '%');
+    const v = Math.max(4, Math.min(96, pct));
+    document.documentElement.style.setProperty('--split', v + '%');
   }
-  btnBefore.addEventListener('click', () => setMode('single', 'before'));
-  btnAfter.addEventListener('click', () => setMode('single', 'after'));
-  btnSplit.addEventListener('click', () => setMode('split'));
+  btnBefore.addEventListener('click', () => { stopCycle(); setMode('before', 'before'); });
+  btnAfter.addEventListener('click', () => { stopCycle(); setMode('after', 'after'); });
+  btnSplit.addEventListener('click', () => { stopCycle(); setMode('split'); });
+  btnFade.addEventListener('click', () => { stopCycle(); setMode('fade'); });
+
   divider.addEventListener('pointerdown', (e) => {
-    drag = true; divider.classList.add('drag');
+    document.body.classList.add('split');
+    divider.classList.add('drag');
     try { divider.setPointerCapture(e.pointerId); } catch {}
     e.preventDefault();
   });
   window.addEventListener('pointermove', (e) => {
-    if (!drag) return;
+    if (!divider.classList.contains('drag')) return;
     const r = stage.getBoundingClientRect();
     setSplit(((e.clientX - r.left) / r.width) * 100);
   });
-  window.addEventListener('pointerup', () => { drag = false; divider.classList.remove('drag'); });
-  // 两个 iframe 始终显示同一个页面位置：滚其中一个，另一个同步滚
+  window.addEventListener('pointerup', () => divider.classList.remove('drag'));
+
+  /* ---------- 叠化滑杆 ---------- */
+  fadeRange.addEventListener('input', () => {
+    const v = Number(fadeRange.value) / 100;
+    document.body.style.setProperty('--after-opacity', String(v));
+    fadePct.textContent = fadeRange.value + '%';
+  });
+
+  /* ---------- 滚动同步 ---------- */
   let syncing = false;
   function bindScroll(src, dst) {
     try {
-      src.addEventListener("scroll", () => {
+      src.addEventListener('scroll', () => {
         if (syncing) return;
         syncing = true;
         try { dst.scrollTo(src.scrollX, src.scrollY); } catch {}
@@ -142,40 +417,161 @@
       }, { passive: true });
     } catch {}
   }
+  let wired = false;
   function wireScrollSync() {
+    if (wired) return;
     try {
-      const a = before.contentWindow;
-      const b = after.contentWindow;
-      if (a && b) { bindScroll(a, b); bindScroll(b, a); }
+      const a = before.contentWindow, b = after.contentWindow;
+      if (a && b) { bindScroll(a, b); bindScroll(b, a); wired = true; }
     } catch {}
   }
-  before.addEventListener("load", wireScrollSync);
-  after.addEventListener("load", wireScrollSync);
-  // 由工作台「应用并打开风格对比」打开时，等待新版本写回后再揭开右侧
-  const pending = params.get("pending") === "1";
-  const pendingEl = document.getElementById("pending");
-  if (pending && pendingEl) {
+  function resetScroll() {
+    try { before.contentWindow.scrollTo(0, 0); } catch {}
+    try { after.contentWindow.scrollTo(0, 0); } catch {}
+  }
+  before.addEventListener('load', wireScrollSync);
+  after.addEventListener('load', () => { wireScrollSync(); resetScroll(); });
+  before.addEventListener('load', resetScroll);
+
+  /* ---------- 轮播（录视频用） ---------- */
+  let cycleTimer = null;
+  const POOL = () => VERSIONS.filter((v) => v.group === '模板版本' || v.kind === 'before');
+  function nextVersion() {
+    const pool = POOL();
+    const idx = pool.findIndex((v) => v.id === rightId);
+    return pool[(idx + 1) % pool.length];
+  }
+  function startCycle() {
+    if (cycleTimer) return;
+    btnCycle.classList.add('on');
+    btnCycle.textContent = '⏸ 轮播';
+    const tick = () => { const v = nextVersion(); if (v) setVersion('right', v.id); };
+    cycleTimer = setInterval(tick, 4000);
+  }
+  function stopCycle() {
+    if (!cycleTimer) return;
+    clearInterval(cycleTimer);
+    cycleTimer = null;
+    btnCycle.classList.remove('on');
+    btnCycle.textContent = '▶ 轮播';
+  }
+  btnCycle.addEventListener('click', () => (cycleTimer ? stopCycle() : startCycle()));
+
+  /* ---------- 纯净 / 全屏 ---------- */
+  function toggleBare() { document.body.classList.toggle('bare'); setTimeout(measure, 60); }
+  btnBare.addEventListener('click', toggleBare);
+  restore.addEventListener('click', toggleBare);
+  function toggleFull() {
+    try {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    } catch { /* ignore */ }
+  }
+  btnFull.addEventListener('click', toggleFull);
+
+  /* 「编辑器」：对比页保持纯预览，只有点这里才用带编辑器的窗口打开右侧页面 */
+  if (btnEditor) btnEditor.addEventListener('click', () => {
+    const v = byId(rightId) || { url: 'muse.html' };
+    let url;
+    try {
+      const u = new URL(v.url, location.href);
+      u.searchParams.delete('ve_pure');
+      u.searchParams.delete('ve_embed');
+      u.searchParams.delete('ve_win');
+      u.searchParams.set('ve', '1');
+      url = u.toString();
+    } catch { return; }
+    const w = window.open(url, '_blank');
+    if (!w && hintbar) {
+      hintbar.innerHTML = '<b>「编辑器」</b> 被浏览器拦截了弹窗：允许弹窗后再点一次，或直接打开 <b>' + url + '</b>';
+    }
+  });
+
+  /* ---------- 选择器 ---------- */
+  selLeft.addEventListener('change', () => { stopCycle(); setVersion('left', selLeft.value); });
+  selRight.addEventListener('change', () => { stopCycle(); setVersion('right', selRight.value); });
+  btnSwap.addEventListener('click', () => {
+    const l = leftId;
+    leftId = rightId; rightId = l;
+    before.src = viewUrl((byId(leftId) || {}).url || beforeParam);
+    after.src = viewUrl((byId(rightId) || {}).url || afterParam);
+    syncUI(); syncParams();
+  });
+
+  /* ---------- 键盘 ---------- */
+  const MODES = ['split', 'fade', 'before', 'after'];
+  document.addEventListener('keydown', (e) => {
+    const t = e.target;
+    if (t && (t.tagName === 'SELECT' || t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    const k = e.key;
+    const pool = POOL();
+    const rIdx = pool.findIndex((v) => v.id === rightId);
+    const lIdx = pool.findIndex((v) => v.id === leftId);
+    if (k === 'ArrowRight' || k === 'ArrowLeft') {
+      e.preventDefault();
+      stopCycle();
+      const dir = k === 'ArrowRight' ? 1 : -1;
+      if (e.shiftKey) {
+        if (lIdx >= 0) setVersion('left', pool[(lIdx + dir + pool.length) % pool.length].id);
+      } else if (rIdx >= 0) {
+        setVersion('right', pool[(rIdx + dir + pool.length) % pool.length].id);
+      }
+      return;
+    }
+    if (k === ' ') { e.preventDefault(); cycleTimer ? stopCycle() : startCycle(); return; }
+    if (k === 'f' || k === 'F') { toggleFull(); return; }
+    if (k === 'h' || k === 'H') { toggleBare(); return; }
+    if (k === 'm' || k === 'M') { setMode(MODES[(MODES.indexOf(mode) + 1) % MODES.length], 'after'); return; }
+    if (k === 's' || k === 'S') { btnSwap.click(); return; }
+    if (/^[1-9]$/.test(k)) {
+      const target = pool[Number(k) - 1];
+      if (target) { stopCycle(); setVersion('right', target.id); }
+    }
+  });
+
+  /* ---------- 尺寸测量（stage 顶部偏移） ---------- */
+  function measure() {
+    const root = document.documentElement;
+    root.style.setProperty('--barh', bar.offsetHeight + 'px');
+    root.style.setProperty('--quickh', quick.offsetHeight + 'px');
+    root.style.setProperty('--hinth', hintbar.offsetHeight + 'px');
+  }
+  window.addEventListener('resize', measure);
+  if (window.ResizeObserver) {
+    try {
+      const ro = new ResizeObserver(() => measure());
+      ro.observe(bar); ro.observe(quick); ro.observe(hintbar);
+    } catch { /* ignore */ }
+  }
+
+  /* ---------- 风格生成中（工作台「应用并打开对比」打开时） ---------- */
+  const pending = params.get('pending') === '1';
+  const pendingEl = document.getElementById('pending');
+  function setupPending() {
+    if (!pending || !pendingEl) return;
     pendingEl.hidden = false;
     const sigOf = async (url) => {
       try {
-        const res = await fetch(url, { cache: "no-store" });
+        const res = await fetch(url, { cache: 'no-store' });
         const text = await res.text();
         let h = 0;
         for (let i = 0; i < text.length; i += 97) h = (h * 31 + text.charCodeAt(i)) | 0;
-        return text.length + ":" + h;
-      } catch { return ""; }
+        return text.length + ':' + h;
+      } catch { return ''; }
     };
-    const base = new URL(afterSrc, location.href);
-    const appliedUrl = new URL("ve-applied.js", base).toString();
+    const rightUrl = (byId(rightId) || {}).url || afterParam || 'muse.html';
+    const base = new URL(rightUrl, location.href);
+    const appliedUrl = new URL('ve-applied.js', base).toString();
     let baseline = null;
     const check = async () => {
       const s1 = await sigOf(base.toString());
       const s2 = await sigOf(appliedUrl);
-      const now = s1 + "|" + s2;
-      if (baseline === null) { baseline = now; }
+      const now = s1 + '|' + s2;
+      if (baseline === null) baseline = now;
       else if (now !== baseline) {
         pendingEl.hidden = true;
-        after.src = afterSrc + (afterSrc.indexOf("?") >= 0 ? "&" : "?") + "t=" + Date.now();
+        const v = byId(rightId);
+        if (v) after.src = viewUrl(v.url + (v.url.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now());
         return;
       }
       setTimeout(check, 2000);
@@ -183,48 +579,143 @@
     setTimeout(check, 1200);
   }
 
-  // ── 自愈：项目预览实例被重新打开（端口变了 / DSH 重启）时，对比页的 iframe 会 ERR_CONNECTION_REFUSED。
-  // 这里通过工作台传进来的 api + dir 找到当前端口，整页跳到新的对比地址；找不到就显示可操作的提示。
+  /* ---------- 断线检测 / 重连 ----------
+     项目预览实例的端口是临时的：DSH 重启、项目重新打开、预览重建都会换端口，
+     旧标签页里的 iframe 指向旧端口就会失败。这里做三件事：
+       ① 直接探测 iframe 地址是否可达（不看 contentDocument，避免误判）；
+       ② 断线后定时复检，恢复后自动揭开；
+       ③ 提供「粘贴新预览地址」和「固定端口本地服务」两条恢复路径。 */
   const apiBase = (params.get('api') || '').replace(/\/+$/, '');
   const projDir = params.get('dir') || '';
   const offlineEl = document.getElementById('offline');
   const offlineText = document.getElementById('offlineText');
+  const relinkInput = document.getElementById('relinkInput');
+  const relinkBtn = document.getElementById('relinkBtn');
+  const copyServeBtn = document.getElementById('copyServe');
+  const retryBtn = document.getElementById('offlineRetry');
+  const IS_FILE = location.protocol === 'file:';
+  const SIGN_MSG = '预览端口变了：App 重启 / 项目重新打开都会分配新端口。粘贴当前项目的预览地址即可恢复，或回编辑器重新打开对比页；录视频建议用固定端口本地服务（下方可复制命令）。';
   let recovering = 0;
-  const frameOk = (f) => { try { return Boolean(f.contentDocument && f.contentDocument.location); } catch { return false; } };
+  let probing = false;
+
   function showOffline(msg) { if (!offlineEl) return; offlineEl.hidden = false; if (offlineText && msg) offlineText.textContent = msg; }
+  function hideOffline() { if (offlineEl) offlineEl.hidden = true; recovering = 0; }
+  const absUrl = (f) => { try { return new URL(f.getAttribute('src') || '', location.href).toString(); } catch { return ''; } };
+  async function probe(url) {
+    if (!url) return false;
+    try { const r = await fetch(url, { cache: 'no-store' }); return r.ok; } catch { return false; }
+  }
+  async function checkFrames() {
+    if (IS_FILE) return; // file:// 下浏览器禁止探测/同步，页面仍可看，不做断线覆盖
+    if (probing) return;
+    probing = true;
+    const [okB, okA] = await Promise.all([probe(absUrl(before)), probe(absUrl(after))]);
+    probing = false;
+    if (okB && okA) { hideOffline(); return; }
+    showOffline(SIGN_MSG);
+    if (relinkInput && !relinkInput.value) relinkInput.value = location.origin + '/';
+    if (apiBase && projDir && recovering < 2) recoverFromDeadPort();
+  }
   async function recoverFromDeadPort() {
-    if (!apiBase || !projDir || recovering >= 2) {
-      showOffline('预览服务已关闭：回到工作台「应用并打开风格对比」重新打开这个页面。');
-      return;
-    }
+    if (!apiBase || !projDir || recovering >= 2) return;
     recovering += 1;
-    showOffline('预览服务端口变了，正在重新连接…');
     try {
       const res = await fetch(apiBase + '/ve/plugin/projects', { cache: 'no-store' });
       const data = await res.json();
       const hit = (data.projects || []).find((x) => String(x.dir || '').toLowerCase() === projDir.toLowerCase());
-      if (!hit || !hit.url) { showOffline('找不到项目预览实例：回到工作台重新打开「风格对比」。'); return; }
+      if (!hit || !hit.url) return;
       const next = new URL('style-compare.html', hit.url);
       params.forEach((v, k) => { if (k !== 't') next.searchParams.set(k, v); });
-      if (next.host === location.host) { showOffline('预览服务还没起来：点「重新连接」再试一次。'); return; }
+      if (next.host === location.host) return;
       location.replace(next.toString());
-    } catch (e) {
-      showOffline('重新连接失败：' + String((e && e.message) || e));
+    } catch { /* 由手动重连兜底 */ }
+  }
+  function rebase(originText) {
+    try {
+      const u = new URL(originText);
+      const fix = (f, fallback) => {
+        const raw = f.getAttribute('src') || fallback;
+        try { const p = new URL(raw, location.href); return u.origin + p.pathname + p.search; } catch { return raw; }
+      };
+      before.src = viewUrl(fix(before, 'template-neutral.html'));
+      after.src = viewUrl(fix(after, 'template-versions/glass.html'));
+      hideOffline();
+      setTimeout(checkFrames, 2400);
+    } catch {
+      showOffline('地址格式不对，示例：http://127.0.0.1:49893/');
     }
   }
-  function checkFrames() { if (!frameOk(before) || !frameOk(after)) recoverFromDeadPort(); }
-  const retryBtn = document.getElementById('offlineRetry');
-  if (retryBtn) retryBtn.addEventListener('click', () => {
-    recovering = 0;
-    if (offlineEl) offlineEl.hidden = true;
-    before.src = beforeSrc; after.src = afterSrc;
-    setTimeout(checkFrames, 4500);
+  if (relinkBtn) relinkBtn.addEventListener('click', () => rebase((relinkInput && relinkInput.value || '').trim()));
+  if (relinkInput) {
+    relinkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') rebase(relinkInput.value.trim()); });
+    relinkInput.value = location.origin + '/';
+  }
+  if (copyServeBtn) copyServeBtn.addEventListener('click', async () => {
+    const cmd = 'node demo/_tools/serve-demo.mjs';
+    try { await navigator.clipboard.writeText(cmd); } catch { /* ignore */ }
+    copyServeBtn.textContent = '已复制：' + cmd;
   });
+  if (retryBtn) retryBtn.addEventListener('click', () => {
+    hideOffline();
+    const bust = (f, fallback) => {
+      const raw = f.getAttribute('src') || fallback;
+      try { const u = new URL(raw, location.href); u.searchParams.set('t', Date.now()); return u.toString(); } catch { return raw; }
+    };
+    before.src = viewUrl(bust(before, 'template-neutral.html'));
+    after.src = viewUrl(bust(after, 'template-versions/glass.html'));
+    setTimeout(checkFrames, 2600);
+  });
+  if (IS_FILE) {
+    try {
+      if (hintbar) hintbar.innerHTML = '<b>file://</b> 直接打开：滚动同步不可用。录视频/长期对比请用固定端口本地服务 <b>node demo/_tools/serve-demo.mjs</b>';
+    } catch { /* ignore */ }
+  }
+  window.addEventListener('load', () => setTimeout(checkFrames, 2500));
+  setInterval(() => { if (offlineEl && !offlineEl.hidden) checkFrames(); }, 6000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) checkFrames(); });
   setTimeout(checkFrames, 5000);
-  window.addEventListener('load', () => setTimeout(checkFrames, 1200));
 
-  setMode('split');
-  setSplit(50);
+  /* ---------- 初始化 ---------- */
+  async function boot() {
+    try {
+      const r = await fetch('compare-versions.json?t=' + Date.now(), { cache: 'no-store' });
+      if (r.ok) {
+        const j = await r.json();
+        if (j && Array.isArray(j.versions) && j.versions.length) VERSIONS = j.versions;
+      }
+    } catch { /* 用兜底清单 */ }
+
+    // ?before=/?after= 优先；否则：插件「应用并打开对比」默认 muse 原版/当前，手动打开默认 原版模板/拟态玻璃
+    const custom = (url, label) => {
+      if (!url) return null;
+      const hit = byUrl(url);
+      if (hit) return hit;
+      const v = { id: 'custom-' + label, label: label, note: '自定义', url: url, chip: '#cccccc', group: '自定义' };
+      VERSIONS.push(v);
+      return v;
+    };
+    let l = custom(beforeParam, '自定义左') || custom(decodeURIComponent(beforeParam || ''), '自定义左');
+    let r2 = custom(afterParam, '自定义右') || custom(decodeURIComponent(afterParam || ''), '自定义右');
+    if (!l) l = (pending && byId('muse-original')) || byId('neutral') || VERSIONS[0];
+    if (!r2) r2 = (pending && byId('muse-current')) || byId('glass') || VERSIONS[1] || VERSIONS[0];
+    leftId = leftId || (l && l.id) || '';
+    rightId = rightId || (r2 && r2.id) || '';
+    leftId = fillSelect(selLeft, leftId);
+    rightId = fillSelect(selRight, rightId);
+    renderQuick();
+    syncUI();
+
+    before.src = viewUrl((byId(leftId) || {}).url || 'template-neutral.html');
+    after.src = viewUrl((byId(rightId) || {}).url || 'muse.html');
+    setMode(mode, 'after');
+    setSplit(50);
+    measure();
+    setupPending();
+    if (params.get('bare') === '1') toggleBare();
+    syncParams();
+  }
+  boot();
+})();
 </script>
 </body>
 </html>

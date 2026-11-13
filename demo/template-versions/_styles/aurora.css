@@ -1,0 +1,110 @@
+/* ===== Aurora 极光 · 覆盖 ATLAS 模板 token ===== */
+:root{
+  --paper:#02070D;
+  --paper-2:#030910;
+  --ink:#EDF3FB;
+  --ink-2:#8493A8;
+  --ink-3:#6C7C92;
+  --line:#1A2938;
+  --line-2:#141F2A;
+  --accent:#11D8B7;
+  --accent-2:#A75CF5;
+  --accent-3:#477CFF;
+  --surface:#08111B;
+  --surface-2:#0B1420;
+  --stroke:#1A2938;
+  --sheen:linear-gradient(145deg,rgba(17,216,183,.045) 0%,rgba(2,7,13,0) 46%,rgba(167,92,245,.045) 100%);
+  --r-xs:calc(5 * var(--u));
+  --r-sm:calc(6 * var(--u));
+  --r-md:calc(8 * var(--u));
+  --r-lg:calc(11 * var(--u));
+  --r-pill:999px;
+  --blur:blur(calc(10 * var(--u)));
+  --shadow:0 8px 20px rgba(0,0,0,.45),0 0 18px rgba(19,216,196,.05);
+  --font-display:Inter,"Segoe UI Variable Display","Segoe UI","PingFang SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
+  --font-sans:Inter,"Segoe UI","PingFang SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
+  --font-mono:"Cascadia Mono","SF Mono",Consolas,"Courier New",monospace;
+  --display-weight:600;
+  --track:-.02em;
+  --btn-bg:#0B1420;
+  --btn-fg:#EDF3FB;
+  --btn-border:#233242;
+  --chip-bg:rgba(17,216,183,.07);
+  --focus:#25D9C4;
+  --chart-line:#11D8B7;
+}
+html{color-scheme:dark}
+body{
+  /* 背景渐变（极光幕布）：① 青绿主光源 → ② 紫副光源 → ③ 蓝反射光 → ④ 深空线性底 */
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(120% 92% at 82% -18%,rgba(25,227,196,.56) 0%,rgba(19,216,183,.25) 32%,rgba(19,216,183,0) 64%),
+    radial-gradient(92% 78% at 8% -14%,rgba(166,79,242,.48) 0%,rgba(139,77,221,.20) 34%,rgba(139,77,221,0) 64%),
+    radial-gradient(130% 84% at 52% 114%,rgba(71,124,255,.30) 0%,rgba(71,124,255,0) 62%),
+    linear-gradient(158deg,#02070D 0%,#050F19 42%,#030910 74%,#02070D 100%);
+  background-attachment:fixed;
+  background-repeat:no-repeat;
+  background-size:cover;
+}
+@media (max-width:760px){ body{background-attachment:scroll} }
+/* 极光光带 */
+body::before{
+  content:"";position:fixed;inset:-18%;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(115deg,rgba(0,0,0,0) 28%,rgba(17,216,183,.36) 42%,rgba(0,0,0,0) 58%),
+    linear-gradient(103deg,rgba(0,0,0,0) 20%,rgba(167,92,245,.32) 36%,rgba(0,0,0,0) 52%);
+  filter:blur(calc(60 * var(--u)));
+  opacity:.65;
+  transform:rotate(-9deg);
+}
+/* 细点阵颗粒 */
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.18;
+  background-image:radial-gradient(circle,rgba(237,243,251,.5) .7px,rgba(237,243,251,0) .8px);
+  background-size:38px 38px;
+}
+header{
+  position:sticky;top:0;z-index:12;
+  background:rgba(3,9,16,.78);
+  border-bottom:1px solid var(--line);
+  -webkit-backdrop-filter:blur(calc(12 * var(--u)));
+  backdrop-filter:blur(calc(12 * var(--u)));
+}
+.brand svg{color:var(--accent)}
+h1 .accent,h1 em{
+  font-style:normal;
+  background-image:linear-gradient(100deg,#11D8B7 0%,#477CFF 52%,#A75CF5 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.panel{
+  background-color:var(--surface);
+  background-image:var(--sheen);
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow);
+  -webkit-backdrop-filter:var(--blur);
+  backdrop-filter:var(--blur);
+}
+.btn{border-radius:var(--r-pill);padding:calc(12 * var(--u)) calc(20 * var(--u));font-weight:500;letter-spacing:.02em}
+.btn:hover{border-color:#2C4358;background:#0F1B29;text-decoration:none}
+.btn.primary{
+  background:linear-gradient(135deg,#11D8B7 0%,#477CFF 100%);
+  color:#03120F;border-color:transparent;
+  box-shadow:0 0 20px rgba(24,188,169,.35);
+}
+.btn.primary:hover{filter:brightness(1.08);background:linear-gradient(135deg,#11D8B7 0%,#477CFF 100%);color:#03120F}
+.chip{border-radius:var(--r-pill);color:var(--accent);border-color:rgba(17,216,183,.24)}
+.kicker{color:var(--ink-3)}
+.ic{background:rgba(17,216,183,.08);border-color:rgba(17,216,183,.22);color:var(--accent)}
+.stat,.chart{border-color:var(--line-2);background:rgba(11,20,32,.55)}
+.stat small,.row time,.num small{color:var(--ink-3)}
+.stat em{color:var(--accent)}
+.preview-row i{background:rgba(17,216,183,.10);border-color:rgba(17,216,183,.2)}
+.preview-bars span,.preview-row span{background:#0B1420;border-color:var(--line-2)}
+.row i{background:var(--accent)}
+blockquote{color:var(--ink);font-weight:500}
+.avatar{background:linear-gradient(135deg,rgba(17,216,183,.25),rgba(167,92,245,.25));color:var(--ink);border-color:rgba(17,216,183,.3)}
+.cta{background-color:rgba(8,17,27,.55);background-image:radial-gradient(90% 160% at 6% -20%,rgba(17,216,183,.14) 0%,rgba(17,216,183,0) 58%),var(--sheen)}
+.cta .btn.primary{box-shadow:0 0 24px rgba(24,188,169,.35)}
+footer{border-top:1px solid var(--line-2)}
+.foot a{color:var(--ink-2)}
+.copy{color:var(--ink-3)}

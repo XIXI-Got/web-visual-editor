@@ -1,0 +1,106 @@
+/* ===== UNEO 暖石拟物 · 覆盖 ATLAS 模板 token ===== */
+:root{
+  --paper:#F3EFE9;               /* 页面画布 */
+  --paper-2:#EDE8E0;
+  --ink:#33281E;                 /* 深咖啡主文字 */
+  --ink-2:#756B61;
+  --ink-3:#A39A90;
+  --line:rgba(51,40,30,.10);
+  --line-2:rgba(51,40,30,.06);
+  --accent:#8C6F52;              /* 古铜唯一强调 */
+  --accent-2:#B69D82;
+  --accent-3:#8C6F52;
+  --surface:#F6F3EE;
+  --surface-2:#EDE8E0;
+  --stroke:rgba(255,255,255,.78); /* 亮侧发丝边 */
+  --sheen:none;
+  --r-xs:calc(10 * var(--u));
+  --r-sm:calc(10 * var(--u));
+  --r-md:calc(16 * var(--u));
+  --r-lg:calc(24 * var(--u));
+  --r-pill:999px;
+  --blur:none;
+  --shadow:16px 16px 34px #E2DDD4,-16px -16px 34px #FFFFFF;
+  --font-display:"Source Han Serif CN","Source Han Serif SC","Noto Serif SC","Songti SC",STSong,Georgia,serif;
+  --font-sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
+  --font-mono:"Cascadia Mono",Consolas,monospace;
+  --display-weight:600;
+  --track:.02em;
+  --btn-bg:#33281E;--btn-fg:#FAF8F5;--btn-border:transparent;
+  --chip-bg:#EDE8E0;
+  --focus:#8C6F52;
+  --chart-line:#8C6F52;
+}
+html{color-scheme:light}
+/* 画布：左上柔光，右下微沉 */
+body{
+  background-color:#F3EFE9;
+  background-image:radial-gradient(120% 92% at 18% 0%,#FCFAF6 0%,#F3EFE9 58%,#ECE7DF 100%);
+  background-attachment:fixed;
+  background-repeat:no-repeat;
+}
+header{
+  position:sticky;top:0;z-index:12;
+  background:rgba(243,239,233,.84);
+  border-bottom:1px solid rgba(51,40,30,.06);
+  box-shadow:0 1px 0 rgba(255,255,255,.7);
+  -webkit-backdrop-filter:blur(calc(12 * var(--u)));
+  backdrop-filter:blur(calc(12 * var(--u)));
+}
+.brand{letter-spacing:.14em}
+.brand svg{color:#8C6F52}
+.nav-links a{color:#756B61}
+.nav-links a:hover{color:#33281E}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:var(--display-weight)}
+h1{letter-spacing:.02em;color:#33281E}
+/* 拟物面板：亮发丝边 + 双向柔和投影 */
+.panel{
+  background:#F6F3EE;
+  border:1px solid rgba(255,255,255,.78);
+  border-radius:var(--r-lg);
+  box-shadow:16px 16px 34px #E2DDD4,-16px -16px 34px #FFFFFF;
+}
+.kicker,.mono{color:#8C6F52;letter-spacing:.14em}
+.lede{color:#756B61}
+.btn{
+  border:0;border-radius:var(--r-pill);
+  background:#F6F3EE;color:#33281E;
+  box-shadow:7px 9px 18px rgba(51,40,30,.18),-4px -4px 10px #FFFFFF;
+  font-weight:500;letter-spacing:.02em;
+}
+.btn:hover{transform:translateY(calc(-1 * var(--u)))}
+.btn:active{box-shadow:inset 4px 4px 9px #E2DDD4,inset -4px -4px 9px #FFFFFF;transform:none}
+.btn.primary{background:#33281E;color:#FAF8F5;box-shadow:7px 9px 18px rgba(51,40,30,.26),-4px -4px 10px #FFFFFF}
+.btn.primary:hover{background:#443629}
+.btn.ghost{background:#F3EFE9;color:#33281E;box-shadow:inset 4px 4px 9px #E2DDD4,inset -4px -4px 9px #FFFFFF}
+.chip{
+  background:#EDE8E0;border:1px solid rgba(255,255,255,.7);border-radius:var(--r-pill);
+  color:#756B61;box-shadow:inset 2px 2px 5px #E2DDD4,inset -2px -2px 5px #FFFFFF;
+}
+.ic{
+  background:#EDE8E0;border:1px solid rgba(255,255,255,.7);border-radius:var(--r-md);
+  color:#8C6F52;box-shadow:inset 3px 3px 7px #E2DDD4,inset -3px -3px 7px #FFFFFF;
+}
+.preview-head{border-bottom:1px solid rgba(51,40,30,.08)}
+.preview-title{font-family:var(--font-display);font-weight:600}
+.preview-row i{background:#EDE8E0;border:1px solid rgba(255,255,255,.7);box-shadow:inset 2px 2px 4px #E2DDD4}
+.preview-bars span,.preview-row span{background:#EDE8E0;border:1px solid rgba(255,255,255,.7)}
+.stat,.chart{
+  background:#EDE8E0;border:1px solid rgba(255,255,255,.6);border-radius:var(--r-md);
+  box-shadow:inset 3px 3px 7px #E2DDD4,inset -3px -3px 7px #FFFFFF;
+}
+.stat small,.chart small,.row time{color:#A39A90}
+.stat em{color:#8C6F52}
+.stat b,.num b{font-family:var(--font-sans);font-weight:600}
+.row{border-bottom:1px solid rgba(51,40,30,.06)}
+.row i{background:#8C6F52}
+blockquote{font-family:var(--font-display);color:#33281E;letter-spacing:.02em}
+.who .avatar{background:#EDE8E0;border:1px solid rgba(255,255,255,.8);color:#8C6F52;box-shadow:inset 3px 3px 7px #E2DDD4,inset -3px -3px 7px #FFFFFF}
+.num{background:#F6F3EE;border-radius:var(--r-md);box-shadow:6px 6px 14px #E2DDD4,-6px -6px 14px #FFFFFF;padding:calc(12 * var(--u))}
+.step-no{color:#8C6F52;letter-spacing:.16em}
+.cta{background:#F6F3EE}
+.cta h2{color:#33281E}
+footer{background:rgba(243,239,233,.6);border-top:1px solid rgba(51,40,30,.08)}
+.foot h4{color:#A39A90}
+.foot a{color:#756B61}
+.copy{border-top:1px solid rgba(51,40,30,.08);color:#A39A90}

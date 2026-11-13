@@ -19,6 +19,8 @@
     --green:#11D8B7; --purple:#A75CF5; --blue:#477CFF;
     --warn:#F5B45F; --danger:#FA7777; --info:#73A0FF;
     --glow:#13D8C455; --aurora-teal:#19E3C477; --aurora-violet:#A64FF277;
+    --bg-grad-teal:#19E3C48F; --bg-grad-violet:#A64FF27A;
+    --bg-grad-blue:#477CFF4D; --bg-grad-mid:#050F19;
     --r-md:7px; --r-panel:11px; --pill:999px;
     --ease-out:cubic-bezier(.2,.8,.2,1);
     --font:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
@@ -27,11 +29,19 @@
   html,body{margin:0;overflow-x:clip;background:var(--bg);color:var(--ink);font-family:var(--font)}
   body{
     padding-top:20px;padding-bottom:30px;
-    background:
-      radial-gradient(60% 120% at 82% -30%, var(--aurora-teal), transparent 62%),
-      radial-gradient(46% 100% at 20% -34%, var(--aurora-violet), transparent 60%),
-      var(--bg);
+    /* 背景渐变（极光幕布）：① 青绿主光源 → ② 紫副光源 → ③ 蓝反射光 → ④ 深空线性底
+       层序固定不可颠倒；光斑合计 ≤30% 面积，文字永远压在 ④ 的深空端 */
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(120% 92% at 82% -18%, var(--bg-grad-teal) 0%, #13D8B740 32%, transparent 64%),
+      radial-gradient(92% 78% at 8% -14%, var(--bg-grad-violet) 0%, #8B4DDD33 34%, transparent 64%),
+      radial-gradient(130% 84% at 52% 114%, var(--bg-grad-blue) 0%, transparent 62%),
+      linear-gradient(158deg, var(--paper) 0%, var(--bg-grad-mid) 42%, var(--bg) 74%, var(--paper) 100%);
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+    background-size:cover;
   }
+  @media (max-width:760px){ body{background-attachment:scroll} }
   /* 极光幕布：纯背景光效，不参与布局 */
   .aurora{position:fixed;inset:-20% -10% auto -10%;height:80vh;pointer-events:none;z-index:0;filter:blur(22px);opacity:.9}
   .aurora i{position:absolute;display:block;border-radius:50%;mix-blend-mode:screen}

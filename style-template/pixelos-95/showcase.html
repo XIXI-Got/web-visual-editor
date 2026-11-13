@@ -162,8 +162,8 @@
     align-items: center;
     justify-content: center;
     gap: 5px;
-    min-height: 26px;
-    padding: 3px 10px;
+    min-height: 24px;
+    padding: 2px 10px;
     font: inherit;
     font-size: clamp(11px, 0.8vw, 12px);
     font-weight: 700;
@@ -240,8 +240,8 @@
   .btn-sm { min-height: 22px; padding: 1px 7px; font-size: clamp(10px, 0.7vw, 11px); }
   .icon-btn {
     appearance: none;
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     padding: 0;
     display: inline-flex;
     align-items: center;
@@ -296,7 +296,7 @@
     margin: clamp(6px, 0.9vw, 12px) auto 0;
     display: grid;
     gap: var(--gap-card);
-    padding-bottom: clamp(10px, 1.2vw, 14px);
+    padding-bottom: clamp(8px, 1vw, 12px);
   }
 
   .triptych {
@@ -505,7 +505,7 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
-    padding-top: clamp(6px, 0.8vw, 10px);
+    padding-top: clamp(5px, 0.7vw, 8px);
     border-top: 1px solid var(--desk-rule);
   }
   .feature { display: grid; gap: 2px; align-content: start; }
@@ -535,15 +535,15 @@
   .panel {
     display: flex;
     flex-direction: column;
-    gap: clamp(6px, 0.7vw, 9px);
-    padding: clamp(9px, 0.9vw, 12px);
+    gap: clamp(5px, 0.6vw, 7px);
+    padding: clamp(8px, 0.8vw, 11px);
   }
   .panel-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
     border-bottom: 1px solid var(--b-dark);
   }
   .panel-head h2 {
@@ -782,7 +782,7 @@
   .taskbar-mini .tray { margin-left: auto; padding: 1px 5px; font-size: clamp(9px, 0.66vw, 10px); font-weight: 700; white-space: nowrap; }
 
   /* 字体与色彩 */
-  .type-row { display: grid; gap: 2px; padding-bottom: 4px; border-bottom: 1px solid rgba(128, 128, 128, 0.45); }
+  .type-row { display: grid; gap: 2px; padding-bottom: 3px; border-bottom: 1px solid rgba(128, 128, 128, 0.45); }
   .type-row:last-child { border-bottom: 0; padding-bottom: 0; }
   .type-tag { font-size: clamp(9px, 0.64vw, 10px); color: var(--text-muted); }
   .t-pixel { font-family: var(--font-pixel); font-size: clamp(9px, 0.78vw, 11px); letter-spacing: .04em; }
@@ -791,7 +791,7 @@
   .t-meta { font-size: clamp(10px, 0.72vw, 11px); color: var(--text-muted); }
 
   .swatches { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
-  .swatch { display: block; height: 17px; border: 2px solid var(--b-black); }
+  .swatch { display: block; height: 16px; border: 2px solid var(--b-black); }
   .token-list { display: grid; gap: 3px; margin-top: 7px; }
   .token-line { display: flex; justify-content: space-between; gap: 8px; font-size: clamp(9px, 0.66vw, 10px); color: var(--text-muted); }
   .token-line code { font-family: var(--font-body); font-weight: 700; color: var(--text-main); }
@@ -802,9 +802,9 @@
     grid-template-columns: minmax(0, 1.6fr) auto;
     gap: clamp(10px, 1.2vw, 18px);
     align-items: center;
-    padding: clamp(9px, 1vw, 13px) clamp(12px, 1.2vw, 16px);
+    padding: clamp(8px, 0.9vw, 11px) clamp(12px, 1.2vw, 16px);
   }
-  .guide-left { display: grid; gap: 4px; align-content: center; }
+  .guide-left { display: grid; gap: 3px; align-content: center; }
   .guide-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .guide-badge {
     padding: 2px 6px;
@@ -873,11 +873,6 @@
   .crt.is-off { display: none; }
 
   /* ── 响应式 ─────────────────────────────────────────────── */
-  /* 桌面宽度下把展板垂直居中，让整页保持「扁」的长方形构图 */
-  @media (min-width: 1181px) {
-    .stage { flex: 1 1 auto; align-content: center; }
-  }
-
   @media (max-width: 1180px) {
     .triptych { grid-template-columns: minmax(0, 1fr); }
     .right-grid { grid-auto-rows: auto; }

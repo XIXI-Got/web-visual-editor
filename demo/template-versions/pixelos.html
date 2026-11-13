@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="zh-CN" data-style="pixelos">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ATLAS · 模板（PixelOS 95）</title>
+<meta name="description" content="未套任何风格模板的基线页面：结构齐全、装饰为零。用于演示「同一张模板 → 应用不同风格」的对比。" />
+<meta name="theme-color" content="#008080" />
+<style>
+  /* ======================================================================
+     ATLAS · 无风格基线模板
+     只有结构 + 中性的排版/间距 token，没有任何品牌化装饰：
+     无阴影、无渐变、无圆角、无动画、无自定义强调色。
+     所有颜色/字体/圆角都收在 :root 变量里，后续「风格版本」只覆盖变量。
+     ====================================================================== */
+
+  :root{
+    --u:clamp(.45px,calc(100vw / 1440),1px);
+    --cw:calc(1180 * var(--u));
+    --gutter:max(16px,calc(32 * var(--u)));
+    --sec:clamp(calc(40 * var(--u)),5.2vw,calc(96 * var(--u)));
+    --h1:clamp(34px,calc(46 * var(--u) + 10px),64px);
+    --h2:clamp(22px,calc(26 * var(--u) + 2px),30px);
+    --h3:max(15px,calc(15 * var(--u) + 1px));
+    --body:max(14px,calc(13 * var(--u) + 1.5px));
+    --small:max(12px,calc(11 * var(--u) + 1px));
+    --micro:max(10px,calc(9 * var(--u) + 1px));
+
+    /* —— 中性 token（风格版本只覆盖这里） —— */
+    --paper:#ffffff;
+    --paper-2:#fafafa;
+    --ink:#1a1a1a;
+    --ink-2:#4a4a4a;
+    --ink-3:#767676;
+    --line:#e2e2e2;
+    --line-2:#efefef;
+    --accent:#1a56db;
+    --accent-2:#1a56db;
+    --accent-3:#1a56db;
+    --surface:#ffffff;
+    --surface-2:#f6f6f6;
+    --stroke:#e2e2e2;
+    --sheen:none;
+    --r-xs:0px;
+    --r-sm:0px;
+    --r-md:0px;
+    --r-lg:0px;
+    --r-pill:999px;
+    --blur:none;
+    --shadow:none;
+    --font-display:ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    --font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    --font-mono:ui-monospace,Menlo,Consolas,"Courier New",monospace;
+    --display-weight:600;
+    --track:0;
+    --btn-bg:#ffffff;
+    --btn-fg:#1a1a1a;
+    --btn-border:#c8c8c8;
+    --chip-bg:transparent;
+    --focus:#1a56db;
+    --chart-line:#8a8a8a;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;color-scheme:light}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans)}
+  body{font-size:var(--body);line-height:1.65;overflow-x:clip;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  img,svg{display:block;max-width:100%}
+  p,h1,h2,h3,h4,figure,dl,dd,dt,blockquote{margin:0}
+  button{font:inherit;color:inherit}
+  :focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+
+  .wrap{width:min(var(--cw),calc(100% - var(--gutter) - var(--gutter)));margin-inline:auto;min-width:0}
+  .section{padding-block:var(--sec)}
+  .kicker{font-family:var(--font-mono);font-size:var(--micro);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .mono{font-family:var(--font-mono);font-size:var(--micro);letter-spacing:.06em;color:var(--ink-3)}
+
+  h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);letter-spacing:var(--track);text-wrap:balance}
+  h1{font-size:var(--h1);line-height:1.06;font-weight:var(--display-weight)}
+  h2{font-size:var(--h2);line-height:1.2;font-weight:var(--display-weight)}
+  h3{font-size:var(--h3);line-height:1.35;font-weight:600}
+  .lede{font-size:var(--body);line-height:1.8;color:var(--ink-2);max-width:34em}
+
+  /* 面板：中性 1px 边框，无圆角无阴影 */
+  .panel{
+    background-color:var(--surface);
+    background-image:var(--sheen);
+    border:1px solid var(--stroke);
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow);
+  }
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:calc(8 * var(--u));
+    padding:calc(11 * var(--u)) calc(18 * var(--u));
+    border:1px solid var(--btn-border);border-radius:var(--r-sm);
+    background:var(--btn-bg);color:var(--btn-fg);
+    font-size:var(--small);font-weight:500;cursor:pointer;
+  }
+  .btn:hover{text-decoration:none}
+  .btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .chip{display:inline-flex;align-items:center;padding:calc(4 * var(--u)) calc(9 * var(--u));border:1px solid var(--stroke);border-radius:var(--r-pill);background:var(--chip-bg);font-family:var(--font-mono);font-size:var(--micro);letter-spacing:.06em;color:var(--ink-3)}
+
+  /* ---------- 导航 ---------- */
+  header{border-bottom:1px solid var(--line-2)}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:calc(16 * var(--u));min-height:clamp(calc(52 * var(--u)),5vw,calc(70 * var(--u)));padding-block:calc(10 * var(--u))}
+  .brand{display:flex;align-items:center;gap:calc(8 * var(--u));font-family:var(--font-display);font-weight:700;font-size:max(14px,calc(14 * var(--u)));letter-spacing:.14em}
+  .brand svg{width:calc(20 * var(--u));height:calc(20 * var(--u));color:var(--ink)}
+  .nav-links{display:flex;align-items:center;gap:calc(20 * var(--u));font-size:var(--small)}
+  .nav-links a{color:var(--ink-2)}
+  .nav-links a:hover{color:var(--ink)}
+
+  /* ---------- Hero ---------- */
+  .hero{padding-block:var(--sec)}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(calc(24 * var(--u)),4vw,calc(56 * var(--u)));align-items:center}
+  .hero-copy{min-width:0}
+  .hero .kicker{margin-bottom:calc(14 * var(--u))}
+  .hero h1{margin-bottom:calc(16 * var(--u))}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:calc(10 * var(--u));margin-top:calc(24 * var(--u))}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:calc(8 * var(--u));margin-top:calc(20 * var(--u))}
+  .logos{display:flex;flex-wrap:wrap;gap:calc(14 * var(--u)) clamp(calc(14 * var(--u)),3vw,calc(30 * var(--u)));margin-top:calc(28 * var(--u));font-family:var(--font-mono);font-size:var(--micro);letter-spacing:.14em;color:var(--ink-3)}
+
+  /* hero 右侧预览卡：中性线框 */
+  .preview{padding:calc(16 * var(--u));display:flex;flex-direction:column;gap:calc(12 * var(--u))}
+  .preview-head{display:flex;align-items:center;justify-content:space-between;gap:calc(10 * var(--u));padding-bottom:calc(10 * var(--u));border-bottom:1px solid var(--line-2)}
+  .preview-head .mono{color:var(--ink-3)}
+  .preview-title{font-family:var(--font-display);font-size:clamp(15px,calc(15 * var(--u) + 2px),19px);font-weight:600}
+  .preview-row{display:flex;align-items:center;gap:calc(10 * var(--u));min-width:0}
+  .preview-row i{width:calc(28 * var(--u));height:calc(28 * var(--u));border:1px solid var(--stroke);background:var(--surface-2);flex:0 0 auto}
+  .preview-row span{height:calc(8 * var(--u));background:var(--surface-2);border:1px solid var(--line-2);flex:1;min-width:0}
+  .preview-bars{display:flex;flex-direction:column;gap:calc(8 * var(--u))}
+  .preview-bars span{height:calc(8 * var(--u));background:var(--surface-2);border:1px solid var(--line-2)}
+  .preview-foot{display:flex;gap:calc(8 * var(--u));flex-wrap:wrap;padding-top:calc(4 * var(--u))}
+
+  /* ---------- 特性 ---------- */
+  .features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(calc(14 * var(--u)),2vw,calc(24 * var(--u)))}
+  .feat{padding:calc(20 * var(--u));display:flex;flex-direction:column;gap:calc(8 * var(--u));min-width:0}
+  .ic{width:calc(34 * var(--u));height:calc(34 * var(--u));border:1px solid var(--stroke);background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2);margin-bottom:calc(6 * var(--u))}
+  .ic svg{width:calc(18 * var(--u));height:calc(18 * var(--u))}
+  .feat p{font-size:var(--small);color:var(--ink-2);line-height:1.7}
+
+  /* ---------- 数据面板 ---------- */
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);gap:clamp(calc(20 * var(--u)),3.4vw,calc(48 * var(--u)));align-items:center}
+  .dash{padding:calc(18 * var(--u));display:flex;flex-direction:column;gap:calc(14 * var(--u));min-width:0}
+  .dash-head{display:flex;align-items:center;justify-content:space-between;gap:calc(10 * var(--u))}
+  .dash-head b{font-family:var(--font-mono);font-size:var(--micro);letter-spacing:.12em;color:var(--ink-2);font-weight:500}
+  .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:calc(10 * var(--u))}
+  .stat{border:1px solid var(--line-2);padding:calc(12 * var(--u));min-width:0}
+  .stat small{display:block;font-family:var(--font-mono);font-size:calc(9.5 * var(--u));letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase}
+  .stat b{display:block;font-family:var(--font-display);font-size:clamp(18px,calc(18 * var(--u) + 4px),26px);font-weight:600;margin-top:calc(4 * var(--u));font-variant-numeric:tabular-nums}
+  .stat em{font-style:normal;font-family:var(--font-mono);font-size:calc(9.5 * var(--u));color:var(--ink-2)}
+  .chart{border:1px solid var(--line-2);padding:calc(12 * var(--u))}
+  .chart svg{width:100%;height:clamp(52px,calc(52 * var(--u)),76px)}
+  .rows{display:flex;flex-direction:column}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:calc(10 * var(--u));padding-block:calc(8 * var(--u));border-bottom:1px solid var(--line-2);font-size:var(--small);color:var(--ink-2)}
+  .row:last-child{border-bottom:0}
+  .row span{display:flex;align-items:center;gap:calc(8 * var(--u));min-width:0}
+  .row i{width:calc(6 * var(--u));height:calc(6 * var(--u));background:var(--ink-3);flex:0 0 auto}
+  .row time{font-family:var(--font-mono);font-size:calc(9.5 * var(--u));color:var(--ink-3);white-space:nowrap}
+
+  /* ---------- 数字条 ---------- */
+  .numbers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:calc(16 * var(--u));padding-top:calc(20 * var(--u));border-top:1px solid var(--line-2)}
+  .num{min-width:0}
+  .num b{display:block;font-family:var(--font-display);font-size:clamp(22px,calc(24 * var(--u) + 4px),34px);font-weight:600;font-variant-numeric:tabular-nums}
+  .num small{display:block;margin-top:calc(4 * var(--u));font-family:var(--font-mono);font-size:var(--micro);letter-spacing:.1em;color:var(--ink-3)}
+
+  /* ---------- 引用 ---------- */
+  .quote{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(calc(18 * var(--u)),3vw,calc(40 * var(--u)));align-items:center}
+  blockquote{font-family:var(--font-display);font-size:clamp(18px,calc(20 * var(--u) + 4px),28px);line-height:1.45;font-weight:500;color:var(--ink);letter-spacing:var(--track)}
+  .who{display:flex;align-items:center;gap:calc(10 * var(--u));margin-top:calc(16 * var(--u))}
+  .avatar{width:calc(34 * var(--u));height:calc(34 * var(--u));border:1px solid var(--stroke);background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:var(--micro);color:var(--ink-2);flex:0 0 auto}
+  .who b{display:block;font-size:var(--small);font-weight:600}
+  .who small{display:block;font-family:var(--font-mono);font-size:calc(9.5 * var(--u));color:var(--ink-3)}
+
+  /* ---------- 三步 ---------- */
+  .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(calc(14 * var(--u)),2vw,calc(24 * var(--u)))}
+  .step{padding:calc(18 * var(--u));display:flex;flex-direction:column;gap:calc(6 * var(--u));min-width:0}
+  .step-no{font-family:var(--font-mono);font-size:var(--micro);letter-spacing:.14em;color:var(--ink-3)}
+  .step p{font-size:var(--small);color:var(--ink-2);line-height:1.7}
+
+  /* ---------- CTA ---------- */
+  .cta{display:flex;align-items:center;justify-content:space-between;gap:clamp(calc(16 * var(--u)),3vw,calc(32 * var(--u)));flex-wrap:wrap;padding:clamp(calc(20 * var(--u)),3vw,calc(36 * var(--u)))}
+  .cta h2{font-size:clamp(20px,calc(22 * var(--u) + 4px),30px);line-height:1.2}
+  .cta p{font-size:var(--small);color:var(--ink-2);margin-top:calc(8 * var(--u));max-width:32em}
+  .cta-actions{display:flex;flex-wrap:wrap;gap:calc(10 * var(--u))}
+
+  /* ---------- 页脚 ---------- */
+  footer{border-top:1px solid var(--line-2);padding-block:calc(30 * var(--u)) calc(24 * var(--u))}
+  .foot{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,.65fr));gap:clamp(calc(16 * var(--u)),3vw,calc(32 * var(--u)));min-width:0}
+  .foot > *{min-width:0}
+  .foot p{font-size:var(--small);color:var(--ink-2);margin-top:calc(10 * var(--u));max-width:24em}
+  .foot h4{font-family:var(--font-mono);font-size:var(--micro);letter-spacing:.12em;font-weight:500;color:var(--ink-3);margin-bottom:calc(10 * var(--u));text-transform:uppercase}
+  .foot a{display:block;font-size:var(--small);color:var(--ink-2);line-height:1.9}
+  .copy{margin-top:calc(24 * var(--u));padding-top:calc(14 * var(--u));border-top:1px solid var(--line-2);font-family:var(--font-mono);font-size:calc(9.5 * var(--u));color:var(--ink-3);letter-spacing:.04em}
+
+  /* ---------- 断点：只切结构 ---------- */
+  @media (max-width:960px){
+    .hero-grid{grid-template-columns:1fr}
+    .split{grid-template-columns:1fr}
+    .quote{grid-template-columns:1fr}
+    .features{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .numbers{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:620px){
+    .features,.steps,.numbers,.foot{grid-template-columns:1fr}
+    .nav-links{display:none}
+    .nav .btn{padding:calc(9 * var(--u)) calc(12 * var(--u))}
+    .cta{align-items:flex-start}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+</style>
+<style>
+/* ===== PixelOS 95 像素桌面 · 覆盖 ATLAS 模板 token ===== */
+:root{
+  --paper:#008080;               /* 桌面青绿：页面唯一底色 */
+  --paper-2:#007272;
+  --ink:#000000;
+  --ink-2:#2F2F2F;
+  --ink-3:#5A5A5A;
+  --line:#808080;
+  --line-2:#A4A4A4;
+  --accent:#000080;              /* 标题栏深蓝：唯一强调 */
+  --accent-2:#1084D0;            /* 活动标题栏渐变终点 */
+  --accent-3:#000080;
+  --surface:#C0C0C0;             /* 窗口主体面 */
+  --surface-2:#DFDFDF;
+  --stroke:#000000;
+  --sheen:none;
+  --r-xs:0px;--r-sm:0px;--r-md:0px;--r-lg:0px;--r-pill:0px;
+  --blur:none;
+  --shadow:2px 2px 0 rgba(0,0,0,.45);
+  --font-display:"Press Start 2P","Courier New",SimSun,"Microsoft YaHei",monospace;
+  --font-sans:"Courier New",SimSun,"Microsoft YaHei",monospace;
+  --font-mono:"Courier New",Consolas,monospace;
+  --display-weight:700;
+  --track:0;
+  --btn-bg:#C0C0C0;--btn-fg:#000000;--btn-border:#000000;
+  --chip-bg:#DFDFDF;
+  --focus:#000080;
+  --chart-line:#000080;
+}
+html{color-scheme:light}
+/* 桌面：青绿 + 16px 点阵 + CRT 扫描线 */
+body{
+  background-color:#008080;
+  background-image:radial-gradient(rgba(255,255,255,.14) 1.5px,rgba(255,255,255,0) 1.6px);
+  background-size:16px 16px;
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;
+  background-image:repeating-linear-gradient(180deg,rgba(0,0,0,.9) 0 1px,rgba(0,0,0,0) 1px 3px);
+}
+header{
+  position:sticky;top:0;z-index:12;
+  background:#C0C0C0;
+  border-bottom:2px solid #808080;
+  box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -1px 0 #000000;
+}
+.brand{font-family:var(--font-display);letter-spacing:.06em;font-size:max(12px,calc(11 * var(--u)))}
+.brand svg{color:#000080}
+.nav-links a{color:#000000;letter-spacing:.04em}
+.nav-links a:hover{background:#000080;color:#FFFFFF}
+/* 窗口面板：2px 凸起立体边框 + 硬阴影 */
+.panel{
+  background:#C0C0C0;
+  border:2px solid;
+  border-color:#FFFFFF #808080 #808080 #FFFFFF;
+  box-shadow:inset 1px 1px 0 #DFDFDF,inset -1px -1px 0 #000000,2px 2px 0 rgba(0,0,0,.45);
+  border-radius:0;
+}
+h1,h2,h3,h4{font-family:var(--font-display);letter-spacing:.01em}
+h1{text-shadow:2px 2px 0 #FFFFFF}
+.kicker{
+  color:#FFFFFF;background:#000080;display:inline-block;
+  padding:calc(2 * var(--u)) calc(8 * var(--u));
+  letter-spacing:.12em;font-weight:700;
+}
+.mono{color:#000080;letter-spacing:.1em;font-weight:700}
+.lede{color:#000000}
+/* hero 底部的品牌字：青绿底上反转成白字 + 硬阴影 */
+.logos span{color:#FFFFFF;text-shadow:1px 1px 0 #000000;letter-spacing:.12em}
+.btn{
+  border:2px solid;border-color:#FFFFFF #000000 #000000 #FFFFFF;
+  background:#C0C0C0;color:#000000;border-radius:0;
+  box-shadow:inset 1px 1px 0 #DFDFDF,inset -1px -1px 0 #808080;
+  font-family:var(--font-sans);font-weight:700;letter-spacing:.02em;
+}
+.btn:hover{background:#DFDFDF}
+.btn:active{transform:translate(1px,1px);border-color:#000000 #FFFFFF #FFFFFF #000000;box-shadow:none}
+.btn.primary{background:linear-gradient(180deg,#1084D0,#000080);color:#FFFFFF;border-color:#FFFFFF #000000 #000000 #FFFFFF}
+.btn.primary:hover{background:linear-gradient(180deg,#2C9BE0,#00008B)}
+.btn.ghost{background:#C0C0C0;color:#000000}
+.chip{background:#DFDFDF;border:1px solid;border-color:#808080 #FFFFFF #FFFFFF #808080;border-radius:0;color:#000000;box-shadow:none;letter-spacing:.04em}
+/* 预览窗 / 仪表盘：标题栏用 Windows 95 活动窗口渐变 */
+.preview-head,.dash-head{
+  background:linear-gradient(90deg,#000080 0%,#1084D0 100%);
+  color:#FFFFFF;padding:calc(5 * var(--u)) calc(8 * var(--u));
+  margin:calc(-1 * 0px);border:0;
+}
+.preview-head .mono,.dash-head b,.dash-head .mono{color:#FFFFFF}
+.preview-title,.stat b,.num b{font-family:var(--font-sans);font-weight:700}
+.ic{
+  background:#DFDFDF;border:1px solid;
+  border-color:#808080 #FFFFFF #FFFFFF #808080;
+  color:#000080;box-shadow:none;border-radius:0;
+}
+.stat,.chart{
+  background:#DFDFDF;border:1px solid;
+  border-color:#808080 #FFFFFF #FFFFFF #808080;
+  border-radius:0;box-shadow:none;
+}
+.stat small,.chart small,.row time{color:#000080}
+.chart svg polyline{stroke:#000080}
+.row{border-bottom:1px dashed #808080}
+.row i{background:#000080}
+.blockquote,.quote blockquote{font-family:var(--font-display);letter-spacing:.01em}
+.who .avatar{background:#DFDFDF;border:1px solid;border-color:#808080 #FFFFFF #FFFFFF #808080;color:#000080;border-radius:0}
+.num{background:#C0C0C0;border:2px solid;border-color:#FFFFFF #808080 #808080 #FFFFFF;padding:calc(10 * var(--u))}
+.step-no{color:#000080;font-weight:700}
+.cta{background:#C0C0C0}
+.cta h2{text-shadow:1px 1px 0 #FFFFFF}
+.step,.feat{border-radius:0}
+footer{background:#C0C0C0;border-top:2px solid #808080;box-shadow:inset 0 1px 0 #FFFFFF}
+.foot h4{color:#000080}
+.copy{border-top:1px solid #808080;color:#2F2F2F}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="ATLAS 首页">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <path d="M12 2l8.5 5v10L12 22l-8.5-5V7L12 2z"/><path d="M12 8l4 2.4v4.8L12 17.6 8 15.2v-4.8L12 8z"/>
+      </svg>
+      ATLAS
+    </a>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="#features">功能</a>
+      <a href="#numbers">数据</a>
+      <a href="#how">流程</a>
+    </nav>
+    <button class="btn primary" type="button">开始使用</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="kicker">PRODUCT TEMPLATE · 无风格基线</div>
+        <h1>把想法，<br>做成页面。</h1>
+        <p class="lede">这是一张还没套风格的模板：结构、文案、栅格都齐了，但没有阴影、没有渐变、没有品牌色。接下来给它套哪套风格，就是哪套气质。</p>
+        <div class="hero-actions">
+          <button class="btn primary" type="button">开始使用</button>
+          <button class="btn ghost" type="button">了解详情</button>
+        </div>
+        <div class="hero-meta">
+          <span class="chip">结构完整</span>
+          <span class="chip">零装饰</span>
+          <span class="chip">可直接套风格</span>
+        </div>
+        <div class="logos">
+          <span>NORTH</span><span>PEAK</span><span>SEQUOIA</span><span>MERCURY</span><span>ATLAS LAB</span>
+        </div>
+      </div>
+
+      <div class="panel preview" aria-label="产品预览">
+        <div class="preview-head">
+          <span class="mono">PREVIEW / 01</span>
+          <span class="mono">DRAFT</span>
+        </div>
+        <div class="preview-title">让结构先跑起来</div>
+        <div class="preview-bars">
+          <span style="width:86%"></span>
+          <span style="width:64%"></span>
+          <span style="width:74%"></span>
+        </div>
+        <div class="preview-row"><i></i><span></span></div>
+        <div class="preview-row"><i></i><span></span></div>
+        <div class="preview-row"><i></i><span></span></div>
+        <div class="preview-foot">
+          <span class="chip">Figma 友好</span>
+          <span class="chip">响应式</span>
+          <span class="chip">可交付</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特性 -->
+  <section class="section" id="features">
+    <div class="wrap">
+      <div class="kicker">FEATURES</div>
+      <h2 style="margin-top:calc(8 * var(--u));margin-bottom:calc(18 * var(--u))">先把骨架搭对</h2>
+      <div class="features">
+        <div class="panel feat">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg></div>
+          <h3>结构先行</h3>
+          <p>容器、栅格、断点先定好，后面套任何风格都不用重排。</p>
+        </div>
+        <div class="panel feat">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/></svg></div>
+          <h3>变量收口</h3>
+          <p>颜色、字体、圆角全走变量，风格版本只覆盖一层 token。</p>
+        </div>
+        <div class="panel feat">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 3l14 8-6 1.5L10 19 5 3z"/></svg></div>
+          <h3>随时换皮</h3>
+          <p>同一份 HTML，换一套 token 就是另一种气质，内容一个字不改。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 数据面板 -->
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <div class="kicker">INSIGHT</div>
+        <h2 style="margin-top:calc(8 * var(--u));margin-bottom:calc(12 * var(--u))">一张面板，够讲清一件事</h2>
+        <p class="lede">统计、趋势、动态都放进同一块面板里，先保证信息层级，再谈质感。</p>
+        <div style="margin-top:calc(20 * var(--u));display:flex;flex-direction:column;gap:0">
+          <div class="row"><span><i></i>选中、拖动、对齐</span><time>刚刚</time></div>
+          <div class="row"><span><i></i>换一套变量</span><time>2 分钟前</time></div>
+          <div class="row"><span><i></i>写回源码</span><time>10 分钟前</time></div>
+        </div>
+      </div>
+
+      <div class="panel dash">
+        <div class="dash-head">
+          <b>DASHBOARD</b>
+          <span class="mono">LIVE</span>
+        </div>
+        <div class="stats">
+          <div class="stat"><small>Visitors</small><b>24,560</b><em>+12.5%</em></div>
+          <div class="stat"><small>Revenue</small><b>$84,320</b><em>+8.1%</em></div>
+        </div>
+        <div class="chart">
+          <svg viewBox="0 0 300 64" preserveAspectRatio="none" aria-label="趋势">
+            <polyline points="0,48 30,44 60,46 90,34 120,38 150,28 180,30 210,20 240,24 270,12 300,16" fill="none" stroke="var(--chart-line)" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="rows">
+          <div class="row"><span><i></i>新用户注册</span><time>2 分钟前</time></div>
+          <div class="row"><span><i></i>生成报告</span><time>15 分钟前</time></div>
+          <div class="row"><span><i></i>收到付款</span><time>1 小时前</time></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 数字条 -->
+  <section class="section" id="numbers" style="padding-top:0">
+    <div class="wrap">
+      <div class="numbers">
+        <div class="num"><b>12</b><small>展示区块</small></div>
+        <div class="num"><b>3</b><small>断点，只切结构</small></div>
+        <div class="num"><b>0</b><small>装饰性特效</small></div>
+        <div class="num"><b>1</b><small>份 HTML，N 种风格</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 引用 -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap quote">
+      <div class="panel" style="padding:calc(22 * var(--u))">
+        <blockquote>“风格是最后一层，结构才是最贵的部分。”</blockquote>
+        <div class="who">
+          <span class="avatar" aria-hidden="true">A</span>
+          <div><b>ATLAS 模板</b><small>baseline / 2026</small></div>
+        </div>
+      </div>
+      <div>
+        <div class="kicker">WHY</div>
+        <h2 style="margin-top:calc(8 * var(--u));margin-bottom:calc(10 * var(--u))">先有骨架，才有风格</h2>
+        <p class="lede">同一张模板可以套出无数种气质。对比起来才公平：变的应该是风格，不是内容。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 三步 -->
+  <section class="section" id="how" style="padding-top:0">
+    <div class="wrap">
+      <div class="kicker">HOW</div>
+      <h2 style="margin-top:calc(8 * var(--u));margin-bottom:calc(18 * var(--u))">三步，从模板到成品</h2>
+      <div class="steps">
+        <div class="panel step"><span class="step-no">01</span><h3>选模板</h3><p>结构、文案、栅格就位，先不纠结视觉。</p></div>
+        <div class="panel step"><span class="step-no">02</span><h3>套风格</h3><p>只覆盖 token：颜色、字体、圆角、材质、动效。</p></div>
+        <div class="panel step"><span class="step-no">03</span><h3>对比交付</h3><p>原版与新版并排，确认改的都是想要的那部分。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="panel cta">
+        <div>
+          <h2>同一张模板，先看它不同风格的样子。</h2>
+          <p>用对比页左右并排、拖动分割，或者按风格轮播，直接录成视频。</p>
+        </div>
+        <div class="cta-actions">
+          <a class="btn primary" href="style-compare.html?before=template-neutral.html&amp;after=template-versions/glass.html">打开风格对比</a>
+          <button class="btn ghost" type="button">查看文档</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <path d="M12 2l8.5 5v10L12 22l-8.5-5V7L12 2z"/><path d="M12 8l4 2.4v4.8L12 17.6 8 15.2v-4.8L12 8z"/>
+          </svg>
+          ATLAS
+        </a>
+        <p>一张没有套风格的模板，用来公平地比较各种风格。</p>
+      </div>
+      <div><h4>Product</h4><a href="#">Overview</a><a href="#">Features</a><a href="#">Updates</a></div>
+      <div><h4>Company</h4><a href="#">About</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Resources</h4><a href="#">Docs</a><a href="#">Help</a><a href="#">Privacy</a></div>
+    </div>
+    <div class="copy">© 2026 ATLAS TEMPLATE · no style applied · baseline</div>
+  </div>
+</footer>
+
+</body>
+</html>

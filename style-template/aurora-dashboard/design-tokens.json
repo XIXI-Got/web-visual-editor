@@ -96,6 +96,22 @@
       "value": "#A64FF277",
       "role": "极光幕布紫光带（仅背景光效）"
     },
+    "bg-grad-teal": {
+      "value": "#19E3C48F",
+      "role": "页面背景渐变 · 青绿光斑（右上主光源，仅背景）"
+    },
+    "bg-grad-violet": {
+      "value": "#A64FF27A",
+      "role": "页面背景渐变 · 紫光斑（左上副光源，仅背景）"
+    },
+    "bg-grad-blue": {
+      "value": "#477CFF4D",
+      "role": "页面背景渐变 · 蓝光斑（底部反射光，仅背景）"
+    },
+    "bg-grad-mid": {
+      "value": "#050F19",
+      "role": "页面背景渐变 · 深空线性底第二停点（过渡带）"
+    },
     "paper": {
       "value": "#02070D",
       "role": "最暗舞台底：hero / 湖面 / 页脚"
@@ -195,6 +211,17 @@
     "badge": "radius 20px / 3px 7px / 7px 字 / 1px 同色系描边",
     "input": "radius 5–6px / 1px #233242 / #080F18 底 / 8–10px 字",
     "navItem": "radius 7px / 9px 字 / active #111D2B + 1px #1B2B3B + 右移 2px"
+  },
+  "background": {
+    "_note": "页面背景渐变（极光幕布）：只允许出现在页面底，不上卡片 / 按钮 / 文字底。层序从顶到底不可颠倒。",
+    "auroraGradient": "radial-gradient(120% 92% at 82% -18%, #19E3C48F 0%, #13D8B740 32%, transparent 64%), radial-gradient(92% 78% at 8% -14%, #A64FF27A 0%, #8B4DDD33 34%, transparent 64%), radial-gradient(130% 84% at 52% 114%, #477CFF4D 0%, transparent 62%), linear-gradient(158deg, #02070D 0%, #050F19 42%, #030910 74%, #02070D 100%)",
+    "layerOrder": "① 青绿光斑（右上主光源）→ ② 紫光斑（左上副光源）→ ③ 蓝光斑（底部反射）→ ④ 深空线性底（压暗兜底）",
+    "attachment": "fixed（桌面）；≤760px 改 scroll 省合成开销",
+    "coverage": "光斑合计 ≤ 30% 面积，且永远叠在深空线性底之上；hero 文案区（左 45%）只允许落在 ④ 的深空端",
+    "contrast": "渐变层不改变对比度：文字永远压在深空端或实体面板上，ink / 背景对比度仍 ≥ 17:1",
+    "motion": "背景渐变静止；漂移动画交给 .aurora 幕布层（18s），避免大面积重绘",
+    "fallback": "不支持渐变时退回 --bg / --paper 纯色（#030910 / #02070D）",
+    "banned": "不用彩色渐变做卡片 / 按钮 / 文字底（hero 关键词裁字渐变除外）；不新增第 4 种光色；不把光斑放在文字正后方"
   },
   "effects": {
     "aurora": "三层 radial-gradient 光带 + blur 22px + rotate(-9deg)，18s 漂移",

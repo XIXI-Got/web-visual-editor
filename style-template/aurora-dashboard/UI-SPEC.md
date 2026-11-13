@@ -53,6 +53,40 @@
 
 **禁用规则**：不用纯黑 / 纯白（最亮 `#F3F6FB`、最暗 `#02070D`）；正文与说明只用 muted 系；不用实心大色块，面板底只有 `linear-gradient(145deg,#08111B,#050B13 65%,#070E17)`；glow 只作阴影色；不新增第 4 个强调色。
 
+### 02.1 · 背景渐变（极光幕布）
+
+页面底不是纯色，而是一张**渐进式极光渐变**：右上青绿主光源、左上紫副光源、底部蓝反射光，全部压在一层深空线性底上。层序固定，不可颠倒。
+
+| 层 | 写法 | 作用 |
+|---|---|---|
+| ① 青绿主光源 | `radial-gradient(120% 92% at 82% -18%, var(--bg-grad-teal) 0%, #13D8B740 32%, transparent 64%)` | 右上角「一束光」的主来源 |
+| ② 紫副光源 | `radial-gradient(92% 78% at 8% -14%, var(--bg-grad-violet) 0%, #8B4DDD33 34%, transparent 64%)` | 左上对位补光，制造纵深 |
+| ③ 蓝反射光 | `radial-gradient(130% 84% at 52% 114%, var(--bg-grad-blue) 0%, transparent 62%)` | 底部湖面反射，收住画面下沿 |
+| ④ 深空线性底 | `linear-gradient(158deg, var(--paper) 0%, var(--bg-grad-mid) 42%, var(--bg) 74%, var(--paper) 100%)` | 压暗兜底：保证所有文字对比度 |
+
+```css
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(120% 92% at 82% -18%, var(--bg-grad-teal) 0%, #13D8B740 32%, transparent 64%),
+    radial-gradient(92% 78% at 8% -14%, var(--bg-grad-violet) 0%, #8B4DDD33 34%, transparent 64%),
+    radial-gradient(130% 84% at 52% 114%, var(--bg-grad-blue) 0%, transparent 62%),
+    linear-gradient(158deg, var(--paper) 0%, var(--bg-grad-mid) 42%, var(--bg) 74%, var(--paper) 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+@media (max-width: 760px) { body { background-attachment: scroll; } }
+```
+
+**纪律**
+
+- 光斑合计 **≤ 30% 面积**，且永远叠在 ④ 深空线性底之上；hero 文案区（左 45%）只允许落在 ④ 的深空端，**文字不压光斑**。
+- 渐变层**不做动画**，漂移交给 `.aurora` 幕布层（18s）——大面积 `background-position` 动画会掉帧。
+- 对比度不因渐变降级：ink / 背景仍 ≥ 17:1，muted / 背景 ≥ 6:1；所有文字要么压深空端，要么压在实体面板上。
+- 不支持渐变时退回 `--bg` 纯色；**禁止**用彩色渐变做卡片 / 按钮 / 文字底（hero 关键词裁字渐变是唯一例外）。
+- 移动端（≤760px）`background-attachment: scroll`，光斑尺寸收窄到 90% / 70% 省合成开销。
+
 ## 03 · 字体
 
 **家族**（全站唯一）：`Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif`；不用衬线、不用等宽。
@@ -164,6 +198,8 @@
   --green:#11D8B7; --purple:#A75CF5; --blue:#477CFF;
   --warn:#F5B45F; --danger:#FA7777; --info:#73A0FF;
   --glow:#13D8C455; --aurora-teal:#19E3C477; --aurora-violet:#A64FF277;
+  --bg-grad-teal:#19E3C48F; --bg-grad-violet:#A64FF27A;
+  --bg-grad-blue:#477CFF4D; --bg-grad-mid:#050F19;
   --radius-md:7px; --radius-panel:11px; --radius-pill:999px;
   --ease-out:cubic-bezier(.2,.8,.2,1); --ease-glide:cubic-bezier(.2,.7,.2,1);
 }

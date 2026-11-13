@@ -1,0 +1,166 @@
+{
+  "updatedAt": "2026-11-13T07:16:05.579Z",
+  "versions": [
+    {
+      "id": "neutral",
+      "label": "原版模板",
+      "note": "无风格基线",
+      "url": "template-neutral.html",
+      "chip": "#9aa0a6",
+      "group": "模板",
+      "kind": "before"
+    },
+    {
+      "id": "glass",
+      "label": "拟态玻璃",
+      "note": "Spatial Glass",
+      "url": "template-versions/glass.html",
+      "chip": "#e8c496",
+      "group": "模板版本"
+    },
+    {
+      "id": "white",
+      "label": "极简白点",
+      "note": "Prmpt 白点",
+      "url": "template-versions/white.html",
+      "chip": "#111111",
+      "group": "模板版本"
+    },
+    {
+      "id": "aurora",
+      "label": "极光",
+      "note": "Aurora",
+      "url": "template-versions/aurora.html",
+      "chip": "#11d8b7",
+      "group": "模板版本"
+    },
+    {
+      "id": "pixelos",
+      "label": "PixelOS 95",
+      "note": "像素桌面",
+      "url": "template-versions/pixelos.html",
+      "chip": "#008080",
+      "group": "模板版本"
+    },
+    {
+      "id": "uneo",
+      "label": "UNEO 暖石拟物",
+      "note": "Neumorphism",
+      "url": "template-versions/uneo.html",
+      "chip": "#8c6f52",
+      "group": "模板版本"
+    },
+    {
+      "id": "bluewhite",
+      "label": "DEMO 蓝白",
+      "note": "Blue White",
+      "url": "template-versions/bluewhite.html",
+      "chip": "#2563eb",
+      "group": "模板版本"
+    },
+    {
+      "id": "muse-original",
+      "label": "muse 原版",
+      "note": "旧 demo 初始版",
+      "url": "muse.original.html",
+      "chip": "#2563eb",
+      "group": "项目历史"
+    },
+    {
+      "id": "muse-current",
+      "label": "muse 当前",
+      "note": "工作版本",
+      "url": "muse.html",
+      "chip": "#4d6bfe",
+      "group": "项目历史"
+    },
+    {
+      "id": "bak-2026-11-12T18-36-07-Spatial-Glass-",
+      "label": "历史 · Spatial Glass 拟态玻璃",
+      "note": "202611121836",
+      "url": "/.ve-data/style-backups/2026-11-12T18-36-07_Spatial_Glass_%E6%8B%9F%E6%80%81%E7%8E%BB%E7%92%83/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T18-04-06-Spatial-Glass-",
+      "label": "历史 · Spatial Glass 拟态玻璃",
+      "note": "202611121804",
+      "url": "/.ve-data/style-backups/2026-11-12T18-04-06_Spatial_Glass_%E6%8B%9F%E6%80%81%E7%8E%BB%E7%92%83/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T17-55-33-Spatial-Glass-",
+      "label": "历史 · Spatial Glass 拟态玻璃",
+      "note": "202611121755",
+      "url": "/.ve-data/style-backups/2026-11-12T17-55-33_Spatial_Glass_%E6%8B%9F%E6%80%81%E7%8E%BB%E7%92%83/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T10-38-17-Minimal-White-Dot-Ed",
+      "label": "历史 · 极简白点风格 Minimal White Dot Editorial",
+      "note": "202611121038",
+      "url": "/.ve-data/style-backups/2026-11-12T10-38-17_%E6%9E%81%E7%AE%80%E7%99%BD%E7%82%B9%E9%A3%8E%E6%A0%BC_Minimal_White_Dot_Editorial/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T08-23-04-Minimal-Naturalism",
+      "label": "历史 · 极简自然主义风格 Minimal Naturalism",
+      "note": "202611120823",
+      "url": "/.ve-data/style-backups/2026-11-12T08-23-04_%E6%9E%81%E7%AE%80%E8%87%AA%E7%84%B6%E4%B8%BB%E4%B9%89%E9%A3%8E%E6%A0%BC_Minimal_Naturalism/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T08-20-20-Urban-Modern-Dashboa",
+      "label": "历史 · 城市现代仪表盘风格 Urban Modern Dashboard",
+      "note": "202611120820",
+      "url": "/.ve-data/style-backups/2026-11-12T08-20-20_%E5%9F%8E%E5%B8%82%E7%8E%B0%E4%BB%A3%E4%BB%AA%E8%A1%A8%E7%9B%98%E9%A3%8E%E6%A0%BC_Urban_Modern_Dashboard/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T08-13-27-Minimal-Naturalism",
+      "label": "历史 · 极简自然主义风格 Minimal Naturalism",
+      "note": "202611120813",
+      "url": "/.ve-data/style-backups/2026-11-12T08-13-27_%E6%9E%81%E7%AE%80%E8%87%AA%E7%84%B6%E4%B8%BB%E4%B9%89%E9%A3%8E%E6%A0%BC_Minimal_Naturalism/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T08-13-24-Minimal-Naturalism",
+      "label": "历史 · 极简自然主义风格 Minimal Naturalism",
+      "note": "202611120813",
+      "url": "/.ve-data/style-backups/2026-11-12T08-13-24_%E6%9E%81%E7%AE%80%E8%87%AA%E7%84%B6%E4%B8%BB%E4%B9%89%E9%A3%8E%E6%A0%BC_Minimal_Naturalism/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T08-13-20-Minimal-Naturalism",
+      "label": "历史 · 极简自然主义风格 Minimal Naturalism",
+      "note": "202611120813",
+      "url": "/.ve-data/style-backups/2026-11-12T08-13-20_%E6%9E%81%E7%AE%80%E8%87%AA%E7%84%B6%E4%B8%BB%E4%B9%89%E9%A3%8E%E6%A0%BC_Minimal_Naturalism/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T08-13-19-Minimal-Naturalism",
+      "label": "历史 · 极简自然主义风格 Minimal Naturalism",
+      "note": "202611120813",
+      "url": "/.ve-data/style-backups/2026-11-12T08-13-19_%E6%9E%81%E7%AE%80%E8%87%AA%E7%84%B6%E4%B8%BB%E4%B9%89%E9%A3%8E%E6%A0%BC_Minimal_Naturalism/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    },
+    {
+      "id": "bak-2026-11-12T08-13-17-Minimal-Naturalism",
+      "label": "历史 · 极简自然主义风格 Minimal Naturalism",
+      "note": "202611120813",
+      "url": "/.ve-data/style-backups/2026-11-12T08-13-17_%E6%9E%81%E7%AE%80%E8%87%AA%E7%84%B6%E4%B8%BB%E4%B9%89%E9%A3%8E%E6%A0%BC_Minimal_Naturalism/files/muse.html",
+      "chip": "#8a8a8a",
+      "group": "风格备份"
+    }
+  ]
+}
